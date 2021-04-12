@@ -2,13 +2,15 @@ runtime:
   cache_dir: ./.cache/antora
 
 site:
-  title: Template Tutorial
+  title: ArgoCD Tutorial
   url: https://redhat-scholars.github.io/course-template
-  start_page: template-tutorial::index.adoc
+  start_page: argocd-tutorial::index.adoc
 
 content:
   sources:
-    - url: ./
+    - url: git@github.com:redhat-scholars/argocd-tutorial.git
+      tags: []
+      branches: ["master"]
       start_path: documentation
 
 asciidoc:
@@ -21,7 +23,7 @@ asciidoc:
 
 ui:
   bundle:
-    url: https://github.com/redhat-scholars/course-ui/releases/download/v0.1.0/ui-bundle.zip
+    url: https://github.com/redhat-scholars/course-ui/releases/download/v0.1.9/ui-bundle.zip
     snapshot: true
   supplemental_files:
     - path: ./supplemental-ui

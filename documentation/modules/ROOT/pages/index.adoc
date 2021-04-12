@@ -1,20 +1,29 @@
-= Welcome to Template Tutorial
+= Welcome to the ArgoCD Tutorial
 :page-layout: home
 :!sectids:
 
 [.text-center.strong]
-== Publish Services to Kubernetes
+== ArgoCD
 
-A Kubernetes tutorial to show how you can deploy a Java service to a Kubernetes cluster as it was a child game.
+https://argoproj.github.io/argo-cd/[Argo CD] is a declarative, GitOps continuous delivery tool for Kubernetes.
 
-[.tiles.browse]
-== Browse modules
+It follows the **GitOps** pattern of using Git repositories as the source of truth for defining the desired application state.
 
-[.tile]
-.xref:01-setup.adoc[Get Started]
-* xref:01-setup.adoc#minikube[Minikube]
+It automates the deployment of the desired application states in the specified target environments. Application deployments can track updates to branches, tags, or pinned to a specific version of manifests at a Git commit.
 
-[.tile]
-.xref:02-deploy.adoc[Deploying]
-* xref:02-deploy.adoc#package[Package the Application]
-* xref:02-deploy.adoc#deploy[Deploy the Application]
+image::argocd-logo.png[ArgoCD Logo, 400]
+
+
+== GitOps
+
+https://www.openshift.com/learn/topics/gitops/[GitOps] is a set of practices that leverages Git workflows to manage infrastructure and application configurations.
+By using Git repositories as the source of truth, it allows the DevOps team to store the entire state of the cluster configuration in Git so that the trail of changes are visible and auditable. 
+
+**GitOps** simplifies the propagation of infrastructure and application 
+configuration changes across multiple clusters by defining your infrastructure and applications definitions as “code”.
+
+* Ensure that the clusters have similar states for configuration, monitoring, or storage.
+* Recover or recreate clusters from a known state.
+* Create clusters with a known state.
+* Apply or revert configuration changes to multiple clusters.
+* Associate templated configuration with different environments.

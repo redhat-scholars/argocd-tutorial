@@ -1,7 +1,14 @@
 * xref:01-setup.adoc[1. Setup]
 ** xref:01-setup.adoc#prerequisite[Prerequisites]
-** xref:01-setup.adoc#minikube[Setup Minikube]
+** xref:01-setup.adoc#kubernetes[Setup Kubernetes]
+** xref:01-setup.adoc#install_argocd[Install ArgoCD]
 
-* xref:02-deploy.adoc[2. Deploy Service]
-** xref:02-deploy.adoc#package[Build Service]
-** xref:02-deploy.adoc#deploy[Deploy Dervice]
+* xref:02-deploy.adoc[2. Deploy Apps]
+** xref:02-deploy.adoc#create_application[Create Application]
+** xref:02-deploy.adoc#deploy_application[Deploy Application]
+** xref:02-deploy.adoc#patch_application[Patch Application]
+** xref:02-deploy.adoc#patch_application[Sync Application]
+
+* xref:03-kustomize.adoc[3. Work with Kustomize]
+
+* xref:04-syncwave-and-hooks.adoc[4. Syncwaves and Hooks]

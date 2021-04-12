@@ -10,7 +10,7 @@ include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-c
 include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-common/master/optional-requisites.adoc[]
 |===
 
-[#minikube]
+[#kubernetes]
 == Setup Kubernetes
 
 :profile: my_profile
@@ -19,7 +19,51 @@ include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-c
 
 And then you are ready for start using Kubernetes:
 
-image::kubelogo.png[]
+image::kubelogo.png[Kubernetes, 200]
+
+[#install_argocd]
+== ArgoCD Installation
+
+[tabs, subs="attributes+,+macros"]	
+====
+Minikube::
++
+--
+[source,bash,subs="attributes+,+macros"]
+----
+#!/bin/bash
+----
+
+--
+OpenShift::
++
+--
+ArgoCD is supported in OpenShift by **Red Hat OpenShift GitOps** operator.
+
+To install it, you need to follow the instructions written in: https://docs.openshift.com/container-platform/4.7/cicd/gitops/getting-started-with-openshift-gitops.html
+
+It is important that after you finish with the installation, all the required pods are deployed in `openshift-gitops` namespace:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc get pods -n openshift-gitops
+----
+
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+NAME                                                    READY   STATUS    RESTARTS   AGE
+argocd-cluster-application-controller-6f548f74b-48bvf   1/1     Running   0          54s
+argocd-cluster-redis-6cf68d494d-9qqq4                   1/1     Running   0          54s
+argocd-cluster-repo-server-85b9d68f9b-4hj52             1/1     Running   0          54s
+argocd-cluster-server-78467b647-8lcv9                   1/1     Running   0          54s
+cluster-86f8d97979-lfdhv                                1/1     Running   0          56s
+kam-7ff6f58c-2jxkm                                      1/1     Running   0          55s
+----
+--
+====
+
 
 [#downloadtutorial]
 == Get tutorial sources

@@ -2,9 +2,9 @@ runtime:
   cache_dir: ./.cache/antora
 
 site:
-  title: Template Tutorial(Dev Mode)
+  title: ArgoCD Tutorial (Dev Mode)
   url: http://localhost:3000/rhs-build-course/index.html
-  start_page: template-tutorial::index.adoc
+  start_page: argocd-tutorial::index.adoc
 
 content:
   sources:
@@ -13,13 +13,14 @@ content:
       start_path: documentation
 asciidoc:
   attributes:
-    title: Template Tutorial(Dev Mode)
+    release-version: master
+    page-pagination: true
   extensions:
     - ./lib/remote-include-processor.js
     - ./lib/tab-block.js
 ui:
   bundle:
-    url: https://github.com/redhat-scholars/course-ui/releases/download/v0.1.1/ui-bundle.zip
+    url: https://github.com/redhat-scholars/course-ui/releases/download/v0.1.9/ui-bundle.zip
     snapshot: true
   supplemental_files: ./supplemental-ui
 output:

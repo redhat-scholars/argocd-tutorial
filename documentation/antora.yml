@@ -1,5 +1,5 @@
-name: template-tutorial
-title: Template Tutorial
+name: argocd-tutorial
+title: ArgoCD Tutorial
 version: master
 nav:
   - modules/ROOT/nav.adoc
