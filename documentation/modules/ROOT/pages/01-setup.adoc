@@ -34,8 +34,8 @@ Enable the Ingress Addon for Minikube:
 [source,bash,subs="attributes+,+macros"]
 ----
 #!/bin/bash
-minikube addons enable ingress -p ${profile}
-minikube addons list -p ${profile} | grep ingress
+minikube addons enable ingress -p {profile}
+minikube addons list -p {profile} | grep ingress
 ----
 
 Install Argocd and check that every pod is running properly in the argocd namespace:
@@ -71,7 +71,7 @@ the step before:
 [source,bash,subs="attributes+,+macros"]
 ----
 #!/bin/bash
-minikube -p ${profile} service argocd-server -n argocd
+minikube -p {profile} service argocd-server -n argocd
 ----
 
 --
