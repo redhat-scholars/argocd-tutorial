@@ -10,6 +10,15 @@ include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-c
 include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-common/master/optional-requisites.adoc[]
 |===
 
+
+[#downloadtutorial]
+== Get tutorial sources
+
+:tutorial-url: https://github.com/redhat-scholars/argocd-tutorial.git
+:folder: gitops
+include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-common/master/download-sources.adoc[]
+
+
 [#kubernetes]
 == Setup Kubernetes
 
@@ -101,13 +110,54 @@ argocd-cluster-server-78467b647-8lcv9                   1/1     Running   0     
 cluster-86f8d97979-lfdhv                                1/1     Running   0          56s
 kam-7ff6f58c-2jxkm                                      1/1     Running   0          55s
 ----
+
+Patch the ArgoCD Controller of openshift-gitops in the namespace `openshift-gitops`:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc patch argocd openshift-gitops -n openshift-gitops --type=merge -p='{"spec":{"resourceCustomizations":"route.openshift.io/Route:\n  ignoreDifferences: |\n    jsonPointers:\n    - /spec/host\n","server":{"insecure":true,"route":{"enabled":true,"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"}}}}}'
+----
+
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+argocd.argoproj.io/openshift-gitops patched
+----
+
+this command patches the ArgoCD Controller in the following ways:
+
+- Ignores .spec.host field in routes
+- Uses SSL edge termination
+
+Wait for the rollout of a new controller:
+
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+oc rollout status deploy openshift-gitops-server -n openshift-gitops
+----
+
+Give the serviceAccount for ArgoCD the ability to manage the cluster:
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+oc adm policy add-cluster-role-to-user cluster-admin -z openshift-gitops-argocd-application-controller -n openshift-gitops
+----
+
 --
 ====
 
+[#connect_argocd]
+== Connecting to ArgoCD
 
-[#downloadtutorial]
-== Get tutorial sources
+Now that you've verified that Argo CD is up and running, let's explore how to access and manage Argo CD.
 
-:tutorial-url: https://github.com/redhat-scholars/argocd-tutorial.git
-:folder: gitops
-include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-common/master/download-sources.adoc[]
+Install the argocd CLI tool.
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+wget -q -O /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.0.0/argocd-linux-amd64
+chmod +x /usr/local/bin/argocd
+----

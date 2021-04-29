@@ -2,6 +2,7 @@
 ** xref:01-setup.adoc#prerequisite[Prerequisites]
 ** xref:01-setup.adoc#kubernetes[Setup Kubernetes]
 ** xref:01-setup.adoc#install_argocd[Install ArgoCD]
+** xref:01-setup.adoc#connect_argocd[Connecting to ArgoCD]
 
 * xref:02-deploy.adoc[2. Deploy Apps]
 ** xref:02-deploy.adoc#create_application[Create Application]
