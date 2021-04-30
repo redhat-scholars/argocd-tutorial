@@ -84,6 +84,9 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="#install_argocd">Install ArgoCD</a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#connect_argocd">Connecting to ArgoCD</a>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
@@ -92,15 +95,6 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="02-deploy.html#create_application">Create Application</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-deploy.html#deploy_application">Deploy Application</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-deploy.html#patch_application">Patch Application</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-deploy.html#patch_application">Sync Application</a>
   </li>
 </ul>
   </li>
@@ -277,6 +271,29 @@ Although they are used in the tutorial, you could use others without any problem
 </div>
 </div>
 <div class="sect1">
+<h2 id="downloadtutorial"><a class="anchor" href="#downloadtutorial"></a>Get tutorial sources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before we start setting up the environment, let’s clone the tutorial sources and set the <code>TUTORIAL_HOME</code> environment variable to point to the root directory of the tutorial:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone <a href="https://github.com/redhat-scholars/argocd-tutorial.git" class="bare">https://github.com/redhat-scholars/argocd-tutorial.git</a> gitops</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">export TUTORIAL_HOME="$(pwd)/gitops"</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="kubernetes"><a class="anchor" href="#kubernetes"></a>Setup Kubernetes</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -437,16 +454,6 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}
 </div>
 </div>
 <div class="paragraph">
-<p>ArgoCD by default generates a admin user, and a random password that generates when the ArgoCD is
-deployed. To get the ArgoCD password execute:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d</code></pre>
-</div>
-</div>
-<div class="paragraph">
 <p>Expose the ArgoCD console using the minikube service using user admin, and the password obtained in
 the step before:</p>
 </div>
@@ -483,31 +490,146 @@ cluster-86f8d97979-lfdhv                                1/1     Running   0     
 kam-7ff6f58c-2jxkm                                      1/1     Running   0          55s</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Patch the ArgoCD Controller of openshift-gitops in the namespace <code>openshift-gitops</code>:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc patch argocd openshift-gitops -n openshift-gitops --type=merge -p='{"spec":{"resourceCustomizations":"route.openshift.io/Route:\n  ignoreDifferences: |\n    jsonPointers:\n    - /spec/host\n","server":{"insecure":true,"route":{"enabled":true,"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"}}}}}'</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">argocd.argoproj.io/openshift-gitops patched</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>this command patches the ArgoCD Controller in the following ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Ignores .spec.host field in routes</p>
+</li>
+<li>
+<p>Uses SSL edge termination</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Wait for the rollout of a new controller:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc rollout status deploy openshift-gitops-server -n openshift-gitops</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Give the serviceAccount for ArgoCD the ability to manage the cluster:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc adm policy add-cluster-role-to-user cluster-admin -z openshift-gitops-argocd-application-controller -n openshift-gitops</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="downloadtutorial"><a class="anchor" href="#downloadtutorial"></a>Get tutorial sources</h2>
+<h2 id="connect_argocd"><a class="anchor" href="#connect_argocd"></a>Connecting to ArgoCD</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Before we start setting up the environment, let’s clone the tutorial sources and set the <code>TUTORIAL_HOME</code> environment variable to point to the root directory of the tutorial:</p>
+<p>Now that you&#8217;ve verified that Argo CD is up and running, let&#8217;s explore how to access and manage Argo CD.</p>
+</div>
+<div class="paragraph">
+<p>Install the argocd CLI tool.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone <a href="https://github.com/redhat-scholars/argocd-tutorial.git" class="bare">https://github.com/redhat-scholars/argocd-tutorial.git</a> gitops</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">wget -q -O /usr/local/bin/argocd <a href="https://github.com/argoproj/argo-cd/releases/download/v2.0.0/argocd-linux-amd64" class="bare">https://github.com/argoproj/argo-cd/releases/download/v2.0.0/argocd-linux-amd64</a>
+chmod +x /usr/local/bin/argocd</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Login in the ArgoCD instance with ArgoCD cli:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset3_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_minikube">
+<div class="paragraph">
+<p>ArgoCD by default generates a admin user, and a random password that generates when the ArgoCD is deployed. To get the ArgoCD password execute:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_openshift">
+<div class="paragraph">
+<p>Get the Route for the ArgoCD/Openshift GitOps server and extract the secret for the admin user:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">export TUTORIAL_HOME="$(pwd)/gitops"</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">argoRoute=$(oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}{"\n"}')
+argoPass=$(oc get secret/openshift-gitops-cluster -n openshift-gitops -o jsonpath='{.data.admin\.password}' | base64 -d)</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Login to the ArgoCD with the ArgoCD cli:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">argocd login --insecure --grpc-web $argoRoute  --username admin --password $argoPass</code></pre>
 </div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">'admin:login' logged in successfully</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Access to the Route of ArgoCD:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo $argoRoute</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Access to the ArgoCD console with the user admin and the password extracted in the previous step:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argocd-login.png" alt="ArgoCDLogin" width="200">
+</div>
+</div>
+<div class="paragraph">
+<p>Once you&#8217;ve logged in, you should see the following page.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argocd-login2.png" alt="ArgoCDLogin2" width="200">
+</div>
+</div>
+<div class="paragraph">
+<p>This is the Argo CD Web UI.</p>
 </div>
 </div>
 </div>
