@@ -1,0 +1,355 @@
+= Getting Started
+include::_attributes.adoc[]
+
+[#install_argocd]
+== ArgoCD Installation
+
+Welcome! In this section we will be exploring the OpenShift GitOps Operator, what it installs, and how all the components fit together.
+
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+In the minikube guide, an ArgoCD upstream deployment will be installed and used.
+
+Enable the Ingress Addon for Minikube:
+
+[source,bash,subs="attributes+,+macros"]
+----
+#!/bin/bash
+minikube addons enable ingress -p {profile}
+minikube addons list -p {profile} | grep ingress
+----
+
+Install Argocd and check that every pod is running properly in the argocd namespace:
+
+[source,bash,subs="attributes+,+macros"]
+----
+#!/bin/bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl get pod -n argocd
+----
+
+Patch the ArgoCD service from ClusterIP to a LoadBalancer:
+
+[source,bash,subs="attributes+,+macros"]
+----
+#!/bin/bash
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+----
+
+Expose the ArgoCD console using the minikube service using user admin, and the password obtained in the step before:
+
+[source,bash,subs="attributes+,+macros"]
+----
+#!/bin/bash
+minikube -p {profile} service argocd-server -n argocd
+----
+
+Now with the minikube service list you can check the argocd service exposed:
+
+[source,bash,subs="attributes+,+macros"]
+----
+#!/bin/bash
+minikube -p {profile} service list
+----
+
+--
+OpenShift::
++
+--
+ArgoCD is supported in OpenShift by **Red Hat OpenShift GitOps** operator.
+
+To install it, you need to follow the instructions written in: https://docs.openshift.com/container-platform/4.7/cicd/gitops/getting-started-with-openshift-gitops.html
+
+It is important that after you finish with the installation, all the required pods are deployed in `openshift-gitops` namespace:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc get pods -n openshift-gitops
+----
+
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+NAME                                                    READY   STATUS    RESTARTS   AGE
+argocd-cluster-application-controller-6f548f74b-48bvf   1/1     Running   0          54s
+argocd-cluster-redis-6cf68d494d-9qqq4                   1/1     Running   0          54s
+argocd-cluster-repo-server-85b9d68f9b-4hj52             1/1     Running   0          54s
+argocd-cluster-server-78467b647-8lcv9                   1/1     Running   0          54s
+cluster-86f8d97979-lfdhv                                1/1     Running   0          56s
+kam-7ff6f58c-2jxkm                                      1/1     Running   0          55s
+----
+
+Another way to view what was installed is to run the following:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc get operators
+----
+
+This should have the following output.
+
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+NAME                                                  AGE
+openshift-gitops-operator.openshift-operators         25m
+openshift-pipelines-operator-rh.openshift-operators   25m
+----
+
+Patch the ArgoCD Controller of openshift-gitops in the namespace `openshift-gitops`:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc patch argocd openshift-gitops -n openshift-gitops --type=merge -p='{"spec":{"resourceCustomizations":"route.openshift.io/Route:\n  ignoreDifferences: |\n    jsonPointers:\n    - /spec/host\n","server":{"insecure":true,"route":{"enabled":true,"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"}}}}}'
+----
+
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+argocd.argoproj.io/openshift-gitops patched
+----
+
+this command patches the ArgoCD Controller in the following ways:
+
+- Ignores .spec.host field in routes
+- Uses SSL edge termination
+
+Wait for the rollout of a new controller:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc rollout status deploy openshift-gitops-server -n openshift-gitops
+----
+
+Give the serviceAccount for ArgoCD the ability to manage the cluster:
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc adm policy add-cluster-role-to-user cluster-admin -z openshift-gitops-argocd-application-controller -n openshift-gitops
+----
+
+--
+====
+
+[#connect_argocd]
+== Connecting to ArgoCD
+
+Now that you've verified that Argo CD is up and running, let's explore how to access and manage Argo CD.
+
+Install the argocd CLI tool.
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+wget -q -O /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.0.0/argocd-linux-amd64
+chmod +x /usr/local/bin/argocd
+----
+
+Login in the ArgoCD instance with ArgoCD cli:
+
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+ArgoCD by default generates a admin user, and a random password that generates when the ArgoCD is deployed. 
+
+To get the ArgoCD password execute:
+
+[source,bash,subs="attributes+,+macros"]
+----
+#!/bin/bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+----
+
+--
+
+OpenShift::
++
+--
+
+Get the Route for the ArgoCD/Openshift GitOps server and extract the secret for the admin user: 
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+argoRoute=$(oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}{"\n"}')
+argoPass=$(oc get secret/openshift-gitops-cluster -n openshift-gitops -o jsonpath='{.data.admin\.password}' | base64 -d)
+----
+
+Login to the ArgoCD with the ArgoCD cli:
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+argocd login --insecure --grpc-web $argoRoute  --username admin --password $argoPass
+----
+
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+'admin:login' logged in successfully
+----
+
+Access to the Route of ArgoCD:
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+echo $argoRoute
+----
+--
+====
+
+Access to the ArgoCD console with the user admin and the password extracted in the previous step:
+
+image::argocd-login.png[ArgoCDLogin, 600]
+
+Once you've logged in, you should see the following page.
+
+image::argocd-login2.png[ArgoCDLogin2, 600]
+
+This is the Argo CD Web UI.
+
+[#deploy_sample_application]
+== Deploying Sample Application
+
+For this tutorial, we will use our https://github.com/redhat-developer-demos/openshift-gitops-examples[GitOps repo]. We'll be using this repo to deploy our first application and contain the manifests to deploy our example app.
+
+These manifests include:
+
+* A Namespace: https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/overlays/bgd/bgd-ns.yaml[bgd-namespace.yaml]
+* A Deployment: https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-deployment.yaml[bgd-deployment.yaml]
+* A Service: https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-svc.yaml[bgd-svc.yaml]
+* A Route: https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-route.yaml[bgd-route.yaml]
+
+Collectively, this is known as an `Application` within ArgoCD. Therefore, you must define it as such in order to apply these manifest in your cluster.
+
+For this you can define and apply an `Application` manifest in ArgoCD. Let's check the https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml[ArgoCD Application manifest] used for deploy our application and break this down a bit:
+
+* ArgoCD's concept of a `Project` is different than OpenShift's. Here you're installing the application in ArgoCD's `default` project (`.spec.project`). *NOT* OpenShift's default project.
+* The destination server is the server we installed ArgoCD on (noted as `.spec.destination.server`).
+* The manifest repo where the YAML resides and the path to look for the YAML is under `.spec.source`.
+* The `.spec.syncPolicy` is set to `false`. Note that you can have Argo CD automatically sync the repo.
+* The last section `.spec.sync` just says what are you comparing the repo to. (Basically "Compare the running config to the desired config")
+
+The Application CR (CustomResource) can be applied by running the following:
+
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+#!/bin/bash
+kubectl apply -f assets/bgd-app/bgd-app.yaml
+----
+
+--
+
+OpenShift::
++
+--
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+#!/bin/bash
+oc apply -f assets/bgd-app/bgd-app.yaml
+----
+
+--
+====
+
+This should create the `bgd-app` in the ArgoCD UI.
+
+image::argocd-app1.png[SampleApp, 300]
+
+Clicking on this "card" takes you to the overview page. You may see it as still progressing or full synced.
+
+image::argocd-app2.png[SampleApp, 600]
+
+NOTE: You may have to click on `show hidden resources` on this page to see it all
+
+At this point the application should be up and running. 
+
+You can see all the resources created with:
+
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+#!/bin/bash
+kubeclt get pods,svc,route -n bgd
+----
+--
+
+OpenShift::
++
+--
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+#!/bin/bash
+oc get pods,svc,route -n bgd
+----
+--
+====
+
+The output should look like this:
+
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+NAME                       READY   STATUS    RESTARTS   AGE
+pod/bgd-788cb756f7-kz448   1/1     Running   0          10m
+
+NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/bgd   ClusterIP   172.30.111.118   <none>        8080/TCP   10m
+
+NAME                           HOST/PORT                                PATH   SERVICES   PORT   TERMINATION   WILDCARD
+route.route.openshift.io/bgd   bgd-bgd.apps.example.com          bgd        8080                 None
+----
+
+First wait for the rollout to complete:
+
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+#!/bin/bash
+kubectl rollout status deploy/bgd -n bgd
+----
+--
+
+OpenShift::
++
+--
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+#!/bin/bash
+oc rollout status deploy/bgd -n bgd
+----
+--
+====
+
+Then visit your application using the route or the ingress.
+
+Your application should look like this.
+
+image::argocd-app3.png[SampleApp, 600]
