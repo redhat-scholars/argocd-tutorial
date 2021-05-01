@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Getting Started :: ArgoCD Tutorial</title>
+    <link rel="canonical" href="https://redhat-scholars.github.io/course-template/argocd-tutorial/02-getting_started.html">
+    <link rel="prev" href="01-setup.html">
+    <link rel="next" href="#03-kustomize.adoc">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" href="https://redhat-scholars.github.io/course-template">ArgoCD Tutorial</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Books</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">CheatSheets</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">CheatSheet A</a>
+            <a class="navbar-item" href="#">CheatSheet B</a>
+            <a class="navbar-item" href="#">CheatSheet C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Upcoming Events</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Event A</a>
+            <a class="navbar-item" href="#">Event B</a>
+            <a class="navbar-item" href="#">Event C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Tutorial A</a>
+            <a class="navbar-item" href="#">Tutorial B</a>
+            <a class="navbar-item" href="#">Tutorial C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="argocd-tutorial" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">ArgoCD Tutorial</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">1. Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#kubernetes">Setup Kubernetes</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-getting_started.html">2. Getting Started</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#install_argocd">Install ArgoCD</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#connect_argocd">Connecting to ArgoCD</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#deploy_sample_application">Deploying Sample Application</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="#03-kustomize.adoc">3. Work with Kustomize</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="#04-syncwave-and-hooks.adoc">4. Syncwaves and Hooks</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">ArgoCD Tutorial</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">ArgoCD Tutorial</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">ArgoCD Tutorial</a></li>
+    <li><a href="02-getting_started.html">2. Getting Started</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/redhat-scholars/argocd-tutorial/edit/master/documentation/modules/ROOT/pages/02-getting_started.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Getting Started</h1>
+<div class="sect1">
+<h2 id="install_argocd"><a class="anchor" href="#install_argocd"></a>ArgoCD Installation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Welcome! In this section we will be exploring the OpenShift GitOps Operator, what it installs, and how all the components fit together.</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset1_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_minikube">
+<div class="paragraph">
+<p>In the minikube guide, an ArgoCD upstream deployment will be installed and used.</p>
+</div>
+<div class="paragraph">
+<p>Enable the Ingress Addon for Minikube:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+minikube addons enable ingress -p {profile}
+minikube addons list -p {profile} | grep ingress</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Install Argocd and check that every pod is running properly in the argocd namespace:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f <a href="https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml" class="bare">https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml</a>
+kubectl get pod -n argocd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Patch the ArgoCD service from ClusterIP to a LoadBalancer:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Expose the ArgoCD console using the minikube service using user admin, and the password obtained in the step before:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+minikube -p {profile} service argocd-server -n argocd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now with the minikube service list you can check the argocd service exposed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+minikube -p {profile} service list</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_openshift">
+<div class="paragraph">
+<p>ArgoCD is supported in OpenShift by <strong>Red Hat OpenShift GitOps</strong> operator.</p>
+</div>
+<div class="paragraph">
+<p>To install it, you need to follow the instructions written in: <a href="https://docs.openshift.com/container-platform/4.7/cicd/gitops/getting-started-with-openshift-gitops.html" class="bare">https://docs.openshift.com/container-platform/4.7/cicd/gitops/getting-started-with-openshift-gitops.html</a></p>
+</div>
+<div class="paragraph">
+<p>It is important that after you finish with the installation, all the required pods are deployed in <code>openshift-gitops</code> namespace:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods -n openshift-gitops</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                                                    READY   STATUS    RESTARTS   AGE
+argocd-cluster-application-controller-6f548f74b-48bvf   1/1     Running   0          54s
+argocd-cluster-redis-6cf68d494d-9qqq4                   1/1     Running   0          54s
+argocd-cluster-repo-server-85b9d68f9b-4hj52             1/1     Running   0          54s
+argocd-cluster-server-78467b647-8lcv9                   1/1     Running   0          54s
+cluster-86f8d97979-lfdhv                                1/1     Running   0          56s
+kam-7ff6f58c-2jxkm                                      1/1     Running   0          55s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Another way to view what was installed is to run the following:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get operators</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This should have the following output.</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                                                  AGE
+openshift-gitops-operator.openshift-operators         25m
+openshift-pipelines-operator-rh.openshift-operators   25m</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Patch the ArgoCD Controller of openshift-gitops in the namespace <code>openshift-gitops</code>:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc patch argocd openshift-gitops -n openshift-gitops --type=merge -p='{"spec":{"resourceCustomizations":"route.openshift.io/Route:\n  ignoreDifferences: |\n    jsonPointers:\n    - /spec/host\n","server":{"insecure":true,"route":{"enabled":true,"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"}}}}}'</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">argocd.argoproj.io/openshift-gitops patched</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>this command patches the ArgoCD Controller in the following ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Ignores .spec.host field in routes</p>
+</li>
+<li>
+<p>Uses SSL edge termination</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Wait for the rollout of a new controller:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc rollout status deploy openshift-gitops-server -n openshift-gitops</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Give the serviceAccount for ArgoCD the ability to manage the cluster:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc adm policy add-cluster-role-to-user cluster-admin -z openshift-gitops-argocd-application-controller -n openshift-gitops</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="connect_argocd"><a class="anchor" href="#connect_argocd"></a>Connecting to ArgoCD</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now that you&#8217;ve verified that Argo CD is up and running, let&#8217;s explore how to access and manage Argo CD.</p>
+</div>
+<div class="paragraph">
+<p>Install the argocd CLI tool.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">wget -q -O /usr/local/bin/argocd <a href="https://github.com/argoproj/argo-cd/releases/download/v2.0.0/argocd-linux-amd64" class="bare">https://github.com/argoproj/argo-cd/releases/download/v2.0.0/argocd-linux-amd64</a>
+chmod +x /usr/local/bin/argocd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Login in the ArgoCD instance with ArgoCD cli:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset2_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_minikube">
+<div class="paragraph">
+<p>ArgoCD by default generates a admin user, and a random password that generates when the ArgoCD is deployed.</p>
+</div>
+<div class="paragraph">
+<p>To get the ArgoCD password execute:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_openshift">
+<div class="paragraph">
+<p>Get the Route for the ArgoCD/Openshift GitOps server and extract the secret for the admin user:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">argoRoute=$(oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}{"\n"}')
+argoPass=$(oc get secret/openshift-gitops-cluster -n openshift-gitops -o jsonpath='{.data.admin\.password}' | base64 -d)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Login to the ArgoCD with the ArgoCD cli:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">argocd login --insecure --grpc-web $argoRoute  --username admin --password $argoPass</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">'admin:login' logged in successfully</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Access to the Route of ArgoCD:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo $argoRoute</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Access to the ArgoCD console with the user admin and the password extracted in the previous step:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argocd-login.png" alt="ArgoCDLogin" width="600">
+</div>
+</div>
+<div class="paragraph">
+<p>Once you&#8217;ve logged in, you should see the following page.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argocd-login2.png" alt="ArgoCDLogin2" width="600">
+</div>
+</div>
+<div class="paragraph">
+<p>This is the Argo CD Web UI.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="deploy_sample_application"><a class="anchor" href="#deploy_sample_application"></a>Deploying Sample Application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For this tutorial, we will use our <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples">GitOps repo</a>. We&#8217;ll be using this repo to deploy our first application and contain the manifests to deploy our example app.</p>
+</div>
+<div class="paragraph">
+<p>These manifests include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A Namespace: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/overlays/bgd/bgd-ns.yaml">bgd-namespace.yaml</a></p>
+</li>
+<li>
+<p>A Deployment: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-deployment.yaml">bgd-deployment.yaml</a></p>
+</li>
+<li>
+<p>A Service: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-svc.yaml">bgd-svc.yaml</a></p>
+</li>
+<li>
+<p>A Route: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-route.yaml">bgd-route.yaml</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Collectively, this is known as an <code>Application</code> within ArgoCD. Therefore, you must define it as such in order to apply these manifest in your cluster.</p>
+</div>
+<div class="paragraph">
+<p>For this you can define and apply an <code>Application</code> manifest in ArgoCD. Let&#8217;s check the <a href="https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml">ArgoCD Application manifest</a> used for deploy our application and break this down a bit:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ArgoCD&#8217;s concept of a <code>Project</code> is different than OpenShift&#8217;s. Here you&#8217;re installing the application in ArgoCD&#8217;s <code>default</code> project (<code>.spec.project</code>). <strong>NOT</strong> OpenShift&#8217;s default project.</p>
+</li>
+<li>
+<p>The destination server is the server we installed ArgoCD on (noted as <code>.spec.destination.server</code>).</p>
+</li>
+<li>
+<p>The manifest repo where the YAML resides and the path to look for the YAML is under <code>.spec.source</code>.</p>
+</li>
+<li>
+<p>The <code>.spec.syncPolicy</code> is set to <code>false</code>. Note that you can have Argo CD automatically sync the repo.</p>
+</li>
+<li>
+<p>The last section <code>.spec.sync</code> just says what are you comparing the repo to. (Basically "Compare the running config to the desired config")</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Application CR (CustomResource) can be applied by running the following:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset3_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_minikube">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+kubectl apply -f assets/bgd-app/bgd-app.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_openshift">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+oc apply -f assets/bgd-app/bgd-app.yaml</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>This should create the <code>bgd-app</code> in the ArgoCD UI.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argocd-app1.png" alt="SampleApp" width="300">
+</div>
+</div>
+<div class="paragraph">
+<p>Clicking on this "card" takes you to the overview page. You may see it as still progressing or full synced.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argocd-app2.png" alt="SampleApp" width="600">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You may have to click on <code>show hidden resources</code> on this page to see it all
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>At this point the application should be up and running.</p>
+</div>
+<div class="paragraph">
+<p>You can see all the resources created with:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset4_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset4_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset4_minikube">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+kubeclt get pods,svc,route -n bgd</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset4_openshift">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+oc get pods,svc,route -n bgd</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The output should look like this:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                       READY   STATUS    RESTARTS   AGE
+pod/bgd-788cb756f7-kz448   1/1     Running   0          10m
+
+NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/bgd   ClusterIP   172.30.111.118   &lt;none&gt;        8080/TCP   10m
+
+NAME                           HOST/PORT                                PATH   SERVICES   PORT   TERMINATION   WILDCARD
+route.route.openshift.io/bgd   bgd-bgd.apps.example.com          bgd        8080                 None</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>First wait for the rollout to complete:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset5_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset5_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset5_minikube">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+kubectl rollout status deploy/bgd -n bgd</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset5_openshift">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+oc rollout status deploy/bgd -n bgd</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Then visit your application using the route or the ingress.</p>
+</div>
+<div class="paragraph">
+<p>Your application should look like this.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argocd-app3.png" alt="SampleApp" width="600">
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="01-setup.html" class="query-params-link">1. Setup</a></span>
+  <span class="next"><a href="#03-kustomize.adoc" class="query-params-link">3. Work with Kustomize</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
