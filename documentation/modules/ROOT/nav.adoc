@@ -10,3 +10,5 @@
 * xref:03-kustomize.adoc[3. Work with Kustomize]
 
 * xref:04-syncwave-and-hooks.adoc[4. Syncwaves and Hooks]
+** xref:04-syncwave-and-hooks.adoc#concepts[Sync Waves and Hooks]
+** xref:04-syncwave-and-hooks.adoc#usingsyncwaves[Using Sync Waves]
