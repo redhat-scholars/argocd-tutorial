@@ -62,8 +62,7 @@ OpenShift::
 --
 ArgoCD is supported in OpenShift by **Red Hat OpenShift GitOps** operator.
 
-To install it, you need to follow the instructions written in: https://docs.openshift.com/container-platform/4.7/cicd/gitops/getting-started-with-openshift-gitops.html
-
+To install it, you need to follow the instructions written in: https://docs.openshift.com/container-platform/4.7/cicd/gitops/installing-openshift-gitops.html
 It is important that after you finish with the installation, all the required pods are deployed in `openshift-gitops` namespace:
 
 [.console-input]
