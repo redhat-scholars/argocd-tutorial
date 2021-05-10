@@ -2,14 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://redhat-scholars.github.io/course-template/argocd-tutorial/01-setup.html</loc>
-<lastmod>2021-05-07T14:12:53.499Z</lastmod>
+<lastmod>2021-05-10T08:03:31.524Z</lastmod>
 </url>
 <url>
 <loc>https://redhat-scholars.github.io/course-template/argocd-tutorial/02-getting_started.html</loc>
-<lastmod>2021-05-07T14:12:53.499Z</lastmod>
+<lastmod>2021-05-10T08:03:31.524Z</lastmod>
+</url>
+<url>
+<loc>https://redhat-scholars.github.io/course-template/argocd-tutorial/04-syncwaves-hooks.html</loc>
+<lastmod>2021-05-10T08:03:31.524Z</lastmod>
 </url>
 <url>
 <loc>https://redhat-scholars.github.io/course-template/argocd-tutorial/index.html</loc>
-<lastmod>2021-05-07T14:12:53.499Z</lastmod>
+<lastmod>2021-05-10T08:03:31.524Z</lastmod>
 </url>
 </urlset>

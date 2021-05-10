@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Getting Started :: ArgoCD Tutorial</title>
+    <link rel="canonical" href="https://redhat-scholars.github.io/course-template/argocd-tutorial/04-syncwaves-hooks.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" href="https://redhat-scholars.github.io/course-template">ArgoCD Tutorial</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Books</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">CheatSheets</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">CheatSheet A</a>
+            <a class="navbar-item" href="#">CheatSheet B</a>
+            <a class="navbar-item" href="#">CheatSheet C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Upcoming Events</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Event A</a>
+            <a class="navbar-item" href="#">Event B</a>
+            <a class="navbar-item" href="#">Event C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Tutorial A</a>
+            <a class="navbar-item" href="#">Tutorial B</a>
+            <a class="navbar-item" href="#">Tutorial C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="argocd-tutorial" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">ArgoCD Tutorial</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">1. Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#kubernetes">Setup Kubernetes</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-getting_started.html">2. Getting Started</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-getting_started.html#install_argocd">Install ArgoCD</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-getting_started.html#connect_argocd">Connecting to ArgoCD</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-getting_started.html#deploy_sample_application">Deploying Sample Application</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="#03-kustomize.adoc">3. Work with Kustomize</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="#04-syncwave-and-hooks.adoc">4. Syncwaves and Hooks</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#04-syncwave-and-hooks.adoc#concepts">Sync Waves and Hooks</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#04-syncwave-and-hooks.adoc#usingsyncwaves">Using Sync Waves</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">ArgoCD Tutorial</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">ArgoCD Tutorial</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">ArgoCD Tutorial</a></li>
+    <li><a href="04-syncwaves-hooks.html">Getting Started</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/redhat-scholars/argocd-tutorial/edit/master/documentation/modules/ROOT/pages/04-syncwaves-hooks.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Getting Started</h1>
+<div class="sect1">
+<h2 id="concepts"><a class="anchor" href="#concepts"></a>SyncWaves and Hooks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This scenario will get you get familiar with syncwaves and hook phases.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://argoproj.github.io/argo-cd/user-guide/sync-waves/">Syncwaves</a> are used in Argo CD to order how manifests are applied to the cluster.</p>
+</div>
+<div class="paragraph">
+<p>On the other hand <a href="https://argoproj.github.io/argo-cd/user-guide/resource_hooks/">resource hooks</a> breaks up the delivery of these manifests in different phases.</p>
+</div>
+<div class="paragraph">
+<p>Using a combination of syncwaves and resource hooks, you can control how your application rolls out.</p>
+</div>
+<div class="paragraph">
+<p>This example will take you through the following steps:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Using Syncwaves to order deployment</p>
+</li>
+<li>
+<p>Exploring Resource Hooks</p>
+</li>
+<li>
+<p>Using Syncwaves and Hooks together</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="usingsyncwaves"><a class="anchor" href="#usingsyncwaves"></a>Using Sync Waves</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A Syncwave is a way to order how Argo CD applies the manifests that are stored in git. All manifests have a wave of zero by default, but you can set these by using the argocd.argoproj.io/sync-wave annotation.</p>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The wave can also be negative as well.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When Argo CD starts a sync action, the manifest get placed in the following order:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The Phase that they&#8217;re in (we&#8217;ll cover phases in the next section)</p>
+</li>
+<li>
+<p>The wave the resource is annotated in (starting from the lowest value to the highest)</p>
+</li>
+<li>
+<p>By kind (Namspaces first, then services, then deployments, etc &#8230;&#8203;)</p>
+</li>
+<li>
+<p>By name (ascending order)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Read more about syncwaves on the <a href="https://argoproj.github.io/argo-cd/user-guide/sync-waves/#how-do-i-configure-waves">official documentation site</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="_exploring_the_manifests"><a class="anchor" href="#_exploring_the_manifests"></a>Exploring the manifests</h3>
+<div class="paragraph">
+<p>The sample application that we will deploy has the following manifests:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/overlays/syncwaves/welcome-php-ns.yaml">Namespace</a> with syncwave as 0</p>
+</li>
+<li>
+<p>The <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-deployment.yaml">Deployment</a> with syncwave as 1</p>
+</li>
+<li>
+<p>The <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-svc.yaml">Service</a> with syncwave as 2</p>
+</li>
+<li>
+<p>Finally the <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-route.yaml">Route</a> with syncwave as 3</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Argo CD will apply the Namespace first (since it&#8217;s the lowest value), and make sure it returns a "healthy" status before moving on.</p>
+</div>
+<div class="paragraph">
+<p>Next, the Deployment will be applied. After that reports healthy, Argo CD will apply the Service then the Route.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Argo CD won&#8217;t apply the next manifest until the previous reports "healthy".
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deploying_the_application"><a class="anchor" href="#_deploying_the_application"></a>Deploying The Application</h3>
+<div class="paragraph">
+<p>Before we deploy this application, make sure you&#8217;ve opened the Argo CD Web Console.</p>
+</div>
+<div class="paragraph">
+<p>Access to the ArgoCD console with the user admin and the password extracted in the previous steps:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argocd-login.png" alt="ArgoCDLogin" width="600">
+</div>
+</div>
+<div class="paragraph">
+<p>Apply the Argo CD <code>Application</code> manifest to get this application deployed.</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset1_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_minikube">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+kubectl apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_openshift">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
+oc apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>This should create the <code>welcome-syncwaves</code> in the ArgoCD UI.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/syncwaves1.png" alt="Syncwaves1" width="400">
+</div>
+</div>
+<div class="paragraph">
+<p>Clicking on this "card" will take you to the application overview page. Clicking on "show hidden resources" should expand the "tree" view.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/syncwaves2.png" alt="Syncwaves2" width="400">
+</div>
+</div>
+<div class="paragraph">
+<p>If you follow along, you&#8217;ll note that these manfiests get applied in order of their annotated syncwave!</p>
+</div>
+<div class="paragraph">
+<p>Keep the Argo CD WebUI tab open for the next exercise.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
