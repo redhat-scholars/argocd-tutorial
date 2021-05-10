@@ -402,7 +402,7 @@ the <code>kubectl</code> (or <code>oc</code>) command. Example:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kustomize build . | oc apply -f -</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kustomize build . | kubectl apply -f -</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -543,7 +543,12 @@ YAML.</p>
 CD and how it can be used in a GitOps workflow.</p>
 </div>
 <div class="paragraph">
-<p>Before preceeding, move back into the home directory: <code>cd ~</code>{{execute}}</p>
+<p>Before preceeding, move back into the home directory:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd -</code></pre>
+</div>
 </div>
 <div class="sect2">
 <h3 id="argocd_web_console"><a class="anchor" href="#argocd_web_console"></a>The Argo CD Web Console</h3>
@@ -614,7 +619,7 @@ command:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f resources/bgd-app/bgd-app.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f documentation/modules/ROOT/examples/bgd-app/bgd-app.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
