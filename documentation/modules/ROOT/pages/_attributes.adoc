@@ -1,2 +1,4 @@
 :experimental:
 :source-highlighter: highlightjs
+:branch: master
+:github-repo: https://github.com/redhat-scholars/argocd-tutorial/blob/{branch}

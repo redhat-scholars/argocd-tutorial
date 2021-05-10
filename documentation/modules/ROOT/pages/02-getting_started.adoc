@@ -230,14 +230,47 @@ For this tutorial, we will use our https://github.com/redhat-developer-demos/ope
 
 These manifests include:
 
-* A Namespace: https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/overlays/bgd/bgd-ns.yaml[bgd-namespace.yaml]
-* A Deployment: https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-deployment.yaml[bgd-deployment.yaml]
-* A Service: https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-svc.yaml[bgd-svc.yaml]
-* A Route: https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-route.yaml[bgd-route.yaml]
+A *Namespace*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/overlays/bgd/bgd-ns.yaml[bgd-namespace.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$bgd-yaml/bgd-namespace.yaml[]
+----
+
+A *Deployment*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-deployment.yaml[bgd-deployment.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$bgd-yaml/bgd-deployment.yaml[]
+----
+
+A *Service*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-svc.yaml[bgd-svc.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$bgd-yaml/bgd-svc.yaml[]
+----
+
+A *Route*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-route.yaml[bgd-route.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$bgd-yaml/bgd-route.yaml[]
+----
 
 Collectively, this is known as an `Application` within ArgoCD. Therefore, you must define it as such in order to apply these manifest in your cluster.
 
 For this you can define and apply an `Application` manifest in ArgoCD. Let's check the https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml[ArgoCD Application manifest] used for deploy our application and break this down a bit:
+
+.link:https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml[bgd-app.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$bgd-app/bgd-app.yaml[]
+----
 
 * ArgoCD's concept of a `Project` is different than OpenShift's. Here you're installing the application in ArgoCD's `default` project (`.spec.project`). *NOT* OpenShift's default project.
 * The destination server is the server we installed ArgoCD on (noted as `.spec.destination.server`).
@@ -255,7 +288,7 @@ Minikube::
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-kubectl apply -f assets/bgd-app/bgd-app.yaml
+kubectl apply -f documentation/modules/ROOT/examples/bgd-app/bgd-app.yaml
 ----
 
 --
@@ -266,7 +299,7 @@ OpenShift::
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-oc apply -f assets/bgd-app/bgd-app.yaml
+oc apply -f documentation/modules/ROOT/examples/bgd-app/bgd-app.yaml
 ----
 
 --
@@ -294,7 +327,7 @@ Minikube::
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-kubeclt get pods,svc,route -n bgd
+kubectl get pods,svc,route -n bgd
 ----
 --
 
@@ -354,3 +387,73 @@ Then visit your application using the route or the ingress.
 Your application should look like this.
 
 image::argocd-app3.png[SampleApp, 600]
+
+
+Let's introduce a change! Patch the live manifest to change the color
+of the box from blue to green:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc -n bgd patch deploy/bgd --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/env/0/value", "value":"green"}]'
+----
+
+Wait for the rollout to happen:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc rollout status deploy/bgd -n bgd
+----
+
+If you refresh your tab where your application is running you should see a green square now.
+
+image::bgd-green.png[BDG Green]
+
+Looking over at your Argo CD Web UI, you can see that Argo detects your
+application as "Out of Sync".
+
+image::out-of-sync.png[Out of Sync]
+
+You can sync your app via the Argo CD by:
+
+* First clicking `SYNC`
+* Then clicking `SYNCHRONIZE`
+
+Conversely, you can run:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+argocd app sync bgd-app
+----
+
+After the sync process is done, the Argo CD UI should mark the application as in sync.
+
+image::fullysynced.png[Fully Synced]
+
+If you reload the page on the tab where the application is running. It
+should have returned to a blue square.
+
+image::bgd.png[BDG App]
+
+You can setup Argo CD to automatically correct drift by setting the
+`Application` manifest to do so. Example:
+
+[.console-input]
+[source,yaml,subs="attributes+,+macros"]
+----
+spec:
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+----
+
+Or, as in our case, after the fact by running the following command:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc patch application/bgd-app -n openshift-gitops --type=merge -p='{"spec":{"syncPolicy":{"automated":{"prune":true,"selfHeal":true}}}}'
+----
