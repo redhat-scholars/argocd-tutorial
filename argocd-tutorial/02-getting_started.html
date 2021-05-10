@@ -478,27 +478,141 @@ argoPass=$(oc get secret/openshift-gitops-cluster -n openshift-gitops -o jsonpat
 <div class="paragraph">
 <p>These manifests include:</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>A Namespace: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/overlays/bgd/bgd-ns.yaml">bgd-namespace.yaml</a></p>
-</li>
-<li>
-<p>A Deployment: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-deployment.yaml">bgd-deployment.yaml</a></p>
-</li>
-<li>
-<p>A Service: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-svc.yaml">bgd-svc.yaml</a></p>
-</li>
-<li>
-<p>A Route: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-route.yaml">bgd-route.yaml</a></p>
-</li>
-</ul>
+<div class="paragraph">
+<p>A <strong>Namespace</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/overlays/bgd/bgd-ns.yaml" target="_blank" rel="noopener">bgd-namespace.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
+kind: Namespace
+metadata:
+  name: bgd
+spec: {}
+status: {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A <strong>Deployment</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-deployment.yaml" target="_blank" rel="noopener">bgd-deployment.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: bgd
+  name: bgd
+  namespace: bgd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bgd
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: bgd
+    spec:
+      containers:
+      - image: quay.io/redhatworkshops/bgd:latest
+        name: bgd
+        env:
+        - name: COLOR
+          value: "blue"
+        resources: {}
+---</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A <strong>Service</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-svc.yaml" target="_blank" rel="noopener">bgd-svc.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: bgd
+  name: bgd
+  namespace: bgd
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: bgd
+---</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A <strong>Route</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-route.yaml" target="_blank" rel="noopener">bgd-route.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  creationTimestamp: null
+  labels:
+    app: bgd
+  name: bgd
+  namespace: bgd
+spec:
+  host: ""
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: bgd
+    weight: 100
+status:
+  ingress:
+  - conditions:
+    - status: "True"
+      type: Admitted</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Collectively, this is known as an <code>Application</code> within ArgoCD. Therefore, you must define it as such in order to apply these manifest in your cluster.</p>
 </div>
 <div class="paragraph">
 <p>For this you can define and apply an <code>Application</code> manifest in ArgoCD. Let&#8217;s check the <a href="https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml">ArgoCD Application manifest</a> used for deploy our application and break this down a bit:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml" target="_blank" rel="noopener">bgd-app.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bgd-app
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: bgd
+    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
+  project: default
+  source:
+    path: apps/bgd/overlays/bgd
+    repoURL: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples" class="bare">https://github.com/redhat-developer-demos/openshift-gitops-examples</a>
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true</code></pre>
+</div>
 </div>
 <div class="ulist">
 <ul>
@@ -537,14 +651,14 @@ argoPass=$(oc get secret/openshift-gitops-cluster -n openshift-gitops -o jsonpat
 <div class="tab-pane" aria-labelledby="tabset3_minikube">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f assets/bgd-app/bgd-app.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f documentation/modules/ROOT/examples/bgd-app/bgd-app.yaml</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset3_openshift">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f assets/bgd-app/bgd-app.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f documentation/modules/ROOT/examples/bgd-app/bgd-app.yaml</code></pre>
 </div>
 </div>
 </div>
@@ -599,7 +713,7 @@ You may have to click on <code>show hidden resources</code> on this page to see 
 <div class="tab-pane" aria-labelledby="tabset4_minikube">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubeclt get pods,svc,route -n bgd</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get pods,svc,route -n bgd</code></pre>
 </div>
 </div>
 </div>
@@ -667,6 +781,99 @@ route.route.openshift.io/bgd   bgd-bgd.apps.example.com          bgd        8080
 <div class="imageblock">
 <div class="content">
 <img src="_images/argocd-app3.png" alt="SampleApp" width="600">
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s introduce a change! Patch the live manifest to change the color
+of the box from blue to green:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc -n bgd patch deploy/bgd --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/env/0/value", "value":"green"}]'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait for the rollout to happen:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc rollout status deploy/bgd -n bgd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you refresh your tab where your application is running you should see a green square now.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bgd-green.png" alt="BDG Green">
+</div>
+</div>
+<div class="paragraph">
+<p>Looking over at your Argo CD Web UI, you can see that Argo detects your
+application as "Out of Sync".</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/out-of-sync.png" alt="Out of Sync">
+</div>
+</div>
+<div class="paragraph">
+<p>You can sync your app via the Argo CD by:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>First clicking <code>SYNC</code></p>
+</li>
+<li>
+<p>Then clicking <code>SYNCHRONIZE</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Conversely, you can run:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">argocd app sync bgd-app</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After the sync process is done, the Argo CD UI should mark the application as in sync.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/fullysynced.png" alt="Fully Synced">
+</div>
+</div>
+<div class="paragraph">
+<p>If you reload the page on the tab where the application is running. It
+should have returned to a blue square.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bgd.png" alt="BDG App">
+</div>
+</div>
+<div class="paragraph">
+<p>You can setup Argo CD to automatically correct drift by setting the
+<code>Application</code> manifest to do so. Example:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or, as in our case, after the fact by running the following command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc patch application/bgd-app -n openshift-gitops --type=merge -p='{"spec":{"syncPolicy":{"automated":{"prune":true,"selfHeal":true}}}}'</code></pre>
 </div>
 </div>
 </div>
