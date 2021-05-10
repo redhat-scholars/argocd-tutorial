@@ -1,10 +1,5 @@
-= Getting Started
+= SyncWaves and Hooks
 include::_attributes.adoc[]
-
-[#concepts]
-== SyncWaves and Hooks
-
-This scenario will get you get familiar with syncwaves and hook phases.
 
 https://argoproj.github.io/argo-cd/user-guide/sync-waves/[Syncwaves] are used in Argo CD to order how manifests are applied to the cluster. 
 
@@ -18,7 +13,7 @@ This example will take you through the following steps:
 * Exploring Resource Hooks
 * Using Syncwaves and Hooks together
 
-[#usingsyncwaves]
+[#using_syncwaves]
 == Using Sync Waves
 
 A Syncwave is a way to order how Argo CD applies the manifests that are stored in git. All manifests have a wave of zero by default, but you can set these by using the argocd.argoproj.io/sync-wave annotation. 
@@ -26,7 +21,7 @@ A Syncwave is a way to order how Argo CD applies the manifests that are stored i
 Example:
 
 [.console-input]
-[source,bash,subs="attributes+,+macros"]
+[source,yaml,subs="attributes+,+macros"]
 ----
 metadata:
   annotations:
@@ -36,7 +31,7 @@ metadata:
 The wave can also be negative as well.
 
 [.console-input]
-[source,bash,subs="attributes+,+macros"]
+[source,yaml,subs="attributes+,+macros"]
 ----
 metadata:
   annotations:
@@ -52,7 +47,8 @@ When Argo CD starts a sync action, the manifest get placed in the following orde
 
 Read more about syncwaves on the https://argoproj.github.io/argo-cd/user-guide/sync-waves/#how-do-i-configure-waves[official documentation site].
 
-=== Exploring the manifests
+[#exploring_the_manifests]
+=== Exploring the Manifests
 
 The sample application that we will deploy has the following manifests:
 
@@ -67,7 +63,8 @@ Next, the Deployment will be applied. After that reports healthy, Argo CD will a
 
 NOTE: Argo CD won't apply the next manifest until the previous reports "healthy".
 
-=== Deploying The Application
+[#deploying_the_application]
+=== Deploying the Application
 
 Before we deploy this application, make sure you've opened the Argo CD Web Console.
 
@@ -85,7 +82,6 @@ Minikube::
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-#!/bin/bash
 kubectl apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml
 ----
 
@@ -97,7 +93,6 @@ OpenShift::
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-#!/bin/bash
 oc apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml
 ----
 
@@ -106,12 +101,224 @@ oc apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml
 
 This should create the `welcome-syncwaves` in the ArgoCD UI.
 
-image::syncwaves1.png[Syncwaves1, 400]
+image::welcome-syncwaves.png[Syncwaves1, 400]
 
 Clicking on this "card" will take you to the application overview page. Clicking on "show hidden resources" should expand the "tree" view.
 
-image::syncwaves2.png[Syncwaves2, 400]
+image::welcome-syncwaves-tree.png[Syncwaves2, 400]
 
 If you follow along, you'll note that these manfiests get applied in order of their annotated syncwave!
 
 Keep the Argo CD WebUI tab open for the next exercise.
+
+
+[#exploring_resource_hooks]
+== Exploring Resource Hooks
+
+Now that you're familiar with syncwaves, we can begin exploring applying
+manifests in phases using `resource hooks`.
+
+Controlling your sync operation can be futher redefined by using
+hooks. These hooks can run before, during, and after a sync
+operation. These hooks are:
+
+* **PreSync** - Runs before the sync operation. This can be something like a database backup before a schema change
+* **Sync** - Runs after `PreSync` has successfully ran. This will run alongside your normal manifesets.
+* **PostSync** - Runs after `Sync` has ran successfully. This can be something like a Slack message or an email notification.
+* **SyncFail** - Runs if the `Sync` operation as failed. This is also used to send notifications or do other evasive actions.
+
+To enable a sync, annotate the specific object manfiest with
+`argocd.argoproj.io/hook` with the type of sync you want to use for that
+resource. For example, if I wanted to use the `PreSync` hook:
+
+[.console-input]
+[source,yaml,subs="attributes+,+macros"]
+----
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+----
+
+You can also have the hooks be deleted after a successful/unsuccessful run.
+
+* **HookSucceeded** - The resouce will be deleted after it has succeeded.
+* **HookFailed** - The resource will be deleted if it has failed.
+* **BeforeHookCreation** - The resource will be deleted before a new one is created (when a new sync is triggered).
+
+You can apply these with the `argocd.argoproj.io/hook-delete-policy`
+annotation. For example
+
+[.console-input]
+[source,yaml,subs="attributes+,+macros"]
+----
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+----
+
+> **NOTE** Since a sync can fail in any phase, you can come to a situation where the application never reports healthy!
+
+Although hooks can be any resource, they are usually Pods and/or Jobs.
+
+To read more about resource hooks, consult the https://argoproj.github.io/argo-cd/user-guide/resource_hooks[official documentation]
+
+[#exploring_the_manifests_hooks]
+=== Exploring Manifests
+
+I will be adding the following manifest to the first
+application deployed. Take a look at the manfiest
+`examples/hooks/welcome-php-presync-job.yaml`{{open}}
+
+You'll see that I have the annotation `argocd.argoproj.io/hook: PreSync`
+set. This means that this Job will run in the `PreSync` phase, before
+the application of the manifests in the `Sync` phase.
+
+> **NOTE** Since I don't have a deletion policy, this job will "stick around" after completion.
+
+[#deploying_the_application_hooks]
+=== Deploying The Application
+
+This sample will be using `kustomize` to create a new application based
+on the one we previously deployed; while adding the `Job`
+with the resource hook. You can see this by https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/welcome-php/overlays/hooks[visiting the repo].
+
+Taking a look at the manifest file `apps/welcome-hooks.yaml`{{open}}
+will show that this will deploy the application in the `welcome-hooks`
+namespace.
+
+Create this application:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc apply -f ~/resources/apps/welcome-hooks.yaml
+----
+
+On the Argo CD WebUI, you should see another application appear.
+
+image::hooks-card.png[Hooks Card]
+
+Clicking on this "card" should take you over to the tree view.
+
+image::hooks-tree.png[Hooks Tree]
+
+Observe the sync process. You will see that the `PreSync` manifest has
+an anchor icon ⚓ . You will also notice that the other manifests don't
+start applying until the `PreSync` Job is done.
+
+Once the application is fully synced. Take a look at the pods and jobs in
+the namespace:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc get pods,jobs -n welcome-hooks
+----
+
+You should see that the Job is finished, but still there.
+
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+NAME                               READY   STATUS      RESTARTS   AGE
+pod/welcome-php-6986bd99c4-7w7qk   1/1     Running     0          2m43s
+pod/welcome-presyncjob-l9h8n       0/1     Completed   0          3m14s
+
+NAME                           COMPLETIONS   DURATION   AGE
+job.batch/welcome-presyncjob   1/1           30s        3m14s
+----
+
+Keep this tab open, in the next exercise. We will see how to use Syncwaves
+and Hooks in tandem!
+
+[#using_syncwaves_and_hooks]
+== Using Sync Waves and Hooks
+
+Now that you got your hands on syncwaves and resource hooks, you will
+now use them together to see how you can control how your deployment
+rolls out.
+
+In the previous sections you learned how to order the application
+of manifests using syncwaves. You also went over how you phase your
+deployments with resource hooks.
+
+In this section we will use syncwaves within each phase to show how you
+can further refine the deployment process.
+
+Take a look at the following diagram.
+
+image::resource-hooks.png[Resource waves hooks]
+
+The workflow can be summarized like this:
+
+* The `PreSync` phase will run and manifests will be applied in their syncwave order.
+* Once the `PreSync` phase is successful, the `Sync` phase begins.
+* The `Sync` phase will apply the manifests in the their syncwave order
+* Finally, after the `Sync` phase is done, the `PostSync` phase applies the manifests in the syncwave order.
+
+[#exploring_manifests_resources]
+=== Exploring Manifests
+
+Here we are adding 3 addition manifests.
+
+* A `PreSync` Job with a syncwave of 0 `examples/syncwaves-and-hooks/welcome-php-presync-job.yaml`{{open}}
+* A `PreSync` Pod with a syncwave of 1 and a hook deletion policy `examples/syncwaves-and-hooks/welcome-php-presync-pod.yaml`{{open}}
+* A `PostSync` Pod with a hook deletion policy `examples/syncwaves-and-hooks/welcome-php-postsync-pod.yaml`{{open}}
+
+The manifest will apply in the following order.
+
+* `PreSync` - The Job will start and finish. The the Pod will start and finish. Once these are both done successfully the `PreSync` phase is considered "done".
+* `Sync` - All the manifests will apply in their respective syncwave order. Once this is done successfully, the `Sync` phase is considered done.
+* `PostSync` - The Pod will start and finish. Once it's successfully finished, the resource is deleted.
+
+[#deploying_the_application_resources]
+=== Deploying the Application
+
+Take a look at the manifest file `apps/welcome-syncwaves-and-hooks.yaml`{{open}}
+
+As before, we are using Kustomize to deploy the same application,
+but in a different namespace and we are loading in the 3 additional
+manifests. You can see the specific implementation in the https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/welcome-php/overlays/syncwaves-and-hooks[git repo]
+
+Create this application:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc apply -f ~/resources/apps/welcome-syncwaves-and-hooks.yaml
+----
+
+This should create the 3rd application on Argo CD.
+
+image::waves-and-hooks-card.png[Waves and Hooks card] 
+
+Clicking on this card should take you to the tree view.
+
+image::waves-and-hooks-tree.png[Waves and Hooks Tree]
+
+Here you can observe the sync process happening in the order
+specified. You will also note that the `PreSync` Pod and the `PostSync`
+pod were deleted after the sync process because of the deletion policy
+annotation.
+
+Take a look to verify:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc get pods,jobs -n welcome-waves-and-hooks
+----
+
+You should see the following output.
+
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+NAME                               READY   STATUS      RESTARTS   AGE
+pod/welcome-php-6986bd99c4-vv499   1/1     Running     0          4m52s
+pod/welcome-presyncjob-8jtqj       0/1     Completed   0          5m24s
+
+NAME                           COMPLETIONS   DURATION   AGE
+job.batch/welcome-presyncjob   1/1           18s        5m24s
+----

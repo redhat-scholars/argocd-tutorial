@@ -20,7 +20,7 @@ include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-c
 
 
 [#kubernetes]
-== Setup Openshift / Kubernetes Cluster
+== Setup OpenShift / Kubernetes Cluster
 
 :profile: gitops
 
