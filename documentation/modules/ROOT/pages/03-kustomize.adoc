@@ -117,7 +117,7 @@ the `kubectl` (or `oc`) command. Example:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-kustomize build . | oc apply -f -
+kustomize build . | kubectl apply -f -
 ----
 
 [#exploring_kustomize_with_kubectl]
@@ -242,7 +242,13 @@ YAML.
 So now that you've explored `kustomize`, let's see how it fits into Argo
 CD and how it can be used in a GitOps workflow.
 
-Before preceeding, move back into the home directory: `cd ~`{{execute}}
+Before preceeding, move back into the home directory: 
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+cd -
+----
 
 [#argocd_web_console]
 === The Argo CD Web Console
@@ -296,7 +302,7 @@ command:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-kubectl apply -f resources/bgd-app/bgd-app.yaml
+kubectl apply -f documentation/modules/ROOT/examples/bgd-app/bgd-app.yaml
 ----
 
 This should create an `Application` in the Argo CD UI.
