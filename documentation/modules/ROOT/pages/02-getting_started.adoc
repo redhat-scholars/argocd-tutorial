@@ -280,30 +280,11 @@ include::ROOT:example$bgd-app/bgd-app.yaml[]
 
 The Application CR (CustomResource) can be applied by running the following:
 
-[tabs, subs="attributes+,+macros"]
-====
-Minikube::
-+
---
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
 kubectl apply -f documentation/modules/ROOT/examples/bgd-app/bgd-app.yaml
 ----
-
---
-
-OpenShift::
-+
---
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-oc apply -f documentation/modules/ROOT/examples/bgd-app/bgd-app.yaml
-----
-
---
-====
 
 This should create the `bgd-app` in the ArgoCD UI.
 
@@ -319,28 +300,11 @@ At this point the application should be up and running.
 
 You can see all the resources created with:
 
-[tabs, subs="attributes+,+macros"]
-====
-Minikube::
-+
---
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
 kubectl get pods,svc,route -n bgd
 ----
---
-
-OpenShift::
-+
---
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-oc get pods,svc,route -n bgd
-----
---
-====
 
 The output should look like this:
 
@@ -359,28 +323,11 @@ route.route.openshift.io/bgd   bgd-bgd.apps.example.com          bgd        8080
 
 First wait for the rollout to complete:
 
-[tabs, subs="attributes+,+macros"]
-====
-Minikube::
-+
---
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
 kubectl rollout status deploy/bgd -n bgd
 ----
---
-
-OpenShift::
-+
---
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-oc rollout status deploy/bgd -n bgd
-----
---
-====
 
 Then visit your application using the route or the ingress.
 
@@ -395,7 +342,7 @@ of the box from blue to green:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-oc -n bgd patch deploy/bgd --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/env/0/value", "value":"green"}]'
+kubectl -n bgd patch deploy/bgd --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/env/0/value", "value":"green"}]'
 ----
 
 Wait for the rollout to happen:
@@ -403,7 +350,7 @@ Wait for the rollout to happen:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-oc rollout status deploy/bgd -n bgd
+kubectl rollout status deploy/bgd -n bgd
 ----
 
 If you refresh your tab where your application is running you should see a green square now.
@@ -455,5 +402,5 @@ Or, as in our case, after the fact by running the following command:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-oc patch application/bgd-app -n openshift-gitops --type=merge -p='{"spec":{"syncPolicy":{"automated":{"prune":true,"selfHeal":true}}}}'
+kubectl patch application/bgd-app -n openshift-gitops --type=merge -p='{"spec":{"syncPolicy":{"automated":{"prune":true,"selfHeal":true}}}}'
 ----

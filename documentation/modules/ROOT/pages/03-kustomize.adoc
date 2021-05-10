@@ -46,35 +46,38 @@ We will be focusing on two sub-commands the `build` command and the
 
 The `build` command takes the YAML source (via a path or URL) and creates
 a new YAML that can be piped into `kubectl create`. We will work with
-an example in the `~/resources/kustomize-build` directory.
+an example in the `documentation/modules/ROOT/examples/kustomize-build` directory.
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-cd ~/resources/kustomize-build
+cd documentation/modules/ROOT/examples/kustomize-build
 ----
 
-Here you should see two files, a `kustomization.yaml` file and a `welcome.yaml` file
+Here you should see two files, a `kustomization.yaml` file and a `welcome.yaml` file, let's have a look at them.
 
-
-[source,bash,subs="attributes+,+macros"]
+.link:[welcome.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
 ----
-ls -l
+include::ROOT:example$kustomize-build/welcome.yaml[]
 ----
 
-Taking a look at the `kustomize-build/welcome.yaml`:
+This file shows nothing special. Just a standard Kubernetes manifest.
 
+What if, for example, we wanted to add a `label` to this manifest without editing it? This is where the `kustomization.yaml` file comes in.
 
-file shows nothing special. Just a standard Kubernetes manifest.
-
-What if, for example, we wanted to add a `label` to this manifest without editing it? This is where the `kustomize-build/kustomization.yaml`{{open}} file comes in.
+.link:[kustomization.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$kustomize-build/kustomization.yaml[]
+----
 
 As you can see in the output there isn't much. The two sections for this
 example are the `resources` and the `patchesJson6902` sections.
 
-`resources` is an array of individual files, directories, and/or URLs where other manifests are stored. In this example we are just loading in one file. The [`patchesJson6902` is a patching RFC](https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patchesjson6902/) that `kustomize` supports. As you can see, in the `patchesJson6902` file, I am adding a label to this manifest.
+`resources` is an array of individual files, directories, and/or URLs where other manifests are stored. In this example we are just loading in one file. The (https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patchesjson6902/[`patchesJson6902` is a patching RFC] that `kustomize` supports. As you can see, in the `patchesJson6902` file, I am adding a label to this manifest.
 
-> **NOTE** You can read about what options are availble for patching in the [official documentaion site](https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/)
+> **NOTE** You can read about what options are availble for patching in the https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/[official documentaion site]
 
 Build this manifets by running: `kustomize build .`{{execute}} , and
 you can see that the new label got added to the manifest!
@@ -90,7 +93,7 @@ kustomize edit set image quay.io/redhatworkshops/welcome-php:ffcd15
 ----
 
 This will update the
-`kustomize-build/kustomization.yaml`{{open}} file with a
+`kustomization.yaml file with a
 `images` section. 
 
 Now when you run:
@@ -143,6 +146,33 @@ Although you can use this to pipe it into the apply command, you
 don't have to. The `kubectl apply` command has the `-k` option that
 will run the build before it applies the manifest.
 
+
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+
+To test this out, first create a namespace:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+kubectl create namespace kustomize-test
+----
+
+Next make sure you're on the namespace:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+kubectl config set-context --current --namespace=kustomize-test
+----
+
+--
+OpenShift::
++
+--
 To test this out, first create a project:
 
 [.console-input]
@@ -158,6 +188,10 @@ Next make sure you're on the project:
 ----
 oc project kustomize-test
 ----
+
+--
+====
+
 
 Finally run the command to build and apply the manifests:
 
@@ -213,7 +247,7 @@ Before preceeding, move back into the home directory: `cd ~`{{execute}}
 [#argocd_web_console]
 === The Argo CD Web Console
 
-To get to the Argo CD Web UI; click the [Argo CD Web Console](https://openshift-gitops-server-openshift-gitops.[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com) tab.
+Access Argo CD Web Console.
 
 Once you have accepted the self signed certificate, you should be
 presented with the Argo CD login screen.
@@ -230,11 +264,28 @@ admin
 ----
 
 **Password**:
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+----
+--
+OpenShift::
++
+--
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
 oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
 ----
+--
+====
+
 
 ## Base Application
 
@@ -245,7 +296,7 @@ command:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-oc apply -f resources/bgd-app/bgd-app.yaml
+kubectl apply -f resources/bgd-app/bgd-app.yaml
 ----
 
 This should create an `Application` in the Argo CD UI.
@@ -257,7 +308,7 @@ You can wait for the rollout of the application by running:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-oc rollout status deploy/bgd -n bgd
+kubectl rollout status deploy/bgd -n bgd
 ----
 
 Once it's done rolling out, you can open the application's URL.
@@ -277,7 +328,14 @@ duplicating YAML for each deployment. This is especially good to
 use if you have different environements or clusters you're deploying
 to.
 
-Take a look at the `Application` definition:  `bgdk-app/bgdk-app.yaml`{{open}}
+Take a look at the `Application` definition:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/bgd/overlays/bgdk[bgdk-app.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$bgdk-app/bgdk-app.yaml[]
+----
+
 
 This application is pointed to the https://github.com/redhat-developer-demos/openshift-gitops-examples[same repo] but https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/bgd/overlays/bgdk[different directory].
 
@@ -293,15 +351,19 @@ the `namespace:` section of the file).
 
 Deploy this application:
 
-`oc apply -f resources/bgdk-app/bgdk-app.yaml`{{execute}}
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+kubectl apply -f documentation/modules/ROOT/examples/bgdk-app/bgdk-app.yaml
+----
 
 This should show you two apps on the Argo CD UI.
 
-![two-apps](../../assets/gitops/two-apps.png)
+image::two-apps.png[Two Apps]
 
-Open the applicaiton's route by [CLICKING HERE](http://bgd-bgdk.[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com)
+Open the application's Ingress or Route.
 
-![yellow-square](../../assets/gitops/yellow-square.png)
+image::yellow-square.png[Yellow Square]
 
 As you can see, the application deployed with your customizations! To review what we just did.
 

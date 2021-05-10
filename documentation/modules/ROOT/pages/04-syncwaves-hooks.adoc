@@ -74,30 +74,11 @@ image::argocd-login.png[ArgoCDLogin, 600]
 
 Apply the Argo CD `Application` manifest to get this application deployed.
 
-[tabs, subs="attributes+,+macros"]
-====
-Minikube::
-+
---
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
 kubectl apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml
 ----
-
---
-
-OpenShift::
-+
---
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-oc apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml
-----
-
---
-====
 
 This should create the `welcome-syncwaves` in the ArgoCD UI.
 
@@ -192,7 +173,7 @@ Create this application:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-oc apply -f ~/resources/apps/welcome-hooks.yaml
+kubectl apply -f documentation/modules/ROOT/examples/welcome-php/welcome-hooks.yaml
 ----
 
 On the Argo CD WebUI, you should see another application appear.
@@ -213,7 +194,7 @@ the namespace:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-oc get pods,jobs -n welcome-hooks
+kubectl get pods,jobs -n welcome-hooks
 ----
 
 You should see that the Job is finished, but still there.
@@ -286,7 +267,7 @@ Create this application:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-oc apply -f ~/resources/apps/welcome-syncwaves-and-hooks.yaml
+kubectl apply -f documentation/modules/ROOT/examples/welcome-php/welcome-syncwaves-and-hooks.yaml
 ----
 
 This should create the 3rd application on Argo CD.
@@ -307,7 +288,7 @@ Take a look to verify:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-oc get pods,jobs -n welcome-waves-and-hooks
+kubectl get pods,jobs -n welcome-waves-and-hooks
 ----
 
 You should see the following output.
