@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Getting Started :: ArgoCD Tutorial</title>
+    <title>SyncWaves and Hooks :: ArgoCD Tutorial</title>
     <link rel="canonical" href="https://redhat-scholars.github.io/course-template/argocd-tutorial/04-syncwaves-hooks.html">
+    <link rel="prev" href="03-kustomize.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -71,7 +72,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="01-setup.html">1. Setup</a>
+    <a class="nav-link" href="01-setup.html">Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
@@ -83,7 +84,7 @@
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="02-getting_started.html">2. Getting Started</a>
+    <a class="nav-link" href="02-getting_started.html">Getting Started</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="02-getting_started.html#install_argocd">Install ArgoCD</a>
@@ -97,17 +98,74 @@
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="#03-kustomize.adoc">3. Work with Kustomize</a>
-  </li>
-  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="#04-syncwave-and-hooks.adoc">4. Syncwaves and Hooks</a>
+    <a class="nav-link" href="03-kustomize.html">Work with Kustomize</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#04-syncwave-and-hooks.adoc#concepts">Sync Waves and Hooks</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-kustomize.html#exploring_kustomize">Exploring the Kustomize</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-kustomize.html#exploring_kustomize_cli">Exploring the Kustomize CLI</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-kustomize.html#exploring_kustomize_with_kubectl">Exploring Kustomize with Kubectl</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#04-syncwave-and-hooks.adoc#usingsyncwaves">Using Sync Waves</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-kustomize.html#deploying_kustomized_application">Deploying Kustomized Application</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-kustomize.html#argocd_web_console">The ArgoCD Web Console</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-kustomize.html#kustomized_application">Kustomized Application</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-syncwaves-hooks.html">Sync Waves and Hooks</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="#using_syncwaves">Using Sync Waves</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#exploring_the_manifests">Exploring the Manifests</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#deploying_the_application">Deploying the Application</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="#exploring_resource_hooks">Exploring Resource Hooks</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#exploring_the_manifests_hooks">Exploring the Manifests</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#deploying_the_application_hooks">Deploying the Application</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="#using_syncwaves_and_hooks">Using Sync Waves and Hooks</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#exploring_the_manifests_resources">Exploring the Manifests</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#deploying_application_resources">Deploying the Application</a>
+  </li>
+</ul>
   </li>
 </ul>
   </li>
@@ -142,20 +200,16 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">ArgoCD Tutorial</a></li>
-    <li><a href="04-syncwaves-hooks.html">Getting Started</a></li>
+    <li><a href="04-syncwaves-hooks.html">Sync Waves and Hooks</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/redhat-scholars/argocd-tutorial/edit/master/documentation/modules/ROOT/pages/04-syncwaves-hooks.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Getting Started</h1>
-<div class="sect1">
-<h2 id="concepts"><a class="anchor" href="#concepts"></a>SyncWaves and Hooks</h2>
+<h1 class="page">SyncWaves and Hooks</h1>
+<div id="preamble">
 <div class="sectionbody">
-<div class="paragraph">
-<p>This scenario will get you get familiar with syncwaves and hook phases.</p>
-</div>
 <div class="paragraph">
 <p><a href="https://argoproj.github.io/argo-cd/user-guide/sync-waves/">Syncwaves</a> are used in Argo CD to order how manifests are applied to the cluster.</p>
 </div>
@@ -184,7 +238,7 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="usingsyncwaves"><a class="anchor" href="#usingsyncwaves"></a>Using Sync Waves</h2>
+<h2 id="using_syncwaves"><a class="anchor" href="#using_syncwaves"></a>Using Sync Waves</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>A Syncwave is a way to order how Argo CD applies the manifests that are stored in git. All manifests have a wave of zero by default, but you can set these by using the argocd.argoproj.io/sync-wave annotation.</p>
@@ -194,7 +248,7 @@
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">metadata:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "2"</code></pre>
 </div>
@@ -204,7 +258,7 @@
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">metadata:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-5"</code></pre>
 </div>
@@ -232,7 +286,7 @@
 <p>Read more about syncwaves on the <a href="https://argoproj.github.io/argo-cd/user-guide/sync-waves/#how-do-i-configure-waves">official documentation site</a>.</p>
 </div>
 <div class="sect2">
-<h3 id="_exploring_the_manifests"><a class="anchor" href="#_exploring_the_manifests"></a>Exploring the manifests</h3>
+<h3 id="exploring_the_manifests"><a class="anchor" href="#exploring_the_manifests"></a>Exploring the Manifests</h3>
 <div class="paragraph">
 <p>The sample application that we will deploy has the following manifests:</p>
 </div>
@@ -272,7 +326,7 @@ Argo CD won&#8217;t apply the next manifest until the previous reports "healthy"
 </div>
 </div>
 <div class="sect2">
-<h3 id="_deploying_the_application"><a class="anchor" href="#_deploying_the_application"></a>Deploying The Application</h3>
+<h3 id="deploying_the_application"><a class="anchor" href="#deploying_the_application"></a>Deploying the Application</h3>
 <div class="paragraph">
 <p>Before we deploy this application, make sure you&#8217;ve opened the Argo CD Web Console.</p>
 </div>
@@ -302,16 +356,14 @@ Argo CD won&#8217;t apply the next manifest until the previous reports "healthy"
 <div class="tab-pane" aria-labelledby="tabset1_minikube">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-kubectl apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_openshift">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-oc apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
 </div>
 </div>
 </div>
@@ -322,7 +374,7 @@ oc apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/syncwaves1.png" alt="Syncwaves1" width="400">
+<img src="_images/welcome-syncwaves.png" alt="Syncwaves1" width="400">
 </div>
 </div>
 <div class="paragraph">
@@ -330,7 +382,7 @@ oc apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/syncwaves2.png" alt="Syncwaves2" width="400">
+<img src="_images/welcome-syncwaves-tree.png" alt="Syncwaves2" width="400">
 </div>
 </div>
 <div class="paragraph">
@@ -342,6 +394,323 @@ oc apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="exploring_resource_hooks"><a class="anchor" href="#exploring_resource_hooks"></a>Exploring Resource Hooks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now that you&#8217;re familiar with syncwaves, we can begin exploring applying
+manifests in phases using <code>resource hooks</code>.</p>
+</div>
+<div class="paragraph">
+<p>Controlling your sync operation can be futher redefined by using
+hooks. These hooks can run before, during, and after a sync
+operation. These hooks are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>PreSync</strong> - Runs before the sync operation. This can be something like a database backup before a schema change</p>
+</li>
+<li>
+<p><strong>Sync</strong> - Runs after <code>PreSync</code> has successfully ran. This will run alongside your normal manifesets.</p>
+</li>
+<li>
+<p><strong>PostSync</strong> - Runs after <code>Sync</code> has ran successfully. This can be something like a Slack message or an email notification.</p>
+</li>
+<li>
+<p><strong>SyncFail</strong> - Runs if the <code>Sync</code> operation as failed. This is also used to send notifications or do other evasive actions.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To enable a sync, annotate the specific object manfiest with
+<code>argocd.argoproj.io/hook</code> with the type of sync you want to use for that
+resource. For example, if I wanted to use the <code>PreSync</code> hook:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">metadata:
+  annotations:
+    argocd.argoproj.io/hook: PreSync</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also have the hooks be deleted after a successful/unsuccessful run.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>HookSucceeded</strong> - The resouce will be deleted after it has succeeded.</p>
+</li>
+<li>
+<p><strong>HookFailed</strong> - The resource will be deleted if it has failed.</p>
+</li>
+<li>
+<p><strong>BeforeHookCreation</strong> - The resource will be deleted before a new one is created (when a new sync is triggered).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can apply these with the <code>argocd.argoproj.io/hook-delete-policy</code>
+annotation. For example</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">metadata:
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded</code></pre>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>NOTE</strong> Since a sync can fail in any phase, you can come to a situation where the application never reports healthy!</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Although hooks can be any resource, they are usually Pods and/or Jobs.</p>
+</div>
+<div class="paragraph">
+<p>To read more about resource hooks, consult the <a href="https://argoproj.github.io/argo-cd/user-guide/resource_hooks">official documentation</a></p>
+</div>
+<div class="sect2">
+<h3 id="exploring_the_manifests_hooks"><a class="anchor" href="#exploring_the_manifests_hooks"></a>Exploring Manifests</h3>
+<div class="paragraph">
+<p>I will be adding the following manifest to the first
+application deployed. Take a look at the manfiest
+<code>examples/hooks/welcome-php-presync-job.yaml</code>{{open}}</p>
+</div>
+<div class="paragraph">
+<p>You&#8217;ll see that I have the annotation <code>argocd.argoproj.io/hook: PreSync</code>
+set. This means that this Job will run in the <code>PreSync</code> phase, before
+the application of the manifests in the <code>Sync</code> phase.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>NOTE</strong> Since I don&#8217;t have a deletion policy, this job will "stick around" after completion.</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="deploying_the_application_hooks"><a class="anchor" href="#deploying_the_application_hooks"></a>Deploying The Application</h3>
+<div class="paragraph">
+<p>This sample will be using <code>kustomize</code> to create a new application based
+on the one we previously deployed; while adding the <code>Job</code>
+with the resource hook. You can see this by <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/welcome-php/overlays/hooks">visiting the repo</a>.</p>
+</div>
+<div class="paragraph">
+<p>Taking a look at the manifest file <code>apps/welcome-hooks.yaml</code>{{open}}
+will show that this will deploy the application in the <code>welcome-hooks</code>
+namespace.</p>
+</div>
+<div class="paragraph">
+<p>Create this application:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f ~/resources/apps/welcome-hooks.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On the Argo CD WebUI, you should see another application appear.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/hooks-card.png" alt="Hooks Card">
+</div>
+</div>
+<div class="paragraph">
+<p>Clicking on this "card" should take you over to the tree view.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/hooks-tree.png" alt="Hooks Tree">
+</div>
+</div>
+<div class="paragraph">
+<p>Observe the sync process. You will see that the <code>PreSync</code> manifest has
+an anchor icon ⚓ . You will also notice that the other manifests don&#8217;t
+start applying until the <code>PreSync</code> Job is done.</p>
+</div>
+<div class="paragraph">
+<p>Once the application is fully synced. Take a look at the pods and jobs in
+the namespace:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods,jobs -n welcome-hooks</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see that the Job is finished, but still there.</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                               READY   STATUS      RESTARTS   AGE
+pod/welcome-php-6986bd99c4-7w7qk   1/1     Running     0          2m43s
+pod/welcome-presyncjob-l9h8n       0/1     Completed   0          3m14s
+
+NAME                           COMPLETIONS   DURATION   AGE
+job.batch/welcome-presyncjob   1/1           30s        3m14s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Keep this tab open, in the next exercise. We will see how to use Syncwaves
+and Hooks in tandem!</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using_syncwaves_and_hooks"><a class="anchor" href="#using_syncwaves_and_hooks"></a>Using Sync Waves and Hooks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now that you got your hands on syncwaves and resource hooks, you will
+now use them together to see how you can control how your deployment
+rolls out.</p>
+</div>
+<div class="paragraph">
+<p>In the previous sections you learned how to order the application
+of manifests using syncwaves. You also went over how you phase your
+deployments with resource hooks.</p>
+</div>
+<div class="paragraph">
+<p>In this section we will use syncwaves within each phase to show how you
+can further refine the deployment process.</p>
+</div>
+<div class="paragraph">
+<p>Take a look at the following diagram.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/resource-hooks.png" alt="Resource waves hooks">
+</div>
+</div>
+<div class="paragraph">
+<p>The workflow can be summarized like this:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>PreSync</code> phase will run and manifests will be applied in their syncwave order.</p>
+</li>
+<li>
+<p>Once the <code>PreSync</code> phase is successful, the <code>Sync</code> phase begins.</p>
+</li>
+<li>
+<p>The <code>Sync</code> phase will apply the manifests in the their syncwave order</p>
+</li>
+<li>
+<p>Finally, after the <code>Sync</code> phase is done, the <code>PostSync</code> phase applies the manifests in the syncwave order.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="exploring_manifests_resources"><a class="anchor" href="#exploring_manifests_resources"></a>Exploring Manifests</h3>
+<div class="paragraph">
+<p>Here we are adding 3 addition manifests.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A <code>PreSync</code> Job with a syncwave of 0 <code>examples/syncwaves-and-hooks/welcome-php-presync-job.yaml</code>{{open}}</p>
+</li>
+<li>
+<p>A <code>PreSync</code> Pod with a syncwave of 1 and a hook deletion policy <code>examples/syncwaves-and-hooks/welcome-php-presync-pod.yaml</code>{{open}}</p>
+</li>
+<li>
+<p>A <code>PostSync</code> Pod with a hook deletion policy <code>examples/syncwaves-and-hooks/welcome-php-postsync-pod.yaml</code>{{open}}</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The manifest will apply in the following order.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>PreSync</code> - The Job will start and finish. The the Pod will start and finish. Once these are both done successfully the <code>PreSync</code> phase is considered "done".</p>
+</li>
+<li>
+<p><code>Sync</code> - All the manifests will apply in their respective syncwave order. Once this is done successfully, the <code>Sync</code> phase is considered done.</p>
+</li>
+<li>
+<p><code>PostSync</code> - The Pod will start and finish. Once it&#8217;s successfully finished, the resource is deleted.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="deploying_the_application_resources"><a class="anchor" href="#deploying_the_application_resources"></a>Deploying the Application</h3>
+<div class="paragraph">
+<p>Take a look at the manifest file <code>apps/welcome-syncwaves-and-hooks.yaml</code>{{open}}</p>
+</div>
+<div class="paragraph">
+<p>As before, we are using Kustomize to deploy the same application,
+but in a different namespace and we are loading in the 3 additional
+manifests. You can see the specific implementation in the <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/welcome-php/overlays/syncwaves-and-hooks">git repo</a></p>
+</div>
+<div class="paragraph">
+<p>Create this application:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f ~/resources/apps/welcome-syncwaves-and-hooks.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This should create the 3rd application on Argo CD.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/waves-and-hooks-card.png" alt="Waves and Hooks card">
+</div>
+</div>
+<div class="paragraph">
+<p>Clicking on this card should take you to the tree view.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/waves-and-hooks-tree.png" alt="Waves and Hooks Tree">
+</div>
+</div>
+<div class="paragraph">
+<p>Here you can observe the sync process happening in the order
+specified. You will also note that the <code>PreSync</code> Pod and the <code>PostSync</code>
+pod were deleted after the sync process because of the deletion policy
+annotation.</p>
+</div>
+<div class="paragraph">
+<p>Take a look to verify:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods,jobs -n welcome-waves-and-hooks</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see the following output.</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                               READY   STATUS      RESTARTS   AGE
+pod/welcome-php-6986bd99c4-vv499   1/1     Running     0          4m52s
+pod/welcome-presyncjob-8jtqj       0/1     Completed   0          5m24s
+
+NAME                           COMPLETIONS   DURATION   AGE
+job.batch/welcome-presyncjob   1/1           18s        5m24s</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="03-kustomize.html" class="query-params-link">Work with Kustomize</a></span>
+</nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>

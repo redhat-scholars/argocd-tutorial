@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Kustomize :: ArgoCD Tutorial</title>
+    <link rel="canonical" href="https://redhat-scholars.github.io/course-template/argocd-tutorial/03-kustomize.html">
+    <link rel="prev" href="02-getting_started.html">
+    <link rel="next" href="04-syncwaves-hooks.html">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" href="https://redhat-scholars.github.io/course-template">ArgoCD Tutorial</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Books</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">CheatSheets</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">CheatSheet A</a>
+            <a class="navbar-item" href="#">CheatSheet B</a>
+            <a class="navbar-item" href="#">CheatSheet C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Upcoming Events</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Event A</a>
+            <a class="navbar-item" href="#">Event B</a>
+            <a class="navbar-item" href="#">Event C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Tutorial A</a>
+            <a class="navbar-item" href="#">Tutorial B</a>
+            <a class="navbar-item" href="#">Tutorial C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="argocd-tutorial" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">ArgoCD Tutorial</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#kubernetes">Setup Kubernetes</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-getting_started.html">Getting Started</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-getting_started.html#install_argocd">Install ArgoCD</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-getting_started.html#connect_argocd">Connecting to ArgoCD</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-getting_started.html#deploy_sample_application">Deploying Sample Application</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-kustomize.html">Work with Kustomize</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="#exploring_kustomize">Exploring the Kustomize</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#exploring_kustomize_cli">Exploring the Kustomize CLI</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#exploring_kustomize_with_kubectl">Exploring Kustomize with Kubectl</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="#deploying_kustomized_application">Deploying Kustomized Application</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#argocd_web_console">The ArgoCD Web Console</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="#kustomized_application">Kustomized Application</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-syncwaves-hooks.html">Sync Waves and Hooks</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-syncwaves-hooks.html#using_syncwaves">Using Sync Waves</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#exploring_the_manifests">Exploring the Manifests</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#deploying_the_application">Deploying the Application</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-syncwaves-hooks.html#exploring_resource_hooks">Exploring Resource Hooks</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#exploring_the_manifests_hooks">Exploring the Manifests</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#deploying_the_application_hooks">Deploying the Application</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-syncwaves-hooks.html#using_syncwaves_and_hooks">Using Sync Waves and Hooks</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#exploring_the_manifests_resources">Exploring the Manifests</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#deploying_application_resources">Deploying the Application</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">ArgoCD Tutorial</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">ArgoCD Tutorial</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">ArgoCD Tutorial</a></li>
+    <li><a href="03-kustomize.html">Work with Kustomize</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/redhat-scholars/argocd-tutorial/edit/master/documentation/modules/ROOT/pages/03-kustomize.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Kustomize</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://kustomize.io/">Kustomize</a> traverses a Kubernetes manifest to add, remove or update configuration options without forking. It is available both as a standalone binary and as a native feature of <code>kubectl</code> (and by extension <code>oc</code>).</p>
+</div>
+<div class="paragraph">
+<p>The principals of <code>kustomize</code> are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Purely declarative approach to configuration customization</p>
+</li>
+<li>
+<p>Manage an arbitrary number of distinctly customized Kubernetes configurations</p>
+</li>
+<li>
+<p>Every artifact that kustomize uses is plain YAML and can be validated and processed as such</p>
+</li>
+<li>
+<p>As a "templateless" templating system; it encourages using YAML without forking the repo it.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/kustomize_logo.png" alt="Kustomize Logo">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="exploring_kustomize"><a class="anchor" href="#exploring_kustomize"></a>Exploring Kustomize</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="exploring_kustomize_cli"><a class="anchor" href="#exploring_kustomize_cli"></a>Exploring the Kustomize CLI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>kustomize</code> CLI should have been installed as part of the lab
+setup. Verify that it has been installed.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kustomize version --short</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This should display the version, it should look something like this.</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">{kustomize/v4.0.5  2021-02-13T21:21:14Z  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Kustomize, at it&#8217;s core, is meant to build native Kubernetes manifests
+based on YAML, while leaving the original YAML in tact. It achives this
+in a "templte-less" templating format. This is done by providing a <code>kustomization.yaml</code> file.</p>
+</div>
+<div class="paragraph">
+<p>We will be focusing on two sub-commands the <code>build</code> command and the
+<code>edit</code> command.</p>
+</div>
+<div class="paragraph">
+<p>The <code>build</code> command takes the YAML source (via a path or URL) and creates
+a new YAML that can be piped into <code>kubectl create</code>. We will work with
+an example in the <code>~/resources/kustomize-build</code> directory.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd ~/resources/kustomize-build</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here you should see two files, a <code>kustomization.yaml</code> file and a <code>welcome.yaml</code> file</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ls -l</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Taking a look at the <code>kustomize-build/welcome.yaml</code>:</p>
+</div>
+<div class="paragraph">
+<p>file shows nothing special. Just a standard Kubernetes manifest.</p>
+</div>
+<div class="paragraph">
+<p>What if, for example, we wanted to add a <code>label</code> to this manifest without editing it? This is where the <code>kustomize-build/kustomization.yaml</code>{{open}} file comes in.</p>
+</div>
+<div class="paragraph">
+<p>As you can see in the output there isn&#8217;t much. The two sections for this
+example are the <code>resources</code> and the <code>patchesJson6902</code> sections.</p>
+</div>
+<div class="paragraph">
+<p><code>resources</code> is an array of individual files, directories, and/or URLs where other manifests are stored. In this example we are just loading in one file. The [<code>patchesJson6902</code> is a patching RFC](<a href="https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patchesjson6902/" class="bare">https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patchesjson6902/</a>) that <code>kustomize</code> supports. As you can see, in the <code>patchesJson6902</code> file, I am adding a label to this manifest.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>NOTE</strong> You can read about what options are availble for patching in the [official documentaion site](<a href="https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/" class="bare">https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/</a>)</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Build this manifets by running: <code>kustomize build .</code>{{execute}} , and
+you can see that the new label got added to the manifest!</p>
+</div>
+<div class="paragraph">
+<p>You can use the <code>kustomize edit</code> command instead of writing YAML. For
+example, you can change the image tag this <code>Deployment</code> uses from <code>latest</code>
+to <code>ffcd15</code> by running the following:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kustomize edit set image quay.io/redhatworkshops/welcome-php:ffcd15</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will update the
+<code>kustomize-build/kustomization.yaml</code>{{open}} file with a
+<code>images</code> section.</p>
+</div>
+<div class="paragraph">
+<p>Now when you run:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"> kustomize build .</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see not only the new label but also the new <code>ffcd15</code> image tag.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>NOTE</strong> You may have to close the <code>kustomization.yaml</code> tab and re-open it to see the changes.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>You can see how you can take already existing YAML and modify it for
+your specific environment without the need to copy or edit the original.</p>
+</div>
+<div class="paragraph">
+<p>Kustomize can be used to write a new YAML file or be pipped into
+the <code>kubectl</code> (or <code>oc</code>) command. Example:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kustomize build . | oc apply -f -</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="exploring_kustomize_with_kubectl"><a class="anchor" href="#exploring_kustomize_with_kubectl"></a>Exploring Kustomize with Kubectl</h3>
+<div class="paragraph">
+<p>Since Kubernetes 1.14, The <code>kubectl</code> command (and by extention the
+<code>oc</code> cli) has support for Kustomize built in.</p>
+</div>
+<div class="paragraph">
+<p>You can see this by running:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl kustomize --help</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This runs the <code>kustomize build</code> command. You can see this by running:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl kustomize</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Although you can use this to pipe it into the apply command, you
+don&#8217;t have to. The <code>kubectl apply</code> command has the <code>-k</code> option that
+will run the build before it applies the manifest.</p>
+</div>
+<div class="paragraph">
+<p>To test this out, first create a project:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc new-project kustomize-test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next make sure you&#8217;re on the project:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project kustomize-test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally run the command to build and apply the manifests:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -k ./</code></pre>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>NOTE</strong> You can pass not only directories, but URLs as well. The
+only requirement is that you have a <code>kustomization.yaml</code> file in
+the path.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>This should create the deployment and you should see the pods running in the namespace:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get pods -n kustomize-test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can see the deployment was created with the additional labels:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get deployment welcome-php -o jsonpath='{.metadata.labels}' | jq -r</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also, the image was updated based on the customization that was made:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get deploy welcome-php  -o jsonpath='{.spec.template.spec.containers[].image}{"\n"}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see <code>kustomize</code> can be a powerful tool.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="deploying_kustomized_application"><a class="anchor" href="#deploying_kustomized_application"></a>Deploying Kustomized Application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In previous scenarios, you learned that in a GitOps workflow; the
+entire application stack (including infrastructure) is reflected
+in a git repo. The challenge is how to do this without duplicating
+YAML.</p>
+</div>
+<div class="paragraph">
+<p>So now that you&#8217;ve explored <code>kustomize</code>, let&#8217;s see how it fits into Argo
+CD and how it can be used in a GitOps workflow.</p>
+</div>
+<div class="paragraph">
+<p>Before preceeding, move back into the home directory: <code>cd ~</code>{{execute}}</p>
+</div>
+<div class="sect2">
+<h3 id="argocd_web_console"><a class="anchor" href="#argocd_web_console"></a>The Argo CD Web Console</h3>
+<div class="paragraph">
+<p>To get to the Argo CD Web UI; click the [Argo CD Web Console](<a href="https://openshift-gitops-server-openshift-gitops" class="bare">https://openshift-gitops-server-openshift-gitops</a>.<a id="HOST_SUBDOMAIN"></a>-80-<a id="KATACODA_HOST"></a>.environments.katacoda.com) tab.</p>
+</div>
+<div class="paragraph">
+<p>Once you have accepted the self signed certificate, you should be
+presented with the Argo CD login screen.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argocd-login.png" alt="ArgoCD Login">
+</div>
+</div>
+<div class="paragraph">
+<p>You can login with the following</p>
+</div>
+<div class="paragraph">
+<p><strong>Username</strong>:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">admin</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Password</strong>:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_base_application"><a class="anchor" href="#_base_application"></a>Base Application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In a previous scenario, we deployed a sample appication that had a
+picture of a blue square. To deploy the application, run the following
+command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f resources/bgd-app/bgd-app.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This should create an <code>Application</code> in the Argo CD UI.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bgdk-app.png" alt="Application">
+</div>
+</div>
+<div class="paragraph">
+<p>You can wait for the rollout of the application by running:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc rollout status deploy/bgd -n bgd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once it&#8217;s done rolling out, you can open the application&#8217;s URL.</p>
+</div>
+<div class="paragraph">
+<p>It should look something like this.</p>
+</div>
+<div class="paragraph">
+<p>images::bgd.png[Blue Green Deploy app]</p>
+</div>
+<div class="paragraph">
+<p>If you did the previous scenario, this should be familiar. But what
+if I wanted to deploy this application with modifications?</p>
+</div>
+<div class="sect2">
+<h3 id="kustomized_application"><a class="anchor" href="#kustomized_application"></a>Kustomized Application</h3>
+<div class="paragraph">
+<p>Argo CD has native support for Kustomize. You can use this to avoid
+duplicating YAML for each deployment. This is especially good to
+use if you have different environements or clusters you&#8217;re deploying
+to.</p>
+</div>
+<div class="paragraph">
+<p>Take a look at the <code>Application</code> definition:  <code>bgdk-app/bgdk-app.yaml</code>{{open}}</p>
+</div>
+<div class="paragraph">
+<p>This application is pointed to the <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples">same repo</a> but <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/bgd/overlays/bgdk">different directory</a>.</p>
+</div>
+<div class="paragraph">
+<p>This is using a concept of an "overlay", where you have a "base"
+set of manifests and you overlay your customizations. Take a look
+at the <code>examples/bgdk-overlay/kustomization.yaml</code>{{open}} example
+file.</p>
+</div>
+<div class="paragraph">
+<p>This <code>kustomization.yaml</code> take the base application and patches the
+manifest so that we get a yellow square instead of a blue one. It
+also deploys the application to the <code>bgdk</code> namespace (denoted by
+the <code>namespace:</code> section of the file).</p>
+</div>
+<div class="paragraph">
+<p>Deploy this application:</p>
+</div>
+<div class="paragraph">
+<p><code>oc apply -f resources/bgdk-app/bgdk-app.yaml</code>{{execute}}</p>
+</div>
+<div class="paragraph">
+<p>This should show you two apps on the Argo CD UI.</p>
+</div>
+<div class="paragraph">
+<p>![two-apps](../../assets/gitops/two-apps.png)</p>
+</div>
+<div class="paragraph">
+<p>Open the applicaiton&#8217;s route by [CLICKING HERE](<a href="http://bgd-bgdk" class="bare">http://bgd-bgdk</a>.<a id="HOST_SUBDOMAIN"></a>-80-<a id="KATACODA_HOST"></a>.environments.katacoda.com)</p>
+</div>
+<div class="paragraph">
+<p>![yellow-square](../../assets/gitops/yellow-square.png)</p>
+</div>
+<div class="paragraph">
+<p>As you can see, the application deployed with your customizations! To review what we just did.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Deployed an Application called <code>bgd</code> with a blue square.</p>
+</li>
+<li>
+<p>Deployed another Application based on <code>bgd</code> called <code>bgdk</code></p>
+</li>
+<li>
+<p>The Application <code>bgdk</code> was deployed in it&#8217;s own namespace, with deployment customizations.</p>
+</li>
+<li>
+<p>ALL without having to duplicate YAML!</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="02-getting_started.html" class="query-params-link">Getting Started</a></span>
+  <span class="next"><a href="04-syncwaves-hooks.html" class="query-params-link">Sync Waves and Hooks</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

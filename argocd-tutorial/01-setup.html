@@ -73,7 +73,7 @@
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="01-setup.html">1. Setup</a>
+    <a class="nav-link" href="01-setup.html">Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="#prerequisite">Prerequisites</a>
@@ -85,7 +85,7 @@
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="02-getting_started.html">2. Getting Started</a>
+    <a class="nav-link" href="02-getting_started.html">Getting Started</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="02-getting_started.html#install_argocd">Install ArgoCD</a>
@@ -99,17 +99,74 @@
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="#03-kustomize.adoc">3. Work with Kustomize</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-kustomize.html">Work with Kustomize</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-kustomize.html#exploring_kustomize">Exploring the Kustomize</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-kustomize.html#exploring_kustomize_cli">Exploring the Kustomize CLI</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-kustomize.html#exploring_kustomize_with_kubectl">Exploring Kustomize with Kubectl</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-kustomize.html#deploying_kustomized_application">Deploying Kustomized Application</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-kustomize.html#argocd_web_console">The ArgoCD Web Console</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-kustomize.html#kustomized_application">Kustomized Application</a>
+  </li>
+</ul>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="#04-syncwave-and-hooks.adoc">4. Syncwaves and Hooks</a>
+    <a class="nav-link" href="04-syncwaves-hooks.html">Sync Waves and Hooks</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#04-syncwave-and-hooks.adoc#concepts">Sync Waves and Hooks</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-syncwaves-hooks.html#using_syncwaves">Using Sync Waves</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#exploring_the_manifests">Exploring the Manifests</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#deploying_the_application">Deploying the Application</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#04-syncwave-and-hooks.adoc#usingsyncwaves">Using Sync Waves</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-syncwaves-hooks.html#exploring_resource_hooks">Exploring Resource Hooks</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#exploring_the_manifests_hooks">Exploring the Manifests</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#deploying_the_application_hooks">Deploying the Application</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-syncwaves-hooks.html#using_syncwaves_and_hooks">Using Sync Waves and Hooks</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#exploring_the_manifests_resources">Exploring the Manifests</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#deploying_application_resources">Deploying the Application</a>
+  </li>
+</ul>
   </li>
 </ul>
   </li>
@@ -144,7 +201,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">ArgoCD Tutorial</a></li>
-    <li><a href="01-setup.html">1. Setup</a></li>
+    <li><a href="01-setup.html">Setup</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/redhat-scholars/argocd-tutorial/edit/master/documentation/modules/ROOT/pages/01-setup.adoc">Edit this Page</a></div>
@@ -303,7 +360,7 @@ Although they are used in the tutorial, you could use others without any problem
 </div>
 </div>
 <div class="sect1">
-<h2 id="kubernetes"><a class="anchor" href="#kubernetes"></a>Setup Openshift / Kubernetes Cluster</h2>
+<h2 id="kubernetes"><a class="anchor" href="#kubernetes"></a>Setup OpenShift / Kubernetes Cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The profile gitops is created to run the tutorial:</p>
@@ -418,7 +475,7 @@ Kubernetes Version: v1.18.6</code></pre>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="index.html" class="query-params-link">ArgoCD Tutorial</a></span>
-  <span class="next"><a href="02-getting_started.html" class="query-params-link">2. Getting Started</a></span>
+  <span class="next"><a href="02-getting_started.html" class="query-params-link">Getting Started</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

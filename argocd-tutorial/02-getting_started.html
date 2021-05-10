@@ -6,7 +6,7 @@
     <title>Getting Started :: ArgoCD Tutorial</title>
     <link rel="canonical" href="https://redhat-scholars.github.io/course-template/argocd-tutorial/02-getting_started.html">
     <link rel="prev" href="01-setup.html">
-    <link rel="next" href="#03-kustomize.adoc">
+    <link rel="next" href="03-kustomize.html">
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -73,7 +73,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="01-setup.html">1. Setup</a>
+    <a class="nav-link" href="01-setup.html">Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
@@ -85,7 +85,7 @@
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="02-getting_started.html">2. Getting Started</a>
+    <a class="nav-link" href="02-getting_started.html">Getting Started</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="#install_argocd">Install ArgoCD</a>
@@ -99,17 +99,74 @@
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="#03-kustomize.adoc">3. Work with Kustomize</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-kustomize.html">Work with Kustomize</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-kustomize.html#exploring_kustomize">Exploring the Kustomize</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-kustomize.html#exploring_kustomize_cli">Exploring the Kustomize CLI</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-kustomize.html#exploring_kustomize_with_kubectl">Exploring Kustomize with Kubectl</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-kustomize.html#deploying_kustomized_application">Deploying Kustomized Application</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-kustomize.html#argocd_web_console">The ArgoCD Web Console</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-kustomize.html#kustomized_application">Kustomized Application</a>
+  </li>
+</ul>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="#04-syncwave-and-hooks.adoc">4. Syncwaves and Hooks</a>
+    <a class="nav-link" href="04-syncwaves-hooks.html">Sync Waves and Hooks</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#04-syncwave-and-hooks.adoc#concepts">Sync Waves and Hooks</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-syncwaves-hooks.html#using_syncwaves">Using Sync Waves</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#exploring_the_manifests">Exploring the Manifests</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#deploying_the_application">Deploying the Application</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#04-syncwave-and-hooks.adoc#usingsyncwaves">Using Sync Waves</a>
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-syncwaves-hooks.html#exploring_resource_hooks">Exploring Resource Hooks</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#exploring_the_manifests_hooks">Exploring the Manifests</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#deploying_the_application_hooks">Deploying the Application</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-syncwaves-hooks.html#using_syncwaves_and_hooks">Using Sync Waves and Hooks</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#exploring_the_manifests_resources">Exploring the Manifests</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-syncwaves-hooks.html#deploying_application_resources">Deploying the Application</a>
+  </li>
+</ul>
   </li>
 </ul>
   </li>
@@ -144,7 +201,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">ArgoCD Tutorial</a></li>
-    <li><a href="02-getting_started.html">2. Getting Started</a></li>
+    <li><a href="02-getting_started.html">Getting Started</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/redhat-scholars/argocd-tutorial/edit/master/documentation/modules/ROOT/pages/02-getting_started.adoc">Edit this Page</a></div>
@@ -177,20 +234,25 @@
 <div class="paragraph">
 <p>Enable the Ingress Addon for Minikube:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-minikube addons enable ingress -p {profile}
-minikube addons list -p {profile} | grep ingress</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube addons enable ingress -p gitops</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Install Argocd and check that every pod is running properly in the argocd namespace:</p>
+<p>Check that the addon has been enabled:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-kubectl create namespace argocd
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube addons list -p gitops | grep ingress</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Install ArgoCD and check that every pod is running properly in the argocd namespace:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl create namespace argocd
 kubectl apply -n argocd -f <a href="https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml" class="bare">https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml</a>
 kubectl get pod -n argocd</code></pre>
 </div>
@@ -198,34 +260,31 @@ kubectl get pod -n argocd</code></pre>
 <div class="paragraph">
 <p>Patch the ArgoCD service from ClusterIP to a LoadBalancer:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Expose the ArgoCD console using the minikube service using user admin, and the password obtained in the step before:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-minikube -p {profile} service argocd-server -n argocd</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube -p gitops service argocd-server -n argocd</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Now with the minikube service list you can check the argocd service exposed:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-minikube -p {profile} service list</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube -p gitops service list</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset1_openshift">
 <div class="paragraph">
-<p>ArgoCD is supported in OpenShift by <strong>Red Hat OpenShift GitOps</strong> operator.</p>
+<p>ArgoCD is supported in OpenShift 4.7 by <strong>Red Hat OpenShift GitOps</strong> operator.</p>
 </div>
 <div class="paragraph">
 <p>To install it, you need to follow the instructions written in: <a href="https://docs.openshift.com/container-platform/4.7/cicd/gitops/installing-openshift-gitops.html" class="bare">https://docs.openshift.com/container-platform/4.7/cicd/gitops/installing-openshift-gitops.html</a>
@@ -349,10 +408,9 @@ chmod +x /usr/local/bin/argocd</code></pre>
 <div class="paragraph">
 <p>To get the ArgoCD password execute:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d</code></pre>
 </div>
 </div>
 </div>
@@ -479,16 +537,14 @@ argoPass=$(oc get secret/openshift-gitops-cluster -n openshift-gitops -o jsonpat
 <div class="tab-pane" aria-labelledby="tabset3_minikube">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-kubectl apply -f assets/bgd-app/bgd-app.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f assets/bgd-app/bgd-app.yaml</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset3_openshift">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-oc apply -f assets/bgd-app/bgd-app.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f assets/bgd-app/bgd-app.yaml</code></pre>
 </div>
 </div>
 </div>
@@ -543,16 +599,14 @@ You may have to click on <code>show hidden resources</code> on this page to see 
 <div class="tab-pane" aria-labelledby="tabset4_minikube">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-kubeclt get pods,svc,route -n bgd</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubeclt get pods,svc,route -n bgd</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset4_openshift">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-oc get pods,svc,route -n bgd</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods,svc,route -n bgd</code></pre>
 </div>
 </div>
 </div>
@@ -591,16 +645,14 @@ route.route.openshift.io/bgd   bgd-bgd.apps.example.com          bgd        8080
 <div class="tab-pane" aria-labelledby="tabset5_minikube">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-kubectl rollout status deploy/bgd -n bgd</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl rollout status deploy/bgd -n bgd</code></pre>
 </div>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset5_openshift">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">#!/bin/bash
-oc rollout status deploy/bgd -n bgd</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc rollout status deploy/bgd -n bgd</code></pre>
 </div>
 </div>
 </div>
@@ -620,8 +672,8 @@ oc rollout status deploy/bgd -n bgd</code></pre>
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="01-setup.html" class="query-params-link">1. Setup</a></span>
-  <span class="next"><a href="#03-kustomize.adoc" class="query-params-link">3. Work with Kustomize</a></span>
+  <span class="prev"><a href="01-setup.html" class="query-params-link">Setup</a></span>
+  <span class="next"><a href="03-kustomize.html" class="query-params-link">Work with Kustomize</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
