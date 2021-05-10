@@ -341,32 +341,9 @@ Argo CD won&#8217;t apply the next manifest until the previous reports "healthy"
 <div class="paragraph">
 <p>Apply the Argo CD <code>Application</code> manifest to get this application deployed.</p>
 </div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_minikube"></a>Minikube</p>
-</li>
-<li>
-<p><a id="tabset1_openshift"></a>OpenShift</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_minikube">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
-</div>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_openshift">
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
-</div>
-</div>
-</div>
 </div>
 </div>
 <div class="paragraph">
@@ -512,7 +489,7 @@ namespace.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f ~/resources/apps/welcome-hooks.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f documentation/modules/ROOT/examples/welcome-php/welcome-hooks.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -542,7 +519,7 @@ the namespace:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods,jobs -n welcome-hooks</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get pods,jobs -n welcome-hooks</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -659,7 +636,7 @@ manifests. You can see the specific implementation in the <a href="https://githu
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f ~/resources/apps/welcome-syncwaves-and-hooks.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f documentation/modules/ROOT/examples/welcome-php/welcome-syncwaves-and-hooks.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -689,7 +666,7 @@ annotation.</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods,jobs -n welcome-waves-and-hooks</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get pods,jobs -n welcome-waves-and-hooks</code></pre>
 </div>
 </div>
 <div class="paragraph">
