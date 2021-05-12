@@ -712,7 +712,41 @@ deployment.apps/bgd   1/1     1            1           10m</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Then visit your application using the route or the ingress.</p>
+<p>Then visit your application:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset5_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset5_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset5_minikube">
+<div class="paragraph">
+<p>Add Minikube IP (<code>minikube ip</code>) and the Ingress hostname <code>bgd.devnation</code> to your Host file, like <code>/etc/hosts</code>.</p>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">192.168.39.242 bgd.devnation</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset5_openshift">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get route bgd -n bgd -o jsonpath='{.spec.host}{"\n"}'</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="paragraph">
 <p>Your application should look like this.</p>
@@ -814,22 +848,22 @@ should have returned to a blue square.</p>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset5_minikube"></a>Minikube</p>
+<p><a id="tabset6_minikube"></a>Minikube</p>
 </li>
 <li>
-<p><a id="tabset5_openshift"></a>OpenShift</p>
+<p><a id="tabset6_openshift"></a>OpenShift</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset5_minikube">
+<div class="tab-pane" aria-labelledby="tabset6_minikube">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch application/bgd-app -n argocd --type=merge -p='{"spec":{"syncPolicy":{"automated":{"prune":true,"selfHeal":true}}}}'</code></pre>
 </div>
 </div>
 </div>
-<div class="tab-pane" aria-labelledby="tabset5_openshift">
+<div class="tab-pane" aria-labelledby="tabset6_openshift">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch application/bgd-app -n openshift-gitops --type=merge -p='{"spec":{"syncPolicy":{"automated":{"prune":true,"selfHeal":true}}}}'</code></pre>
