@@ -529,19 +529,11 @@ argocd-server-859b4b5578-cv2qx        1/1     Running   0          2m18s</code><
 </div>
 </div>
 <div class="paragraph">
-<p>Expose the ArgoCD console using the minikube service.</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube -p gitops service argocd-server -n argocd</code></pre>
-</div>
-</div>
-<div class="paragraph">
 <p>Now with the minikube service list you can check the argocd service exposed:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube -p gitops service list</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube -p gitops service list | grep argocd</code></pre>
 </div>
 </div>
 </div>
