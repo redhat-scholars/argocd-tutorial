@@ -284,7 +284,33 @@ First wait for the rollout to complete:
 kubectl rollout status deploy/bgd -n bgd
 ----
 
-Then visit your application using the route or the ingress.
+Then visit your application:
+
+
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+Add Minikube IP (`minikube ip`) and the Ingress hostname `bgd.devnation` to your Host file, like `/etc/hosts`.
+
+Example:
+[source,bash,subs="attributes+,+macros"]
+----
+192.168.39.242 bgd.devnation
+----
+
+--
+OpenShift::
++
+--
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc get route bgd -n bgd -o jsonpath='{.spec.host}{"\n"}'
+----
+--
+====
 
 Your application should look like this.
 
