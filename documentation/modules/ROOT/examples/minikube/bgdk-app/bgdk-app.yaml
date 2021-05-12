@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: bgdk-app
-  namespace: openshift-gitops
+  namespace: argocd
 spec:
   destination:
     namespace: bgdk
@@ -11,7 +11,7 @@ spec:
   source:
     path: apps/bgd/overlays/bgdk
     repoURL: https://github.com/redhat-developer-demos/openshift-gitops-examples
-    targetRevision: main
+    targetRevision: minikube
   syncPolicy:
     automated:
       prune: true

@@ -79,8 +79,44 @@ example are the `resources` and the `patchesJson6902` sections.
 
 > **NOTE** You can read about what options are availble for patching in the https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/[official documentaion site]
 
-Build this manifets by running: `kustomize build .`{{execute}} , and
-you can see that the new label got added to the manifest!
+Build this manifets by running:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+kustomize build
+----
+
+You can see that the new label got added to the manifest!
+
+[.console-output]
+[source,yaml,subs="attributes+,+macros"]
+----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: welcome-php
+    testkey: testvalue
+  name: welcome-php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: welcome-php
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: welcome-php
+    spec:
+      containers:
+      - image: quay.io/redhatworkshops/welcome-php:ffcd15
+        name: welcome-php
+        resources: {}
+----
 
 You can use the `kustomize edit` command instead of writing YAML. For
 example, you can change the image tag this `Deployment` uses from `latest`
@@ -92,9 +128,34 @@ to `ffcd15` by running the following:
 kustomize edit set image quay.io/redhatworkshops/welcome-php:ffcd15
 ----
 
-This will update the
-`kustomization.yaml file with a
-`images` section. 
+This will update the `kustomization.yaml` file with a `images` section. 
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+cat kustomization.yaml
+----
+
+[.console-output]
+[source,yaml,subs="attributes+,+macros"]
+----
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ./welcome.yaml
+patchesJson6902:
+- patch: |-
+    - op: add
+      path: /metadata/labels/testkey
+      value: testvalue
+  target:
+    group: apps
+    kind: Deployment
+    name: welcome-php
+    version: v1
+images:
+- name: quay.io/redhatworkshops/welcome-php
+  newTag: ffcd15
+----
 
 Now when you run:
 
@@ -114,7 +175,6 @@ your specific environment without the need to copy or edit the original.
 Kustomize can be used to write a new YAML file or be pipped into
 the `kubectl` (or `oc`) command. Example:
 
-[.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
 kustomize build . | kubectl apply -f -
@@ -234,7 +294,7 @@ As you can see `kustomize` can be a powerful tool.
 [#deploying_kustomized_application]
 == Deploying Kustomized Application
 
-In previous scenarios, you learned that in a GitOps workflow; the
+In previous chapter, you learned that in a GitOps workflow; the
 entire application stack (including infrastructure) is reflected
 in a git repo. The challenge is how to do this without duplicating
 YAML.
@@ -293,39 +353,6 @@ oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
 ====
 
 
-## Base Application
-
-In a previous scenario, we deployed a sample appication that had a
-picture of a blue square. To deploy the application, run the following
-command:
-
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-kubectl apply -f documentation/modules/ROOT/examples/bgd-app/bgd-app.yaml
-----
-
-This should create an `Application` in the Argo CD UI.
-
-image::bgdk-app.png[Application]
-
-You can wait for the rollout of the application by running:
-
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-kubectl rollout status deploy/bgd -n bgd
-----
-
-Once it's done rolling out, you can open the application's URL.
-
-It should look something like this.
-
-images::bgd.png[Blue Green Deploy app]
-
-If you did the previous scenario, this should be familiar. But what
-if I wanted to deploy this application with modifications?
-
 [#kustomized_application]
 === Kustomized Application
 
@@ -336,6 +363,40 @@ to.
 
 Take a look at the `Application` definition:
 
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/minikubr/apps/bgd/overlays/bgdk[bgdk-app.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$minikube/bgdk-app/bgdk-app.yaml[]
+----
+
+
+This application is pointed to the https://github.com/redhat-developer-demos/openshift-gitops-examples[same repo] but https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/minikube/apps/bgd/overlays/bgdk[different directory].
+
+This is using a concept of an "overlay", where you have a "base"
+set of manifests and you overlay your customizations. Take a look
+at the `examples/minikube/bgdk-overlay/kustomization.yaml` file.
+
+This `kustomization.yaml` take the base application and patches the
+manifest so that we get a yellow square instead of a blue one. It
+also deploys the application to the `bgdk` namespace (denoted by
+the `namespace:` section of the file).
+
+Deploy this application:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+kubectl apply -f documentation/modules/ROOT/examples/minikube/bgdk-app/bgdk-app.yaml
+----
+--
+OpenShift::
++
+--
 .link:https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/bgd/overlays/bgdk[bgdk-app.yaml,window='_blank']
 [source,yaml,subs="+macros,attributes+"]
 ----
@@ -362,6 +423,9 @@ Deploy this application:
 ----
 kubectl apply -f documentation/modules/ROOT/examples/bgdk-app/bgdk-app.yaml
 ----
+--
+====
+
 
 This should show you two apps on the Argo CD UI.
 
