@@ -450,6 +450,45 @@ spec:
 ---</code></pre>
 </div>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset3_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_minikube">
+<div class="paragraph">
+<p>An <strong>Ingress</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/bgd/base/bgd-ingress.yaml" target="_blank" rel="noopener">bgd-ingress.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bgd
+spec:
+  rules:
+    - host: bgd.devnation
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: bgd
+                port:
+                  number: 8080</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_openshift">
 <div class="paragraph">
 <p>A <strong>Route</strong>:</p>
 </div>
@@ -479,12 +518,82 @@ status:
       type: Admitted</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
 <div class="paragraph">
 <p>Collectively, this is known as an <code>Application</code> within ArgoCD. Therefore, you must define it as such in order to apply these manifest in your cluster.</p>
 </div>
 <div class="paragraph">
 <p>For this you can define and apply an <code>Application</code> manifest in ArgoCD. Let&#8217;s check the <a href="https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml">ArgoCD Application manifest</a> used for deploy our application and break this down a bit:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset4_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset4_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset4_minikube">
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml" target="_blank" rel="noopener">bgd-app.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bgd-app
+  namespace: argocd
+spec:
+  destination:
+    namespace: bgd
+    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
+  project: default
+  source:
+    path: apps/bgd/overlays/bgd
+    repoURL: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples" class="bare">https://github.com/redhat-developer-demos/openshift-gitops-examples</a>
+    targetRevision: minikube
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Here you&#8217;re installing the application in ArgoCD&#8217;s <code>default</code> project (<code>.spec.project</code>)</p>
+</li>
+<li>
+<p>The destination server is the server we installed ArgoCD on (noted as <code>.spec.destination.server</code>).</p>
+</li>
+<li>
+<p>The manifest repo where the YAML resides and the path to look for the YAML is under <code>.spec.source</code>.</p>
+</li>
+<li>
+<p>The <code>.spec.syncPolicy</code> is set to <code>false</code>. Note that you can have Argo CD automatically sync the repo.</p>
+</li>
+<li>
+<p>The last section <code>.spec.sync</code> just says what are you comparing the repo to. (Basically "Compare the running config to the desired config")</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Application CR (CustomResource) can be applied by running the following:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f documentation/modules/ROOT/examples/minikube/bgd-app/bgd-app.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset4_openshift">
 <div class="listingblock">
 <div class="title"><a href="https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml" target="_blank" rel="noopener">bgd-app.yaml</a></div>
 <div class="content">
@@ -537,6 +646,9 @@ spec:
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f documentation/modules/ROOT/examples/bgd-app/bgd-app.yaml</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
 <div class="paragraph">
 <p>This should create the <code>bgd-app</code> in the ArgoCD UI.</p>
 </div>
@@ -573,7 +685,7 @@ You may have to click on <code>show hidden resources</code> on this page to see 
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get pods,svc,route -n bgd</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl get all -n bgd</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -587,8 +699,8 @@ pod/bgd-788cb756f7-kz448   1/1     Running   0          10m
 NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
 service/bgd   ClusterIP   172.30.111.118   &lt;none&gt;        8080/TCP   10m
 
-NAME                           HOST/PORT                                PATH   SERVICES   PORT   TERMINATION   WILDCARD
-route.route.openshift.io/bgd   bgd-bgd.apps.example.com          bgd        8080                 None</code></pre>
+NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/bgd   1/1     1            1           10m</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -698,9 +810,32 @@ should have returned to a blue square.</p>
 <div class="paragraph">
 <p>Or, as in our case, after the fact by running the following command:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset5_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset5_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset5_minikube">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch application/bgd-app -n argocd --type=merge -p='{"spec":{"syncPolicy":{"automated":{"prune":true,"selfHeal":true}}}}'</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset5_openshift">
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch application/bgd-app -n openshift-gitops --type=merge -p='{"spec":{"syncPolicy":{"automated":{"prune":true,"selfHeal":true}}}}'</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
