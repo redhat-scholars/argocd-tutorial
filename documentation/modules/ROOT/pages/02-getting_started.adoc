@@ -159,6 +159,22 @@ A *Service*:
 include::ROOT:example$bgd-yaml/bgd-svc.yaml[]
 ----
 
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+An *Ingress*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/bgd/base/bgd-ingress.yaml[bgd-ingress.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$minikube/bgd-yaml/bgd-ingress.yaml[]
+----
+--
+OpenShift::
++
+--
 A *Route*:
 
 .link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-route.yaml[bgd-route.yaml,window='_blank']
@@ -167,10 +183,41 @@ A *Route*:
 include::ROOT:example$bgd-yaml/bgd-route.yaml[]
 ----
 
+--
+====
+
 Collectively, this is known as an `Application` within ArgoCD. Therefore, you must define it as such in order to apply these manifest in your cluster.
 
 For this you can define and apply an `Application` manifest in ArgoCD. Let's check the https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml[ArgoCD Application manifest] used for deploy our application and break this down a bit:
 
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+.link:https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml[bgd-app.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$minikube/bgd-app/bgd-app.yaml[]
+----
+
+* Here you're installing the application in ArgoCD's `default` project (`.spec.project`)
+* The destination server is the server we installed ArgoCD on (noted as `.spec.destination.server`).
+* The manifest repo where the YAML resides and the path to look for the YAML is under `.spec.source`.
+* The `.spec.syncPolicy` is set to `false`. Note that you can have Argo CD automatically sync the repo.
+* The last section `.spec.sync` just says what are you comparing the repo to. (Basically "Compare the running config to the desired config")
+
+The Application CR (CustomResource) can be applied by running the following:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+kubectl apply -f documentation/modules/ROOT/examples/minikube/bgd-app/bgd-app.yaml
+----
+--
+OpenShift::
++
+--
 .link:https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml[bgd-app.yaml,window='_blank']
 [source,yaml,subs="+macros,attributes+"]
 ----
@@ -190,6 +237,9 @@ The Application CR (CustomResource) can be applied by running the following:
 ----
 kubectl apply -f documentation/modules/ROOT/examples/bgd-app/bgd-app.yaml
 ----
+--
+====
+
 
 This should create the `bgd-app` in the ArgoCD UI.
 
@@ -208,7 +258,7 @@ You can see all the resources created with:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-kubectl get pods,svc,route -n bgd
+kubectl get all -n bgd
 ----
 
 The output should look like this:
@@ -222,8 +272,8 @@ pod/bgd-788cb756f7-kz448   1/1     Running   0          10m
 NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
 service/bgd   ClusterIP   172.30.111.118   <none>        8080/TCP   10m
 
-NAME                           HOST/PORT                                PATH   SERVICES   PORT   TERMINATION   WILDCARD
-route.route.openshift.io/bgd   bgd-bgd.apps.example.com          bgd        8080                 None
+NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/bgd   1/1     1            1           10m
 ----
 
 First wait for the rollout to complete:
@@ -304,8 +354,25 @@ spec:
 
 Or, as in our case, after the fact by running the following command:
 
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+kubectl patch application/bgd-app -n argocd --type=merge -p='{"spec":{"syncPolicy":{"automated":{"prune":true,"selfHeal":true}}}}'
+----
+--
+OpenShift::
++
+--
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
 kubectl patch application/bgd-app -n openshift-gitops --type=merge -p='{"spec":{"syncPolicy":{"automated":{"prune":true,"selfHeal":true}}}}'
 ----
+--
+====
+
