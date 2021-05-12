@@ -2,3 +2,6 @@
 :source-highlighter: highlightjs
 :branch: master
 :github-repo: https://github.com/redhat-scholars/argocd-tutorial/blob/{branch}
+:profile: gitops
+:minikube-version: v1.20.0
+:kubernetes-version: v1.20.2
