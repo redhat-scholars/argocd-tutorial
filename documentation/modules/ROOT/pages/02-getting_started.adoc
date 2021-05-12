@@ -7,6 +7,13 @@ Once you've verified that Argo CD is up and running, let's explore how to access
 [#connect_argocd]
 == Connecting to ArgoCD
 
+You can connect to ArgoCD with the CLI or Web console.
+
+ArgoCD by default generates a `admin` user, and a random password that generates when the ArgoCD is deployed. 
+
+
+=== Connecting with the CLI
+
 Install the argocd CLI tool.
 
 [.console-input]
@@ -23,14 +30,23 @@ Login in the ArgoCD instance with ArgoCD cli:
 Minikube::
 +
 --
-ArgoCD by default generates a admin user, and a random password that generates when the ArgoCD is deployed. 
 
 To get the ArgoCD password execute:
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+argoPass=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
+echo $argoPass
+----
+
+Get ArgoCD URL:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+argoURL=$(minikube -p gitops service argocd-server -n argocd --url -p gitops | tail -n 1 | sed -e 's|http://||')
+echo $argoURL
 ----
 
 --
@@ -39,19 +55,32 @@ OpenShift::
 +
 --
 
-Get the Route for the ArgoCD/Openshift GitOps server and extract the secret for the admin user: 
+Extract the password from the admin user Secret:
+
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-argoRoute=$(oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}{"\n"}')
 argoPass=$(oc get secret/openshift-gitops-cluster -n openshift-gitops -o jsonpath='{.data.admin\.password}' | base64 -d)
+echo $argoPass
 ----
+
+Get the Route for the ArgoCD/OpenShift GitOps server:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+argoURL=$(oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}{"\n"}')
+echo $argoURL
+----
+
+--
+====
 
 Login to the ArgoCD with the ArgoCD cli:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-argocd login --insecure --grpc-web $argoRoute  --username admin --password $argoPass
+argocd login --insecure --grpc-web $argoURL  --username admin --password $argoPass
 ----
 
 [.console-output]
@@ -60,6 +89,25 @@ argocd login --insecure --grpc-web $argoRoute  --username admin --password $argo
 'admin:login' logged in successfully
 ----
 
+=== Connecting with the Web Console
+
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+Expose the ArgoCD console using the minikube service.
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+minikube -p {profile} service argocd-server -n argocd
+----
+--
+
+OpenShift::
++
+--
 Access to the Route of ArgoCD:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
@@ -69,7 +117,8 @@ echo $argoRoute
 --
 ====
 
-Access to the ArgoCD console with the user admin and the password extracted in the previous step:
+
+Access to the ArgoCD console with the user `admin` and the password extracted in the previous step:
 
 image::argocd-login.png[ArgoCDLogin, 600]
 
@@ -82,7 +131,7 @@ This is the Argo CD Web UI.
 [#deploy_sample_application]
 == Deploying Sample Application
 
-For this tutorial, we will use our https://github.com/redhat-developer-demos/openshift-gitops-examples[GitOps repo]. We'll be using this repo to deploy our first application and contain the manifests to deploy our example app.
+For this tutorial, we will use our https://github.com/redhat-developer-demos/openshift-gitops-examples[GitOps repo,window='_blank']. We'll be using this repo to deploy our first application and contain the manifests to deploy our example app.
 
 These manifests include:
 
