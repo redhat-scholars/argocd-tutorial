@@ -151,7 +151,7 @@ Patch the ArgoCD service from ClusterIP to a LoadBalancer:
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 ----
 
-Expose the ArgoCD console using the minikube service using user admin, and the password obtained in the step before:
+Expose the ArgoCD console using the minikube service.
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
