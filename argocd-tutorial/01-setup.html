@@ -81,15 +81,15 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="#kubernetes">Setup Kubernetes</a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#install_argocd">Install ArgoCD</a>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="02-getting_started.html">Getting Started</a>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-getting_started.html#install_argocd">Install ArgoCD</a>
-  </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="02-getting_started.html#connect_argocd">Connecting to ArgoCD</a>
   </li>
@@ -241,7 +241,7 @@ Please have them installed and configured before you get started with any of the
 <tr>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>Docker</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://docs.docker.com/docker-for-mac/install">Docker for Mac</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>dnf install docker</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>dnf install podman podman-docker</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://docs.docker.com/docker-for-windows/install">Docker for Windows</a></p></td>
 </tr>
 <tr>
@@ -251,28 +251,16 @@ Please have them installed and configured before you get started with any of the
 <td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://download.virtualbox.org/virtualbox/6.1.6/VirtualBox-6.1.6-137129-Win.exe">Download</a></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://kubernetes.io/docs/tasks/tools/install-minikube">Minikube</a> v1.12.1</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/minikube/releases/download/v1.12.1/minikube-darwin-amd64">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/minikube/releases/download/v1.12.1/minikube-linux-amd64">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/minikube/releases/download/v1.12.1/minikube-windows-amd64.exe">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://kubernetes.io/docs/tasks/tools/install-minikube">Minikube</a> v1.20.0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/minikube/releases/download/v1.20.0/minikube-darwin-amd64">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/minikube/releases/download/v1.20.0/minikube-linux-amd64">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/kubernetes/minikube/releases/download/v1.20.0/minikube-windows-amd64.exe">Download</a></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>kubectl v1.18.6</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://storage.googleapis.com/kubernetes-release/release/v1.18.6/bin/darwin/amd64/kubectl">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://storage.googleapis.com/kubernetes-release/release/v1.18.6/bin/linux/amd64/kubectl">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://storage.googleapis.com/kubernetes-release/release/v1.18.6/bin/windows/amd64/kubectl.exe">Download</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/wercker/stern">stern</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>brew install stern</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/wercker/stern/releases/download/1.6.0/stern_linux_amd64">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/wercker/stern/releases/download/1.11.0/stern_windows_amd64.exe">Download</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Apache Maven 3.6.3</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>kubectl v1.20.2</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://storage.googleapis.com/kubernetes-release/release/v1.20.2/bin/darwin/amd64/kubectl">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://storage.googleapis.com/kubernetes-release/release/v1.20.2/bin/linux/amd64/kubectl">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://storage.googleapis.com/kubernetes-release/release/v1.20.2/bin/windows/amd64/kubectl.exe">Download</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -309,28 +297,10 @@ Although they are used in the tutorial, you could use others without any problem
 <td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win64.exe">Download</a></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://httpie.org/">httpie</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>brew install httpie</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>dnf install httpie</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://httpie.org/doc#windows-etc" class="bare">https://httpie.org/doc#windows-etc</a></p></td>
-</tr>
-<tr>
 <td class="tableblock halign-center valign-top"><p class="tableblock">watch</p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>brew install watch</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>dnf install procps-ng</code></p></td>
 <td class="tableblock halign-center valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock">kubectx and kubens</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>brew install kubectx</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/ahmetb/kubectx" class="bare">https://github.com/ahmetb/kubectx</a></p></td>
-<td class="tableblock halign-center valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/rakyll/hey">hey</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code>brew install hey</code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://storage.googleapis.com/jblabs/dist/hey_linux_v0.1.2">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://storage.googleapis.com/jblabs/dist/hey_win_v0.1.2.exe">Download</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -386,7 +356,7 @@ Although they are used in the tutorial, you could use others without any problem
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube start --memory=8192 --cpus=3 --kubernetes-version=v1.18.6 --vm-driver=virtualbox -p gitops</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube start --memory=8192 --cpus=3 --kubernetes-version=v1.20.2 --vm-driver=virtualbox -p gitops</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -394,7 +364,7 @@ Although they are used in the tutorial, you could use others without any problem
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube start --memory=8192 --cpus=3 --kubernetes-version=v1.18.6 --vm-driver=hyperv -p gitops</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube start --memory=8192 --cpus=3 --kubernetes-version=v1.20.2 --vm-driver=hyperv -p gitops</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -405,10 +375,10 @@ Although they are used in the tutorial, you could use others without any problem
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">❌  profile "gitops" not found
 ✅  Created a new profile : gitops
 ✅  minikube profile was successfully set to gitops
-😄  [default] minikube v1.12.1 on Darwin 10.15.2
+😄  [default] minikube v1.20.0 on Darwin 10.15.2
 ✨  Selecting 'virtualbox' driver from user configuration (alternates: [hyperkit])
 🔥  Creating virtualbox VM (CPUs=2, Memory=8192MB, Disk=50000MB) ...
-🐳  Preparing Kubernetes v1.18.6 on Docker '19.03.5' ...
+🐳  Preparing Kubernetes v1.20.2 on Docker '19.03.5' ...
     ▪ apiserver.enable-admission-plugins=LimitRanger,NamespaceExists,NamespaceLifecycle,ResourceQuota,ServiceAccount,DefaultStorageClass,MutatingAdmissionWebhook
 🚜  Pulling images ...
 🚀  Launching Kubernetes ...
@@ -449,7 +419,7 @@ Once you have your cluster, you can download the latest OpenShift client(oc) fro
 <div class="listingblock console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Client Version: openshift-clients-4.3.0-201910250623-88-g6a937dfe
-Kubernetes Version: v1.18.6</code></pre>
+Kubernetes Version: v1.20.2</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -464,11 +434,229 @@ Kubernetes Version: v1.18.6</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>And then you are ready for start using Kubernetes:</p>
+<p>And then you are ready for installing ArgoCD on Kubernetes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="install_argocd"><a class="anchor" href="#install_argocd"></a>ArgoCD Installation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this section we will be exploring how to install ArgoCD on Minikube and how to install it on OpenShift with the OpenShift GitOps Operator.</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset2_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_minikube">
+<div class="paragraph">
+<p>In the minikube guide, an ArgoCD upstream deployment will be installed and used.</p>
+</div>
+<div class="paragraph">
+<p>Enable the Ingress Addon for Minikube:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube addons enable ingress -p gitops</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Check that the addon has been enabled:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube addons list -p gitops | grep ingress</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Install ArgoCD and check that every pod is running properly in the argocd namespace:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl create namespace argocd
+kubectl apply -n argocd -f <a href="https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml" class="bare">https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml</a></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>It will take few mins for the ArgoCD components to be installed, you an watch the status using the command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">watch kubectl get pods -n argocd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>c</kbd></span> to terminate the watch</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A successful deployment of Tekton pipelines will show the following pods:</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                                  READY   STATUS    RESTARTS   AGE
+argocd-application-controller-0       1/1     Running   0          2m18s
+argocd-dex-server-5dd657bd9-2r24r     1/1     Running   0          2m19s
+argocd-redis-759b6bc7f4-bnljg         1/1     Running   0          2m19s
+argocd-repo-server-6c495f858f-p5267   1/1     Running   0          2m18s
+argocd-server-859b4b5578-cv2qx        1/1     Running   0          2m18s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Patch the ArgoCD service from ClusterIP to a LoadBalancer:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Expose the ArgoCD console using the minikube service using user admin, and the password obtained in the step before:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube -p gitops service argocd-server -n argocd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now with the minikube service list you can check the argocd service exposed:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube -p gitops service list</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_openshift">
+<div class="paragraph">
+<p>ArgoCD is supported in OpenShift 4.7 by <strong>Red Hat OpenShift GitOps</strong> operator.</p>
+</div>
+<div class="paragraph">
+<p>To install it, you need to follow the instructions written in the: <a href="https://docs.openshift.com/container-platform/4.7/cicd/gitops/installing-openshift-gitops.html" target="_blank" rel="noopener">OpenShift GitOps installation documentation</a>.</p>
+</div>
+<div class="paragraph">
+<p>The OpenShift GitOps Operator is installed via the Operator Hub. You
+can view this installation via the UI in the Administrator Perspective:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Click on <code>Operators</code> drop down on the leftside navigation.</p>
+</li>
+<li>
+<p>Click on <code>Installed Operators</code></p>
+</li>
+<li>
+<p>In the <code>Project</code> dropdown, make sure <code>openshift-gitops</code> is selected.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You should see that the OpenShift GitOps Operator is installed.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/kubelogo.png" alt="Kubernetes" width="200">
+<img src="_images/os-gitops-installed.png" alt="OpenShift GitOps Installed">
+</div>
+</div>
+<div class="paragraph">
+<p>It is important that after you finish with the installation, all the required pods are deployed in <code>openshift-gitops</code> namespace.</p>
+</div>
+<div class="paragraph">
+<p>Another way to view what was installed is to run the following:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods -n openshift-gitops</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                                                    READY   STATUS    RESTARTS   AGE
+argocd-cluster-application-controller-6f548f74b-48bvf   1/1     Running   0          54s
+argocd-cluster-redis-6cf68d494d-9qqq4                   1/1     Running   0          54s
+argocd-cluster-repo-server-85b9d68f9b-4hj52             1/1     Running   0          54s
+argocd-cluster-server-78467b647-8lcv9                   1/1     Running   0          54s
+cluster-86f8d97979-lfdhv                                1/1     Running   0          56s
+kam-7ff6f58c-2jxkm                                      1/1     Running   0          55s</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get operators</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This should have the following output.</p>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                                                  AGE
+openshift-gitops-operator.openshift-operators         25m
+openshift-pipelines-operator-rh.openshift-operators   25m</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Patch the ArgoCD Controller of openshift-gitops in the namespace <code>openshift-gitops</code>:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc patch argocd openshift-gitops -n openshift-gitops --type=merge -p='{"spec":{"resourceCustomizations":"route.openshift.io/Route:\n  ignoreDifferences: |\n    jsonPointers:\n    - /spec/host\n","server":{"insecure":true,"route":{"enabled":true,"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"}}}}}'</code></pre>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">argocd.argoproj.io/openshift-gitops patched</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>this command patches the ArgoCD Controller in the following ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Ignores .spec.host field in routes</p>
+</li>
+<li>
+<p>Uses SSL edge termination</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Wait for the rollout of a new controller:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc rollout status deploy openshift-gitops-server -n openshift-gitops</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Give the serviceAccount for ArgoCD the ability to manage the cluster:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc adm policy add-cluster-role-to-user cluster-admin -z openshift-gitops-argocd-application-controller -n openshift-gitops</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

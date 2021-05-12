@@ -81,15 +81,15 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="01-setup.html#kubernetes">Setup Kubernetes</a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#install_argocd">Install ArgoCD</a>
+  </li>
 </ul>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="02-getting_started.html">Getting Started</a>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#install_argocd">Install ArgoCD</a>
-  </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="#connect_argocd">Connecting to ArgoCD</a>
   </li>
@@ -209,174 +209,16 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Getting Started</h1>
-<div class="sect1">
-<h2 id="install_argocd"><a class="anchor" href="#install_argocd"></a>ArgoCD Installation</h2>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Welcome! In this section we will be exploring the OpenShift GitOps Operator, what it installs, and how all the components fit together.</p>
-</div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_minikube"></a>Minikube</p>
-</li>
-<li>
-<p><a id="tabset1_openshift"></a>OpenShift</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_minikube">
-<div class="paragraph">
-<p>In the minikube guide, an ArgoCD upstream deployment will be installed and used.</p>
-</div>
-<div class="paragraph">
-<p>Enable the Ingress Addon for Minikube:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube addons enable ingress -p gitops</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Check that the addon has been enabled:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube addons list -p gitops | grep ingress</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Install ArgoCD and check that every pod is running properly in the argocd namespace:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl create namespace argocd
-kubectl apply -n argocd -f <a href="https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml" class="bare">https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml</a>
-kubectl get pod -n argocd</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Patch the ArgoCD service from ClusterIP to a LoadBalancer:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Expose the ArgoCD console using the minikube service using user admin, and the password obtained in the step before:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube -p gitops service argocd-server -n argocd</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now with the minikube service list you can check the argocd service exposed:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube -p gitops service list</code></pre>
-</div>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_openshift">
-<div class="paragraph">
-<p>ArgoCD is supported in OpenShift 4.7 by <strong>Red Hat OpenShift GitOps</strong> operator.</p>
-</div>
-<div class="paragraph">
-<p>To install it, you need to follow the instructions written in: <a href="https://docs.openshift.com/container-platform/4.7/cicd/gitops/installing-openshift-gitops.html" class="bare">https://docs.openshift.com/container-platform/4.7/cicd/gitops/installing-openshift-gitops.html</a>
-It is important that after you finish with the installation, all the required pods are deployed in <code>openshift-gitops</code> namespace:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods -n openshift-gitops</code></pre>
-</div>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                                                    READY   STATUS    RESTARTS   AGE
-argocd-cluster-application-controller-6f548f74b-48bvf   1/1     Running   0          54s
-argocd-cluster-redis-6cf68d494d-9qqq4                   1/1     Running   0          54s
-argocd-cluster-repo-server-85b9d68f9b-4hj52             1/1     Running   0          54s
-argocd-cluster-server-78467b647-8lcv9                   1/1     Running   0          54s
-cluster-86f8d97979-lfdhv                                1/1     Running   0          56s
-kam-7ff6f58c-2jxkm                                      1/1     Running   0          55s</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Another way to view what was installed is to run the following:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get operators</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This should have the following output.</p>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                                                  AGE
-openshift-gitops-operator.openshift-operators         25m
-openshift-pipelines-operator-rh.openshift-operators   25m</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Patch the ArgoCD Controller of openshift-gitops in the namespace <code>openshift-gitops</code>:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc patch argocd openshift-gitops -n openshift-gitops --type=merge -p='{"spec":{"resourceCustomizations":"route.openshift.io/Route:\n  ignoreDifferences: |\n    jsonPointers:\n    - /spec/host\n","server":{"insecure":true,"route":{"enabled":true,"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"}}}}}'</code></pre>
-</div>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">argocd.argoproj.io/openshift-gitops patched</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>this command patches the ArgoCD Controller in the following ways:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Ignores .spec.host field in routes</p>
-</li>
-<li>
-<p>Uses SSL edge termination</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Wait for the rollout of a new controller:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc rollout status deploy openshift-gitops-server -n openshift-gitops</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Give the serviceAccount for ArgoCD the ability to manage the cluster:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc adm policy add-cluster-role-to-user cluster-admin -z openshift-gitops-argocd-application-controller -n openshift-gitops</code></pre>
-</div>
-</div>
-</div>
-</div>
+<p>Once you&#8217;ve verified that Argo CD is up and running, let&#8217;s explore how to access and manage Argo CD.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="connect_argocd"><a class="anchor" href="#connect_argocd"></a>Connecting to ArgoCD</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Now that you&#8217;ve verified that Argo CD is up and running, let&#8217;s explore how to access and manage Argo CD.</p>
-</div>
 <div class="paragraph">
 <p>Install the argocd CLI tool.</p>
 </div>
@@ -393,15 +235,15 @@ chmod +x /usr/local/bin/argocd</code></pre>
 <div class="ulist tabs">
 <ul>
 <li>
-<p><a id="tabset2_minikube"></a>Minikube</p>
+<p><a id="tabset1_minikube"></a>Minikube</p>
 </li>
 <li>
-<p><a id="tabset2_openshift"></a>OpenShift</p>
+<p><a id="tabset1_openshift"></a>OpenShift</p>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="tab-pane" aria-labelledby="tabset2_minikube">
+<div class="tab-pane" aria-labelledby="tabset1_minikube">
 <div class="paragraph">
 <p>ArgoCD by default generates a admin user, and a random password that generates when the ArgoCD is deployed.</p>
 </div>
@@ -414,7 +256,7 @@ chmod +x /usr/local/bin/argocd</code></pre>
 </div>
 </div>
 </div>
-<div class="tab-pane" aria-labelledby="tabset2_openshift">
+<div class="tab-pane" aria-labelledby="tabset1_openshift">
 <div class="paragraph">
 <p>Get the Route for the ArgoCD/Openshift GitOps server and extract the secret for the admin user:</p>
 </div>
