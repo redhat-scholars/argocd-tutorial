@@ -291,6 +291,36 @@ kubectl get deploy welcome-php  -o jsonpath='{.spec.template.spec.containers[].i
 
 As you can see `kustomize` can be a powerful tool.
 
+
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+
+You can now safely delete this namespace:
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+kubectl delete namespace kustomize-test
+----
+
+--
+OpenShift::
++
+--
+If you want, you can now delete this project as we won't use it for next steps
+
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc delete project kustomize-test
+----
+
+--
+====
+
 [#deploying_kustomized_application]
 == Deploying Kustomized Application
 
@@ -368,7 +398,7 @@ Take a look at the `Application` definition:
 Minikube::
 +
 --
-.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/minikubr/apps/bgd/overlays/bgdk[bgdk-app.yaml,window='_blank']
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/minikube/apps/bgd/overlays/bgdk[bgdk-app.yaml,window='_blank']
 [source,yaml,subs="+macros,attributes+"]
 ----
 include::ROOT:example$minikube/bgdk-app/bgdk-app.yaml[]

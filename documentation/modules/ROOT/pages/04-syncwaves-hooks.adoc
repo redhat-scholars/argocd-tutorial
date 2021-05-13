@@ -52,14 +52,69 @@ Read more about syncwaves on the https://argoproj.github.io/argo-cd/user-guide/s
 
 The sample application that we will deploy has the following manifests:
 
-* The https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/overlays/syncwaves/welcome-php-ns.yaml[Namespace] with syncwave as 0
-* The https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-deployment.yaml[Deployment] with syncwave as 1
-* The https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-svc.yaml[Service] with syncwave as 2 
-* Finally the https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-route.yaml[Route] with syncwave as 3
+The *Namespace* with syncwave as *0*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/overlays/syncwaves/welcome-php-ns.yaml[welcome-php-ns.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$welcome-php-yaml/welcome-php-ns.yaml[]
+----
+
+The *Deployment* with syncwave as *1*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-deployment.yaml[welcome-php-deployment.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$welcome-php-yaml/welcome-php-deployment.yaml[]
+----
+
+The *Service* with syncwave as *2*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-svc.yaml[welcome-php-svc.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$welcome-php-yaml/welcome-php-svc.yaml[]
+----
+
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+The *Ingress* with syncwave as *3*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/welcome-php/base/welcome-php-ingress.yaml[welcome-php-ingress.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$minikube/welcome-php-yaml/welcome-php-ingress.yaml[]
+----
+
+Add Minikube IP (`minikube ip`) and the Ingress hostname `welcome-php.devnation` to your Host file, like `/etc/hosts`.
+
+Example:
+[source,bash,subs="attributes+,+macros"]
+----
+192.168.39.242 bgd.devnation bgdx.devnation welcome-php.devnation
+----
+
+--
+OpenShift::
++
+--
+The *Route* with syncwave as *3*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-route.yaml[welcome-php-route.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$welcome-php-yaml/welcome-php-route.yaml[]
+----
+
+--
+====
 
 Argo CD will apply the Namespace first (since it's the lowest value), and make sure it returns a "healthy" status before moving on.
 
-Next, the Deployment will be applied. After that reports healthy, Argo CD will apply the Service then the Route.
+Next, the Deployment will be applied. After that reports healthy, Argo CD will apply the Service then the Ingress or Route.
 
 NOTE: Argo CD won't apply the next manifest until the previous reports "healthy".
 
@@ -68,17 +123,41 @@ NOTE: Argo CD won't apply the next manifest until the previous reports "healthy"
 
 Before we deploy this application, make sure you've opened the Argo CD Web Console.
 
-Access to the ArgoCD console with the user admin and the password extracted in the previous steps:
+Access to the Arg2oCD console with the user admin and the password extracted in the previous steps:
 
 image::argocd-login.png[ArgoCDLogin, 600]
 
 Apply the Argo CD `Application` manifest to get this application deployed.
 
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-kubectl apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml
+kubectl apply -f d46182
+ocumentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-syncwaves.yaml
 ----
+--
+OpenShift::
++
+--
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+kubectl apply -f documentation/modules/ROOT/examples/syncwaves-hooks/welcome-syncwaves.yaml
+----
+--
+====
+
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+application.argoproj.io/welcome-syncwaves created
+----
+
 
 This should create the `welcome-syncwaves` in the ArgoCD UI.
 
@@ -88,7 +167,7 @@ Clicking on this "card" will take you to the application overview page. Clicking
 
 image::welcome-syncwaves-tree.png[Syncwaves2, 400]
 
-If you follow along, you'll note that these manfiests get applied in order of their annotated syncwave!
+If you follow along, you'll note that these manifests get applied in order of their annotated syncwave!
 
 Keep the Argo CD WebUI tab open for the next exercise.
 
@@ -147,8 +226,7 @@ To read more about resource hooks, consult the https://argoproj.github.io/argo-c
 [#exploring_the_manifests_hooks]
 === Exploring Manifests
 
-I will be adding the following manifest to the first
-application deployed. Take a look at the manfiest
+Take a look at the manifest
 `examples/hooks/welcome-php-presync-job.yaml`{{open}}
 
 You'll see that I have the annotation `argocd.argoproj.io/hook: PreSync`
@@ -170,10 +248,35 @@ namespace.
 
 Create this application:
 
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-kubectl apply -f documentation/modules/ROOT/examples/welcome-php/welcome-hooks.yaml
+kubectl apply -f documentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-hooks.yaml 
+
+----
+
+--
+OpenShift::
++
+--
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+kubectl apply -f documentation/modules/ROOT/examples/syncwaves-hooks/welcome-hooks.yaml 
+
+----
+--
+====
+
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+application.argoproj.io/welcome-hooks created
 ----
 
 On the Argo CD WebUI, you should see another application appear.
@@ -224,6 +327,7 @@ In the previous sections you learned how to order the application
 of manifests using syncwaves. You also went over how you phase your
 deployments with resource hooks.
 
+
 In this section we will use syncwaves within each phase to show how you
 can further refine the deployment process.
 
@@ -243,9 +347,29 @@ The workflow can be summarized like this:
 
 Here we are adding 3 addition manifests.
 
-* A `PreSync` Job with a syncwave of 0 `examples/syncwaves-and-hooks/welcome-php-presync-job.yaml`{{open}}
-* A `PreSync` Pod with a syncwave of 1 and a hook deletion policy `examples/syncwaves-and-hooks/welcome-php-presync-pod.yaml`{{open}}
-* A `PostSync` Pod with a hook deletion policy `examples/syncwaves-and-hooks/welcome-php-postsync-pod.yaml`{{open}}
+A *PreSync* Job with a syncwave of *0*:
+
+.link:[welcome-php-presync-job.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$syncwaves-hooks/syncwaves-and-hooks/welcome-php-presync-job.yaml[]
+----
+
+A *PreSync* Job with a syncwave of *1* and a hook deletion policy:
+
+.link:[welcome-php-presync-pod.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$syncwaves-hooks/syncwaves-and-hooks/welcome-php-presync-pod.yaml[]
+----
+
+A *PostSync* Pod with a hook deletion policy:
+
+.link:[welcome-php-postsync-pod.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$syncwaves-hooks/syncwaves-and-hooks/welcome-php-postsync-pod.yaml[]
+----
 
 The manifest will apply in the following order.
 
@@ -256,19 +380,63 @@ The manifest will apply in the following order.
 [#deploying_the_application_resources]
 === Deploying the Application
 
-Take a look at the manifest file `apps/welcome-syncwaves-and-hooks.yaml`{{open}}
+Take a look at the manifest file:
+
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+.link:[welcome-syncwaves-and-hooks.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$minikube/syncwaves-hooks/welcome-syncwaves-and-hooks.yaml[]
+----
 
 As before, we are using Kustomize to deploy the same application,
 but in a different namespace and we are loading in the 3 additional
-manifests. You can see the specific implementation in the https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/welcome-php/overlays/syncwaves-and-hooks[git repo]
+manifests. You can see the specific implementation in the https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/minikube/apps/welcome-php/overlays/syncwaves-and-hooks[git repo]
 
 Create this application:
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-kubectl apply -f documentation/modules/ROOT/examples/welcome-php/welcome-syncwaves-and-hooks.yaml
+kubectl apply -f documentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-syncwaves-and-hooks.yaml
+
 ----
+
+--
+OpenShift::
++
+--
+.link:[welcome-syncwaves-and-hooks.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$syncwaves-hooks/welcome-syncwaves-and-hooks.yaml[]
+----
+
+As before, we are using Kustomize to deploy the same application,
+but in a different namespace and we are loading in the 3 additional
+manifests. You can see the specific implementation in the https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/welcome-php/overlays/syncwaves-and-hooks[git repo]
+
+Create this application:
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+kubectl apply -f  documentation/modules/ROOT/examples/syncwaves-hooks/welcome-syncwaves-and-hooks.yaml
+
+----
+--
+====
+
+[.console-output]
+[source,bash,subs="attributes+,+macros"]
+----
+application.argoproj.io/welcome-hooks created
+----
+
+
 
 This should create the 3rd application on Argo CD.
 
