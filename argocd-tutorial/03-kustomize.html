@@ -329,7 +329,7 @@ spec:
 kind: Kustomization
 resources:
 - ./welcome.yaml
-patches:
+patchesJson6902:
 - patch: |-
     - op: add
       path: /metadata/labels/testkey
