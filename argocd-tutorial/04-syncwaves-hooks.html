@@ -290,27 +290,168 @@
 <div class="paragraph">
 <p>The sample application that we will deploy has the following manifests:</p>
 </div>
-<div class="ulist">
+<div class="paragraph">
+<p>The <strong>Namespace</strong> with syncwave as <strong>0</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/overlays/syncwaves/welcome-php-ns.yaml" target="_blank" rel="noopener">welcome-php-ns.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  name: welcome
+spec: {}
+status: {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <strong>Deployment</strong> with syncwave as <strong>1</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-deployment.yaml" target="_blank" rel="noopener">welcome-php-deployment.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  labels:
+    app: welcome-php
+  name: welcome-php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: welcome-php
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: welcome-php
+    spec:
+      containers:
+      - image: quay.io/redhatworkshops/welcome-php:latest
+        name: welcome-php
+        resources: {}
+status: {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <strong>Service</strong> with syncwave as <strong>2</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-svc.yaml" target="_blank" rel="noopener">welcome-php-svc.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  labels:
+    app: welcome-php
+  name: welcome-php
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: welcome-php
+status:
+  loadBalancer: {}</code></pre>
+</div>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
 <ul>
 <li>
-<p>The <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/overlays/syncwaves/welcome-php-ns.yaml">Namespace</a> with syncwave as 0</p>
+<p><a id="tabset1_minikube"></a>Minikube</p>
 </li>
 <li>
-<p>The <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-deployment.yaml">Deployment</a> with syncwave as 1</p>
-</li>
-<li>
-<p>The <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-svc.yaml">Service</a> with syncwave as 2</p>
-</li>
-<li>
-<p>Finally the <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-route.yaml">Route</a> with syncwave as 3</p>
+<p><a id="tabset1_openshift"></a>OpenShift</p>
 </li>
 </ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_minikube">
+<div class="paragraph">
+<p>The <strong>Ingress</strong> with syncwave as <strong>3</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/welcome-php/base/welcome-php-ingress.yaml" target="_blank" rel="noopener">welcome-php-ingress.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: welcome-php
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  rules:
+    - host: welcome-php.devnation
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: welcome-php
+                port:
+                  number: 8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add Minikube IP (<code>minikube ip</code>) and the Ingress hostname <code>welcome-php.devnation</code> to your Host file, like <code>/etc/hosts</code>.</p>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">192.168.39.242 bgd.devnation bgdx.devnation welcome-php.devnation</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_openshift">
+<div class="paragraph">
+<p>The <strong>Route</strong> with syncwave as <strong>3</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-route.yaml" target="_blank" rel="noopener">welcome-php-route.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  creationTimestamp: null
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  labels:
+    app: welcome-php
+  name: welcome-php
+spec:
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: welcome-php
+    weight: null
+status: {}</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="paragraph">
 <p>Argo CD will apply the Namespace first (since it&#8217;s the lowest value), and make sure it returns a "healthy" status before moving on.</p>
 </div>
 <div class="paragraph">
-<p>Next, the Deployment will be applied. After that reports healthy, Argo CD will apply the Service then the Route.</p>
+<p>Next, the Deployment will be applied. After that reports healthy, Argo CD will apply the Service then the Ingress or Route.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -331,7 +472,7 @@ Argo CD won&#8217;t apply the next manifest until the previous reports "healthy"
 <p>Before we deploy this application, make sure you&#8217;ve opened the Argo CD Web Console.</p>
 </div>
 <div class="paragraph">
-<p>Access to the ArgoCD console with the user admin and the password extracted in the previous steps:</p>
+<p>Access to the Arg2oCD console with the user admin and the password extracted in the previous steps:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -341,9 +482,38 @@ Argo CD won&#8217;t apply the next manifest until the previous reports "healthy"
 <div class="paragraph">
 <p>Apply the Argo CD <code>Application</code> manifest to get this application deployed.</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset2_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset2_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset2_minikube">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f assets/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f d46182
+ocumentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset2_openshift">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f documentation/modules/ROOT/examples/syncwaves-hooks/welcome-syncwaves.yaml</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">application.argoproj.io/welcome-syncwaves created</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -363,7 +533,7 @@ Argo CD won&#8217;t apply the next manifest until the previous reports "healthy"
 </div>
 </div>
 <div class="paragraph">
-<p>If you follow along, you&#8217;ll note that these manfiests get applied in order of their annotated syncwave!</p>
+<p>If you follow along, you&#8217;ll note that these manifests get applied in order of their annotated syncwave!</p>
 </div>
 <div class="paragraph">
 <p>Keep the Argo CD WebUI tab open for the next exercise.</p>
@@ -455,8 +625,7 @@ annotation. For example</p>
 <div class="sect2">
 <h3 id="exploring_the_manifests_hooks"><a class="anchor" href="#exploring_the_manifests_hooks"></a>Exploring Manifests</h3>
 <div class="paragraph">
-<p>I will be adding the following manifest to the first
-application deployed. Take a look at the manfiest
+<p>Take a look at the manifest
 <code>examples/hooks/welcome-php-presync-job.yaml</code>{{open}}</p>
 </div>
 <div class="paragraph">
@@ -487,9 +656,37 @@ namespace.</p>
 <div class="paragraph">
 <p>Create this application:</p>
 </div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset3_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset3_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset3_minikube">
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f documentation/modules/ROOT/examples/welcome-php/welcome-hooks.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f documentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-hooks.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset3_openshift">
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f documentation/modules/ROOT/examples/syncwaves-hooks/welcome-hooks.yaml</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">application.argoproj.io/welcome-hooks created</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -591,18 +788,95 @@ can further refine the deployment process.</p>
 <div class="paragraph">
 <p>Here we are adding 3 addition manifests.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>A <code>PreSync</code> Job with a syncwave of 0 <code>examples/syncwaves-and-hooks/welcome-php-presync-job.yaml</code>{{open}}</p>
-</li>
-<li>
-<p>A <code>PreSync</code> Pod with a syncwave of 1 and a hook deletion policy <code>examples/syncwaves-and-hooks/welcome-php-presync-pod.yaml</code>{{open}}</p>
-</li>
-<li>
-<p>A <code>PostSync</code> Pod with a hook deletion policy <code>examples/syncwaves-and-hooks/welcome-php-postsync-pod.yaml</code>{{open}}</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>A <strong>PreSync</strong> Job with a syncwave of <strong>0</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="" target="_blank" rel="noopener">welcome-php-presync-job.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: welcome-presyncjob
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+      - command:
+        - /bin/bash
+        - -c
+        - |
+          sleep 15
+        image: registry.access.redhat.com/ubi8/ubi:latest
+        imagePullPolicy: IfNotPresent
+        name: welcome-sleep-job
+      restartPolicy: Never</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A <strong>PreSync</strong> Job with a syncwave of <strong>1</strong> and a hook deletion policy:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="" target="_blank" rel="noopener">welcome-php-presync-pod.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  name: welcome-presync-pod
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  containers:
+  - command:
+    - /bin/bash
+    - -c
+    - |
+      echo "Pre deployment tasks"
+      sleep 10
+    image: registry.access.redhat.com/ubi8/ubi:latest
+    imagePullPolicy: IfNotPresent
+    name: welcome-sleep-pod
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A <strong>PostSync</strong> Pod with a hook deletion policy:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="" target="_blank" rel="noopener">welcome-php-postsync-pod.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  name: welcome-postsync-pod
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  containers:
+  - command:
+    - /bin/bash
+    - -c
+    - |
+      echo "Post deployment work"
+      sleep 10
+    image: registry.access.redhat.com/ubi8/ubi:latest
+    imagePullPolicy: IfNotPresent
+    name: welcome-sleep-pod
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>The manifest will apply in the following order.</p>
@@ -624,7 +898,85 @@ can further refine the deployment process.</p>
 <div class="sect2">
 <h3 id="deploying_the_application_resources"><a class="anchor" href="#deploying_the_application_resources"></a>Deploying the Application</h3>
 <div class="paragraph">
-<p>Take a look at the manifest file <code>apps/welcome-syncwaves-and-hooks.yaml</code>{{open}}</p>
+<p>Take a look at the manifest file:</p>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset4_minikube"></a>Minikube</p>
+</li>
+<li>
+<p><a id="tabset4_openshift"></a>OpenShift</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset4_minikube">
+<div class="listingblock">
+<div class="title"><a href="" target="_blank" rel="noopener">welcome-syncwaves-and-hooks.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: welcome-syncwaves-hooks
+  namespace: argocd
+spec:
+  destination:
+    namespace: welcome-waves-and-hooks
+    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
+  project: default
+  source:
+    path: apps/welcome-php/overlays/syncwaves-and-hooks
+    repoURL: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples" class="bare">https://github.com/redhat-developer-demos/openshift-gitops-examples</a>
+    targetRevision: minikube
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As before, we are using Kustomize to deploy the same application,
+but in a different namespace and we are loading in the 3 additional
+manifests. You can see the specific implementation in the <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/minikube/apps/welcome-php/overlays/syncwaves-and-hooks">git repo</a></p>
+</div>
+<div class="paragraph">
+<p>Create this application:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f documentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-syncwaves-and-hooks.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset4_openshift">
+<div class="listingblock">
+<div class="title"><a href="" target="_blank" rel="noopener">welcome-syncwaves-and-hooks.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: welcome-syncwaves-hooks
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: welcome-waves-and-hooks
+    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
+  project: default
+  source:
+    path: apps/welcome-php/overlays/syncwaves-and-hooks
+    repoURL: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples" class="bare">https://github.com/redhat-developer-demos/openshift-gitops-examples</a>
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>As before, we are using Kustomize to deploy the same application,
@@ -636,7 +988,15 @@ manifests. You can see the specific implementation in the <a href="https://githu
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f documentation/modules/ROOT/examples/welcome-php/welcome-syncwaves-and-hooks.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl apply -f  documentation/modules/ROOT/examples/syncwaves-hooks/welcome-syncwaves-and-hooks.yaml</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="listingblock console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">application.argoproj.io/welcome-hooks created</code></pre>
 </div>
 </div>
 <div class="paragraph">
