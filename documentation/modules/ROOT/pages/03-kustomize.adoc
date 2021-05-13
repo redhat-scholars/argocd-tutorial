@@ -384,7 +384,15 @@ at the `examples/minikube/bgdk-overlay/kustomization.yaml` file.
 This `kustomization.yaml` take the base application and patches the
 manifest so that we get a yellow square instead of a blue one. It
 also deploys the application to the `bgdk` namespace (denoted by
-the `namespace:` section of the file).
+the `namespace:` section of the file) and update the Ingress hostname for this new namespace to be `bgdk.devnation`.
+
+Add Minikube IP (`minikube ip`) and the Ingress hostname `bgdx.devnation` to your Host file, like `/etc/hosts`.
+
+Example:
+[source,bash,subs="attributes+,+macros"]
+----
+192.168.39.242 bgd.devnation bgdx.devnation
+----
 
 Deploy this application:
 
@@ -393,6 +401,7 @@ Deploy this application:
 ----
 kubectl apply -f documentation/modules/ROOT/examples/minikube/bgdk-app/bgdk-app.yaml
 ----
+
 --
 OpenShift::
 +
@@ -408,7 +417,7 @@ This application is pointed to the https://github.com/redhat-developer-demos/ope
 
 This is using a concept of an "overlay", where you have a "base"
 set of manifests and you overlay your customizations. Take a look
-at the `examples/bgdk-overlay/kustomization.yaml`{{open}} example
+at the `examples/bgdk-overlay/kustomization.yaml` example
 file.
 
 This `kustomization.yaml` take the base application and patches the
