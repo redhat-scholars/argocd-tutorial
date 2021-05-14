@@ -1,7 +1,6 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  creationTimestamp: null
   annotations:
     argocd.argoproj.io/sync-wave: "3"
   labels:

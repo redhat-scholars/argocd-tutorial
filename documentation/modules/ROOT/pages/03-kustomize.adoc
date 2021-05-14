@@ -408,20 +408,53 @@ include::ROOT:example$minikube/bgdk-app/bgdk-app.yaml[]
 This application is pointed to the https://github.com/redhat-developer-demos/openshift-gitops-examples[same repo] but https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/minikube/apps/bgd/overlays/bgdk[different directory].
 
 This is using a concept of an "overlay", where you have a "base"
-set of manifests and you overlay your customizations. Take a look
-at the `examples/minikube/bgdk-overlay/kustomization.yaml` file.
+set of manifests and you overlay your customizations.
+
+Take a look at the `kustomization.yaml` file:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/minikube/apps/bgd/overlays/bgdk/kustomization.yaml[kustomization.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: bgdk
+resources:
+- ../../base
+- bgdk-ns.yaml
+patchesJson6902:
+  - target:
+      version: v1
+      group: apps
+      kind: Deployment
+      name: bgd
+      namespace: bgdk
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0/value
+        value: yellow
+  - target:
+      version: v1
+      group: networking.k8s.io
+      kind: Ingress
+      name: bgd
+      namespace: bgdk
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: bgdk.devnation
+----
 
 This `kustomization.yaml` take the base application and patches the
 manifest so that we get a yellow square instead of a blue one. It
 also deploys the application to the `bgdk` namespace (denoted by
 the `namespace:` section of the file) and update the Ingress hostname for this new namespace to be `bgdk.devnation`.
 
-Add Minikube IP (`minikube ip`) and the Ingress hostname `bgdx.devnation` to your Host file, like `/etc/hosts`.
+Add Minikube IP (`minikube ip`) and the Ingress hostname `bgdk.devnation` to your Host file, like `/etc/hosts`.
 
 Example:
 [source,bash,subs="attributes+,+macros"]
 ----
-192.168.39.242 bgd.devnation bgdx.devnation
+192.168.39.242 bgd.devnation bgdk.devnation
 ----
 
 Deploy this application:
@@ -446,9 +479,31 @@ include::ROOT:example$bgdk-app/bgdk-app.yaml[]
 This application is pointed to the https://github.com/redhat-developer-demos/openshift-gitops-examples[same repo] but https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/bgd/overlays/bgdk[different directory].
 
 This is using a concept of an "overlay", where you have a "base"
-set of manifests and you overlay your customizations. Take a look
-at the `examples/bgdk-overlay/kustomization.yaml` example
-file.
+set of manifests and you overlay your customizations.
+
+Take a look at the `kustomization.yaml` file:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/bgd/overlays/bgdk/kustomization.yaml[kustomization.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: bgdk
+resources:
+- ../../base
+- bgdk-ns.yaml
+patchesJson6902:
+  - target:
+      version: v1
+      group: apps
+      kind: Deployment
+      name: bgd
+      namespace: bgdk
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0/value
+        value: yellow
+----
 
 This `kustomization.yaml` take the base application and patches the
 manifest so that we get a yellow square instead of a blue one. It

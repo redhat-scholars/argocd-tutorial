@@ -1,9 +1,9 @@
 = SyncWaves and Hooks
 include::_attributes.adoc[]
 
-https://argoproj.github.io/argo-cd/user-guide/sync-waves/[Syncwaves] are used in Argo CD to order how manifests are applied to the cluster. 
+https://argoproj.github.io/argo-cd/user-guide/sync-waves/[Syncwaves,window='_blank'] are used in Argo CD to order how manifests are applied to the cluster. 
 
-On the other hand https://argoproj.github.io/argo-cd/user-guide/resource_hooks/[resource hooks] breaks up the delivery of these manifests in different phases.
+On the other hand https://argoproj.github.io/argo-cd/user-guide/resource_hooks/[resource hooks,window='_blank'] breaks up the delivery of these manifests in different phases.
 
 Using a combination of syncwaves and resource hooks, you can control how your application rolls out.
 
@@ -16,7 +16,7 @@ This example will take you through the following steps:
 [#using_syncwaves]
 == Using Sync Waves
 
-A Syncwave is a way to order how Argo CD applies the manifests that are stored in git. All manifests have a wave of zero by default, but you can set these by using the argocd.argoproj.io/sync-wave annotation. 
+A Syncwave is a way to order how Argo CD applies the manifests that are stored in git. All manifests have a wave of zero by default, but you can set these by using the `argocd.argoproj.io/sync-wave` annotation. 
 
 Example:
 
@@ -45,7 +45,7 @@ When Argo CD starts a sync action, the manifest get placed in the following orde
 * By kind (Namspaces first, then services, then deployments, etc ...)
 * By name (ascending order)
 
-Read more about syncwaves on the https://argoproj.github.io/argo-cd/user-guide/sync-waves/#how-do-i-configure-waves[official documentation site].
+Read more about syncwaves on the https://argoproj.github.io/argo-cd/user-guide/sync-waves/#how-do-i-configure-waves[official documentation site,window='_blank'].
 
 [#exploring_the_manifests]
 === Exploring the Manifests
@@ -68,19 +68,19 @@ The *Deployment* with syncwave as *1*:
 include::ROOT:example$welcome-php-yaml/welcome-php-deployment.yaml[]
 ----
 
-The *Service* with syncwave as *2*:
-
-.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-svc.yaml[welcome-php-svc.yaml,window='_blank']
-[source,yaml,subs="+macros,attributes+"]
-----
-include::ROOT:example$welcome-php-yaml/welcome-php-svc.yaml[]
-----
-
 [tabs, subs="attributes+,+macros"]
 ====
 Minikube::
 +
 --
+The *Service* with syncwave as *2*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/welcome-php/base/welcome-php-svc.yaml[welcome-php-svc.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$minikube/welcome-php-yaml/welcome-php-svc.yaml[]
+----
+
 The *Ingress* with syncwave as *3*:
 
 .link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/welcome-php/base/welcome-php-ingress.yaml[welcome-php-ingress.yaml,window='_blank']
@@ -101,6 +101,14 @@ Example:
 OpenShift::
 +
 --
+The *Service* with syncwave as *2*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-svc.yaml[welcome-php-svc.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$welcome-php-yaml/welcome-php-svc.yaml[]
+----
+
 The *Route* with syncwave as *3*:
 
 .link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-route.yaml[welcome-php-route.yaml,window='_blank']
@@ -137,8 +145,7 @@ Minikube::
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-kubectl apply -f d46182
-ocumentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-syncwaves.yaml
+kubectl apply -f documentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-syncwaves.yaml
 ----
 --
 OpenShift::
@@ -226,11 +233,36 @@ To read more about resource hooks, consult the https://argoproj.github.io/argo-c
 [#exploring_the_manifests_hooks]
 === Exploring Manifests
 
-Take a look at the manifest
-`examples/hooks/welcome-php-presync-job.yaml`{{open}}
+Take a look at this `PreSync` manifest:
 
-You'll see that I have the annotation `argocd.argoproj.io/hook: PreSync`
-set. This means that this Job will run in the `PreSync` phase, before
+.link:https://github.com/redhat-scholars/argocd-tutorial/blob/master/documentation/modules/ROOT/examples/syncwaves-hooks/hooks/welcome-php-presync-job.yaml[welcome-php-presync-job.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: welcome-presyncjob
+  annotations:
+    argocd.argoproj.io/hook: PreSync <1>
+spec:
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+      - command:
+        - /bin/bash
+        - -c
+        - |
+          sleep 15
+        image: registry.access.redhat.com/ubi8/ubi:latest
+        imagePullPolicy: IfNotPresent
+        name: welcome-sleep-job
+      restartPolicy: Never
+----
+
+<1> This means that this Job will run in the `PreSync` phase, before
 the application of the manifests in the `Sync` phase.
 
 > **NOTE** Since I don't have a deletion policy, this job will "stick around" after completion.
@@ -240,30 +272,55 @@ the application of the manifests in the `Sync` phase.
 
 This sample will be using `kustomize` to create a new application based
 on the one we previously deployed; while adding the `Job`
-with the resource hook. You can see this by https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/welcome-php/overlays/hooks[visiting the repo].
+with the resource hook. You can see this by https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/welcome-php/overlays/hooks[visiting the repo,window='_blank'].
 
-Taking a look at the manifest file `apps/welcome-hooks.yaml`{{open}}
-will show that this will deploy the application in the `welcome-hooks`
-namespace.
-
-Create this application:
+Taking a look at this manifest file: `welcome-hooks.yaml`:
 
 [tabs, subs="attributes+,+macros"]
 ====
 Minikube::
 +
 --
+.link:https://github.com/redhat-scholars/argocd-tutorial/blob/master/documentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-hooks.yaml[welcome-hooks.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$minikube/syncwaves-hooks/welcome-hooks.yaml[]
+----
+
+It will show that this will deploy the application in the `welcome-hooks`
+namespace.
+
+Create this application:
+
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
 kubectl apply -f documentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-hooks.yaml 
+----
 
+Add Minikube IP (`minikube ip`) and the Ingress hostname `welcome-php-hooks.devnation` to your Host file, like `/etc/hosts`.
+
+Example:
+[source,bash,subs="attributes+,+macros"]
+----
+192.168.39.242 bgd.devnation bgdx.devnation welcome-php.devnation welcome-php-hooks.devantion
 ----
 
 --
 OpenShift::
 +
 --
+.link:https://github.com/redhat-scholars/argocd-tutorial/blob/master/documentation/modules/ROOT/examples/syncwaves-hooks/welcome-hooks.yaml[welcome-hooks.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$syncwaves-hooks/welcome-hooks.yaml[]
+----
+
+It will show that this will deploy the application in the `welcome-hooks`
+namespace.
+
+Create this application:
+
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
@@ -395,7 +452,7 @@ include::ROOT:example$minikube/syncwaves-hooks/welcome-syncwaves-and-hooks.yaml[
 
 As before, we are using Kustomize to deploy the same application,
 but in a different namespace and we are loading in the 3 additional
-manifests. You can see the specific implementation in the https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/minikube/apps/welcome-php/overlays/syncwaves-and-hooks[git repo]
+manifests. You can see the specific implementation in the https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/minikube/apps/welcome-php/overlays/syncwaves-and-hooks[git repo,window='_blank']
 
 Create this application:
 
@@ -403,7 +460,14 @@ Create this application:
 [source,bash,subs="attributes+,+macros"]
 ----
 kubectl apply -f documentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-syncwaves-and-hooks.yaml
+----
 
+Add Minikube IP (`minikube ip`) and the Ingress hostname `welcome-php-waves-hooks.devnation` to your Host file, like `/etc/hosts`.
+
+Example:
+[source,bash,subs="attributes+,+macros"]
+----
+192.168.39.242 bgd.devnation bgdk.devnation welcome-php.devnation welcome-php-hooks.devantion welcome-php-waves-hooks.devantion
 ----
 
 --
@@ -418,7 +482,7 @@ include::ROOT:example$syncwaves-hooks/welcome-syncwaves-and-hooks.yaml[]
 
 As before, we are using Kustomize to deploy the same application,
 but in a different namespace and we are loading in the 3 additional
-manifests. You can see the specific implementation in the https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/welcome-php/overlays/syncwaves-and-hooks[git repo]
+manifests. You can see the specific implementation in the https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/welcome-php/overlays/syncwaves-and-hooks[git repo,window='_blank']
 
 Create this application:
 [.console-input]

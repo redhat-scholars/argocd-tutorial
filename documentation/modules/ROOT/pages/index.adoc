@@ -5,7 +5,7 @@
 [.text-center.strong]
 == ArgoCD
 
-https://argoproj.github.io/argo-cd/[Argo CD] is a declarative, GitOps continuous delivery tool for Kubernetes.
+https://argoproj.github.io/argo-cd/[Argo CD,window='_blank'] is a declarative, GitOps continuous delivery tool for Kubernetes.
 
 It follows the **GitOps** pattern of using Git repositories as the source of truth for defining the desired application state.
 
@@ -16,7 +16,7 @@ image::argocd-logo.png[ArgoCD Logo, 400]
 
 == GitOps
 
-https://www.openshift.com/learn/topics/gitops/[GitOps] is a set of practices that leverages Git workflows to manage infrastructure and application configurations.
+https://www.openshift.com/learn/topics/gitops/[GitOps,window='_blank'] is a set of practices that leverages Git workflows to manage infrastructure and application configurations.
 By using Git repositories as the source of truth, it allows the DevOps team to store the entire state of the cluster configuration in Git so that the trail of changes are visible and auditable. 
 
 **GitOps** simplifies the propagation of infrastructure and application 

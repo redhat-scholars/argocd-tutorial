@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   annotations:
     argocd.argoproj.io/sync-wave: "1"
   labels:

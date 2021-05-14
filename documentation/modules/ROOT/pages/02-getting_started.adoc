@@ -151,19 +151,19 @@ A *Deployment*:
 include::ROOT:example$bgd-yaml/bgd-deployment.yaml[]
 ----
 
-A *Service*:
-
-.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-svc.yaml[bgd-svc.yaml,window='_blank']
-[source,yaml,subs="+macros,attributes+"]
-----
-include::ROOT:example$bgd-yaml/bgd-svc.yaml[]
-----
-
 [tabs, subs="attributes+,+macros"]
 ====
 Minikube::
 +
 --
+A *Service* of type `NodePort`:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/bgd/base/bgd-svc.yaml[bgd-svc.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$minikube/bgd-yaml/bgd-svc.yaml[]
+----
+
 An *Ingress*:
 
 .link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/bgd/base/bgd-ingress.yaml[bgd-ingress.yaml,window='_blank']
@@ -175,6 +175,14 @@ include::ROOT:example$minikube/bgd-yaml/bgd-ingress.yaml[]
 OpenShift::
 +
 --
+A *Service* of type `ClusterIP`:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-svc.yaml[bgd-svc.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$bgd-yaml/bgd-svc.yaml[]
+----
+
 A *Route*:
 
 .link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-route.yaml[bgd-route.yaml,window='_blank']
@@ -198,14 +206,32 @@ Minikube::
 .link:https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml[bgd-app.yaml,window='_blank']
 [source,yaml,subs="+macros,attributes+"]
 ----
-include::ROOT:example$minikube/bgd-app/bgd-app.yaml[]
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bgd-app
+  namespace: argocd
+spec:
+  destination:
+    namespace: bgd
+    server: https://kubernetes.default.svc <1>
+  project: default <2>
+  source: <3>
+    path: apps/bgd/overlays/bgd
+    repoURL: https://github.com/redhat-developer-demos/openshift-gitops-examples
+    targetRevision: minikube
+  syncPolicy: <4>
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
 ----
+<1> The destination server is the server we installed ArgoCD on.
+<2> Here you're installing the application in ArgoCD's `default` project (`.spec.project`).
+<3> The manifest repo where the YAML resides and the path to look for.
+<4> The `syncPolicy` is set to `false`. Note that you can have Argo CD automatically sync the repo.
 
-* Here you're installing the application in ArgoCD's `default` project (`.spec.project`)
-* The destination server is the server we installed ArgoCD on (noted as `.spec.destination.server`).
-* The manifest repo where the YAML resides and the path to look for the YAML is under `.spec.source`.
-* The `.spec.syncPolicy` is set to `false`. Note that you can have Argo CD automatically sync the repo.
-* The last section `.spec.sync` just says what are you comparing the repo to. (Basically "Compare the running config to the desired config")
 
 The Application CR (CustomResource) can be applied by running the following:
 
@@ -221,14 +247,31 @@ OpenShift::
 .link:https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml[bgd-app.yaml,window='_blank']
 [source,yaml,subs="+macros,attributes+"]
 ----
-include::ROOT:example$bgd-app/bgd-app.yaml[]
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bgd-app
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: bgd
+    server: https://kubernetes.default.svc <1>
+  project: default <2>
+  source: <3>
+    path: apps/bgd/overlays/bgd
+    repoURL: https://github.com/redhat-developer-demos/openshift-gitops-examples
+    targetRevision: main
+  syncPolicy: <4>
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
 ----
-
-* ArgoCD's concept of a `Project` is different than OpenShift's. Here you're installing the application in ArgoCD's `default` project (`.spec.project`). *NOT* OpenShift's default project.
-* The destination server is the server we installed ArgoCD on (noted as `.spec.destination.server`).
-* The manifest repo where the YAML resides and the path to look for the YAML is under `.spec.source`.
-* The `.spec.syncPolicy` is set to `false`. Note that you can have Argo CD automatically sync the repo.
-* The last section `.spec.sync` just says what are you comparing the repo to. (Basically "Compare the running config to the desired config")
+<1> The destination server is the server we installed ArgoCD on. ArgoCD's concept of a `Project` is different than OpenShift's. Here you're installing the application in ArgoCD's `default` project (`.spec.project`). *NOT* OpenShift's default project.
+<2> Here you're installing the application in ArgoCD's `default` project (`.spec.project`).
+<3> The manifest repo where the YAML resides and the path to look for.
+<4> The `syncPolicy` is set to `false`. Note that you can have Argo CD automatically sync the repo.
 
 The Application CR (CustomResource) can be applied by running the following:
 
