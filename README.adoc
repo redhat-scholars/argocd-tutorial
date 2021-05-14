@@ -1,1 +1,51 @@
-Check the build courseware https://redhat-scholars.github.io/build-course[documentation]  on how folder structure, how to use macros and other gotchas
+= OpenShift Starter Guides for Developers
+
+image::https://github.com/redhat-scholars/openshift-starter-guides/workflows/docs/badge.svg[docs]
+
+== Overview
+
+|===
+|| 
+
+|Audience Experience Level
+|Beginner
+
+|Average Time to Complete	
+|30 minutes
+|===
+
+
+image::https://redhat-scholars.github.io/argocd-tutorial/argocd-tutorial/_images/argocd-logo.png[ArgoCD,400]
+
+https://argoproj.github.io/argo-cd/[Argo CD,window='_blank'] is a declarative, GitOps continuous delivery tool for Kubernetes.
+
+It follows the https://www.openshift.com/learn/topics/gitops/[GitOps,window='_blank']  pattern of using Git repositories as the source of truth for defining the desired application state.
+
+It automates the deployment of the desired application states in the specified target environments. Application deployments can track updates to branches, tags, or pinned to a specific version of manifests at a Git commit.
+
+== Who is this for? 
+
+Developers/DevOps that want to take benefit from GitOps approach. Having Git repositories as the source of truth, it allows development teams to store the entire state of the cluster configuration in Git so that the trail of changes are visible and auditable.
+
+This workshop is intended to give you a hands on introduction to ArgoCD on Kubernetes using https://minikube.sigs.k8s.io/docs/start[Minikube,window='_blank'] and https://openshift.com[OpenShift,window='_blank']. 
+
+== What you will learn
+
+* The fundamentals of GitOps and ArgoCD
+* How to install and managed ArgoCD in Kubernetes and OpenShift
+* Deploying and sync applications
+* Use Kustomize with ArgoCD
+* Use Sync Waves and Hooks with ArgoCD
+
+
+== Documentation
+
+This workshop is based on link:https://antora.org/[Antora] and link:https://github.com/redhat-scholars/courseware-template[Red Hat scholars template] to build HTML based tutorials.
+
+To start this workshop, follow the step by step tutorial link for your cluster available below: 
+
+https://redhat-scholars.github.io/argocd-tutorial/
+
+== Contributing
+
+Please refer to the link:CONTRIBUTING.adoc#contributing-guide[how to contribute] on how you can contribute to the tutorial.
