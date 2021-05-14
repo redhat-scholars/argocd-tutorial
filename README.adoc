@@ -1,4 +1,4 @@
-= OpenShift Starter Guides for Developers
+= ArgoCD and GitOps Tutorial for Kubernetes
 
 image::https://github.com/redhat-scholars/openshift-starter-guides/workflows/docs/badge.svg[docs]
 
@@ -27,7 +27,7 @@ It automates the deployment of the desired application states in the specified t
 
 Developers/DevOps that want to take benefit from GitOps approach. Having Git repositories as the source of truth, it allows development teams to store the entire state of the cluster configuration in Git so that the trail of changes are visible and auditable.
 
-This workshop is intended to give you a hands on introduction to ArgoCD on Kubernetes using https://minikube.sigs.k8s.io/docs/start[Minikube,window='_blank'] and https://openshift.com[OpenShift,window='_blank']. 
+This workshop is intended to give you a hands on introduction to ArgoCD on Kubernetes using https://minikube.sigs.k8s.io/docs/start[Minikube,window='_blank'] and https://try.openshift.com[OpenShift,window='_blank']. 
 
 == What you will learn
 

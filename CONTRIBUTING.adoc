@@ -1,0 +1,46 @@
+# Contributing Guide
+
+The sources of this tutorial docs is in https://github.com/redhat-scholars/argocd-tutorial/tree/master/documentation[documentation] folder.
+The site generation is done by https://docs.antora.org/[Antora]
+
+### Visual Studio Code Remote Development
+
+If you are using link:https://code.visualstudio.com/[Visual Studio Code] with the link:https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers[Remote Containers Extension], you don't need to install anything locally.
+
+Simply follow these instructions:
+
+1. (Only if running with podman) Set the environment variable `DEVCONTAINER_TARGET_PREFIX=podman`
+2. Open VS Code from the root of `openshift-starter-guides` repository and when prompted indicate that you want to open the folder in a container.
+
+Once the devcontainer is initialized, from the Visual Studio Code terminal run `npm run dev` to start the development site.  (Visual Studio Code should handle all the port forwarding into the devcontainer so that you can interact with the site from an VSCode assigned port on your localhost)
+
+Alternatively, you can run the `Build and watch dev-site` VSCode task that should be installed in your workspace when starting up the container
+
+## Running site in development mode
+
+To run the site in development mode you need to have https://yarnpkg.com[yarn] or https://nodejs.org/en/[npm] installed with https://nodejs.org[NodeJS] v12.x or above.
+
+Clone this repository
+```
+git clone https://github.com/redhat-scholars/openshift-starter-guides.git
+```
+
+Run `yarn install` or `npm install` from the `openshift-starter-guides` repository to install needed nodejs packages.
+```
+npm install
+```
+
+Start the development site using `yarn run dev` or `npm run dev` or `gulp` command, this should open a local development site at http://localhost:3000 in your default browser:
+```
+gulp
+```
+
+Making any changes to your local repositories above cloned earlier, will be automatically built and the development site gets reloaded automatically.
+
+## Send your contribution
+
+Now you are all set:
+
+- Open an Issue in http://github.com/redhat-scholars/argocd-tutorial.git
+- Prepare your changes in the respective documentation repository
+- Send the PR to respective repositories listed above
