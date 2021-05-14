@@ -757,8 +757,42 @@ spec:
 </div>
 <div class="paragraph">
 <p>This is using a concept of an "overlay", where you have a "base"
-set of manifests and you overlay your customizations. Take a look
-at the <code>examples/minikube/bgdk-overlay/kustomization.yaml</code> file.</p>
+set of manifests and you overlay your customizations.</p>
+</div>
+<div class="paragraph">
+<p>Take a look at the <code>kustomization.yaml</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/minikube/apps/bgd/overlays/bgdk/kustomization.yaml" target="_blank" rel="noopener">kustomization.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: bgdk
+resources:
+- ../../base
+- bgdk-ns.yaml
+patchesJson6902:
+  - target:
+      version: v1
+      group: apps
+      kind: Deployment
+      name: bgd
+      namespace: bgdk
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0/value
+        value: yellow
+  - target:
+      version: v1
+      group: networking.k8s.io
+      kind: Ingress
+      name: bgd
+      namespace: bgdk
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: bgdk.devnation</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>This <code>kustomization.yaml</code> take the base application and patches the
@@ -767,14 +801,14 @@ also deploys the application to the <code>bgdk</code> namespace (denoted by
 the <code>namespace:</code> section of the file) and update the Ingress hostname for this new namespace to be <code>bgdk.devnation</code>.</p>
 </div>
 <div class="paragraph">
-<p>Add Minikube IP (<code>minikube ip</code>) and the Ingress hostname <code>bgdx.devnation</code> to your Host file, like <code>/etc/hosts</code>.</p>
+<p>Add Minikube IP (<code>minikube ip</code>) and the Ingress hostname <code>bgdk.devnation</code> to your Host file, like <code>/etc/hosts</code>.</p>
 </div>
 <div class="paragraph">
 <p>Example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">192.168.39.242 bgd.devnation bgdx.devnation</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">192.168.39.242 bgd.devnation bgdk.devnation</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -817,9 +851,32 @@ spec:
 </div>
 <div class="paragraph">
 <p>This is using a concept of an "overlay", where you have a "base"
-set of manifests and you overlay your customizations. Take a look
-at the <code>examples/bgdk-overlay/kustomization.yaml</code> example
-file.</p>
+set of manifests and you overlay your customizations.</p>
+</div>
+<div class="paragraph">
+<p>Take a look at the <code>kustomization.yaml</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/bgd/overlays/bgdk/kustomization.yaml" target="_blank" rel="noopener">kustomization.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: bgdk
+resources:
+- ../../base
+- bgdk-ns.yaml
+patchesJson6902:
+  - target:
+      version: v1
+      group: apps
+      kind: Deployment
+      name: bgd
+      namespace: bgdk
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0/value
+        value: yellow</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>This <code>kustomization.yaml</code> take the base application and patches the

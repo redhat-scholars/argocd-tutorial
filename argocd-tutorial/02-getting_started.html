@@ -398,7 +398,6 @@ status: {}</code></pre>
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
     app: bgd
   name: bgd
@@ -411,7 +410,6 @@ spec:
   strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: bgd
     spec:
@@ -422,31 +420,6 @@ spec:
         - name: COLOR
           value: "blue"
         resources: {}
----</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>A <strong>Service</strong>:</p>
-</div>
-<div class="listingblock">
-<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-svc.yaml" target="_blank" rel="noopener">bgd-svc.yaml</a></div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
-apiVersion: v1
-kind: Service
-metadata:
-  creationTimestamp: null
-  labels:
-    app: bgd
-  name: bgd
-  namespace: bgd
-spec:
-  ports:
-  - port: 8080
-    protocol: TCP
-    targetPort: 8080
-  selector:
-    app: bgd
 ---</code></pre>
 </div>
 </div>
@@ -463,6 +436,31 @@ spec:
 </div>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset3_minikube">
+<div class="paragraph">
+<p>A <strong>Service</strong> of type <code>NodePort</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/bgd/base/bgd-svc.yaml" target="_blank" rel="noopener">bgd-svc.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: bgd
+  name: bgd
+  namespace: bgd
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: bgd
+---</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>An <strong>Ingress</strong>:</p>
 </div>
@@ -490,6 +488,31 @@ spec:
 </div>
 <div class="tab-pane" aria-labelledby="tabset3_openshift">
 <div class="paragraph">
+<p>A <strong>Service</strong> of type <code>ClusterIP</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/bgd/base/bgd-svc.yaml" target="_blank" rel="noopener">bgd-svc.yaml</a></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: bgd
+  name: bgd
+  namespace: bgd
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: bgd
+---</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>A <strong>Route</strong>:</p>
 </div>
 <div class="listingblock">
@@ -498,7 +521,6 @@ spec:
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  creationTimestamp: null
   labels:
     app: bgd
   name: bgd
@@ -510,12 +532,7 @@ spec:
   to:
     kind: Service
     name: bgd
-    weight: 100
-status:
-  ingress:
-  - conditions:
-    - status: "True"
-      type: Admitted</code></pre>
+    weight: 100</code></pre>
 </div>
 </div>
 </div>
@@ -551,13 +568,13 @@ metadata:
 spec:
   destination:
     namespace: bgd
-    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
-  project: default
-  source:
+    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a> <i class="conum" data-value="1"></i><b>(1)</b>
+  project: default <i class="conum" data-value="2"></i><b>(2)</b>
+  source: <i class="conum" data-value="3"></i><b>(3)</b>
     path: apps/bgd/overlays/bgd
     repoURL: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples" class="bare">https://github.com/redhat-developer-demos/openshift-gitops-examples</a>
     targetRevision: minikube
-  syncPolicy:
+  syncPolicy: <i class="conum" data-value="4"></i><b>(4)</b>
     automated:
       prune: true
       selfHeal: false
@@ -565,24 +582,25 @@ spec:
     - CreateNamespace=true</code></pre>
 </div>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>Here you&#8217;re installing the application in ArgoCD&#8217;s <code>default</code> project (<code>.spec.project</code>)</p>
-</li>
-<li>
-<p>The destination server is the server we installed ArgoCD on (noted as <code>.spec.destination.server</code>).</p>
-</li>
-<li>
-<p>The manifest repo where the YAML resides and the path to look for the YAML is under <code>.spec.source</code>.</p>
-</li>
-<li>
-<p>The <code>.spec.syncPolicy</code> is set to <code>false</code>. Note that you can have Argo CD automatically sync the repo.</p>
-</li>
-<li>
-<p>The last section <code>.spec.sync</code> just says what are you comparing the repo to. (Basically "Compare the running config to the desired config")</p>
-</li>
-</ul>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The destination server is the server we installed ArgoCD on.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Here you&#8217;re installing the application in ArgoCD&#8217;s <code>default</code> project (<code>.spec.project</code>).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The manifest repo where the YAML resides and the path to look for.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The <code>syncPolicy</code> is set to <code>false</code>. Note that you can have Argo CD automatically sync the repo.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The Application CR (CustomResource) can be applied by running the following:</p>
@@ -605,13 +623,13 @@ metadata:
 spec:
   destination:
     namespace: bgd
-    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
-  project: default
-  source:
+    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a> <i class="conum" data-value="1"></i><b>(1)</b>
+  project: default <i class="conum" data-value="2"></i><b>(2)</b>
+  source: <i class="conum" data-value="3"></i><b>(3)</b>
     path: apps/bgd/overlays/bgd
     repoURL: <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples" class="bare">https://github.com/redhat-developer-demos/openshift-gitops-examples</a>
     targetRevision: main
-  syncPolicy:
+  syncPolicy: <i class="conum" data-value="4"></i><b>(4)</b>
     automated:
       prune: true
       selfHeal: false
@@ -619,24 +637,25 @@ spec:
     - CreateNamespace=true</code></pre>
 </div>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>ArgoCD&#8217;s concept of a <code>Project</code> is different than OpenShift&#8217;s. Here you&#8217;re installing the application in ArgoCD&#8217;s <code>default</code> project (<code>.spec.project</code>). <strong>NOT</strong> OpenShift&#8217;s default project.</p>
-</li>
-<li>
-<p>The destination server is the server we installed ArgoCD on (noted as <code>.spec.destination.server</code>).</p>
-</li>
-<li>
-<p>The manifest repo where the YAML resides and the path to look for the YAML is under <code>.spec.source</code>.</p>
-</li>
-<li>
-<p>The <code>.spec.syncPolicy</code> is set to <code>false</code>. Note that you can have Argo CD automatically sync the repo.</p>
-</li>
-<li>
-<p>The last section <code>.spec.sync</code> just says what are you comparing the repo to. (Basically "Compare the running config to the desired config")</p>
-</li>
-</ul>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The destination server is the server we installed ArgoCD on. ArgoCD&#8217;s concept of a <code>Project</code> is different than OpenShift&#8217;s. Here you&#8217;re installing the application in ArgoCD&#8217;s <code>default</code> project (<code>.spec.project</code>). <strong>NOT</strong> OpenShift&#8217;s default project.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Here you&#8217;re installing the application in ArgoCD&#8217;s <code>default</code> project (<code>.spec.project</code>).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The manifest repo where the YAML resides and the path to look for.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The <code>syncPolicy</code> is set to <code>false</code>. Note that you can have Argo CD automatically sync the repo.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The Application CR (CustomResource) can be applied by running the following:</p>
