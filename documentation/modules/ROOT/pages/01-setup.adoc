@@ -124,7 +124,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 
 [NOTE]
 ======
-It will take few mins for the ArgoCD components to be installed, you an watch the status using the command:
+It will take few mins for the ArgoCD components to be installed, you can watch the status using the command:
 
 [.console-input]
 [source,bash,subs="+macros,attributes+"]
@@ -135,7 +135,7 @@ watch kubectl get pods -n argocd
 You can use kbd:[Ctrl+c] to terminate the watch
 ======
 
-A successful deployment of Tekton pipelines will show the following pods:
+A successful deployment of ArgoCD will show the following pods:
 
 [.console-output]
 [source,bash]
