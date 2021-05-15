@@ -107,10 +107,10 @@ minikube addons enable ingress -p {profile}
 
 Check that the addon has been enabled:
 
-[.console-input]
+[.console-output]
 [source,bash,subs="attributes+,+macros"]
 ----
-minikube addons list -p {profile} | grep ingress
+🌟  The 'ingress' addon is enabled
 ----
 
 Install ArgoCD and check that every pod is running properly in the argocd namespace:
