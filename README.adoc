@@ -11,7 +11,7 @@ image::https://github.com/redhat-scholars/openshift-starter-guides/workflows/doc
 |Beginner
 
 |Average Time to Complete	
-|30 minutes
+|45 minutes
 |===
 
 
