@@ -108,7 +108,7 @@ minikube -p {profile} service argocd-server -n argocd
 OpenShift::
 +
 --
-From Web Console, navigate to top-right Applications pad and click to ArgoCD icon:
+From *Web Console*, navigate to top-right Applications pad and click to *ArgoCD* icon:
 
 image::argopad.png[ArgoCD]
 
@@ -352,6 +352,12 @@ Example:
 OpenShift::
 +
 --
+From *Web Console*, select *bgd* project from drop-down menu, then click to the application's Route to access it.
+
+image::bgdapp.png[BGD App]
+
+Alternatively, get app Route from CLI:
+
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
