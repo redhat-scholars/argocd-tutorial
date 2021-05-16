@@ -512,31 +512,35 @@ argocd-server-859b4b5578-cv2qx        1/1     Running   0          2m18s</code><
 <p>ArgoCD is supported in OpenShift 4.7 by <strong>Red Hat OpenShift GitOps</strong> operator.</p>
 </div>
 <div class="paragraph">
-<p>To install it, you need to follow the instructions written in the: <a href="https://docs.openshift.com/container-platform/4.7/cicd/gitops/installing-openshift-gitops.html" target="_blank" rel="noopener">OpenShift GitOps installation documentation</a>.</p>
+<p>To install it, you need to follow the instructions from <a href="https://docs.openshift.com/container-platform/4.7/cicd/gitops/installing-openshift-gitops.html" target="_blank" rel="noopener">OpenShift GitOps installation documentation</a>.</p>
 </div>
 <div class="paragraph">
-<p>The OpenShift GitOps Operator is installed via the Operator Hub. You
-can view this installation via the UI in the Administrator Perspective:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Click on <code>Operators</code> drop down on the leftside navigation.</p>
-</li>
-<li>
-<p>Click on <code>Installed Operators</code></p>
-</li>
-<li>
-<p>In the <code>Project</code> dropdown, make sure <code>openshift-gitops</code> is selected.</p>
-</li>
-</ul>
+<p>Open the <strong>Administrator perspective</strong> of the web console and navigate to <strong>Operators</strong> &#8594; <strong>OperatorHub</strong> in the menu on the left.</p>
 </div>
 <div class="paragraph">
-<p>You should see that the OpenShift GitOps Operator is installed.</p>
+<p>Search for OpenShift GitOps, click the <strong>Red Hat OpenShift GitOps</strong> tile and then click the <strong>Install</strong> button</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/os-gitops-installed.png" alt="OpenShift GitOps Installed">
+<img src="_images/ocp-install1.png" alt="OperatorHub">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ocp-install2.png" alt="Install GitOps Operator">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ocp-install3.png" alt="Install version">
+</div>
+</div>
+<div class="paragraph">
+<p>The OpenShift GitOps Operator is installed via the Operator Hub.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ocp-install4.png" alt="OpenShift GitOps Installed">
 </div>
 </div>
 <div class="paragraph">
@@ -574,40 +578,6 @@ kam-7ff6f58c-2jxkm                                      1/1     Running   0     
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                                                  AGE
 openshift-gitops-operator.openshift-operators         25m
 openshift-pipelines-operator-rh.openshift-operators   25m</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Patch the ArgoCD Controller of openshift-gitops in the namespace <code>openshift-gitops</code>:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc patch argocd openshift-gitops -n openshift-gitops --type=merge -p='{"spec":{"resourceCustomizations":"route.openshift.io/Route:\n  ignoreDifferences: |\n    jsonPointers:\n    - /spec/host\n","server":{"insecure":true,"route":{"enabled":true,"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"}}}}}'</code></pre>
-</div>
-</div>
-<div class="listingblock console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">argocd.argoproj.io/openshift-gitops patched</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>this command patches the ArgoCD Controller in the following ways:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Ignores .spec.host field in routes</p>
-</li>
-<li>
-<p>Uses SSL edge termination</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Wait for the rollout of a new controller:</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc rollout status deploy openshift-gitops-server -n openshift-gitops</code></pre>
 </div>
 </div>
 <div class="paragraph">
