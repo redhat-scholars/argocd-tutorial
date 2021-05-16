@@ -170,18 +170,21 @@ OpenShift::
 --
 ArgoCD is supported in OpenShift 4.7 by **Red Hat OpenShift GitOps** operator.
 
-To install it, you need to follow the instructions written in the: link:https://docs.openshift.com/container-platform/4.7/cicd/gitops/installing-openshift-gitops.html[OpenShift GitOps installation documentation,window='_blank'].
+To install it, you need to follow the instructions from link:https://docs.openshift.com/container-platform/4.7/cicd/gitops/installing-openshift-gitops.html[OpenShift GitOps installation documentation,window='_blank'].
 
-The OpenShift GitOps Operator is installed via the Operator Hub. You
-can view this installation via the UI in the Administrator Perspective:
+Open the *Administrator perspective* of the web console and navigate to *Operators* -> *OperatorHub* in the menu on the left.
 
-* Click on `Operators` drop down on the leftside navigation.
-* Click on `Installed Operators`
-* In the `Project` dropdown, make sure `openshift-gitops` is selected.
+Search for OpenShift GitOps, click the *Red Hat OpenShift GitOps* tile and then click the *Install* button
 
-You should see that the OpenShift GitOps Operator is installed.
+image::ocp-install1.png[OperatorHub]
 
-image::os-gitops-installed.png[OpenShift GitOps Installed]
+image::ocp-install2.png[Install GitOps Operator]
+
+image::ocp-install3.png[Install version]
+
+The OpenShift GitOps Operator is installed via the Operator Hub.
+
+image::ocp-install4.png[OpenShift GitOps Installed]
 
 It is important that after you finish with the installation, all the required pods are deployed in `openshift-gitops` namespace.
 
@@ -220,33 +223,6 @@ This should have the following output.
 NAME                                                  AGE
 openshift-gitops-operator.openshift-operators         25m
 openshift-pipelines-operator-rh.openshift-operators   25m
-----
-
-Patch the ArgoCD Controller of openshift-gitops in the namespace `openshift-gitops`:
-
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-oc patch argocd openshift-gitops -n openshift-gitops --type=merge -p='{"spec":{"resourceCustomizations":"route.openshift.io/Route:\n  ignoreDifferences: |\n    jsonPointers:\n    - /spec/host\n","server":{"insecure":true,"route":{"enabled":true,"tls":{"insecureEdgeTerminationPolicy":"Redirect","termination":"edge"}}}}}'
-----
-
-[.console-output]
-[source,bash,subs="attributes+,+macros"]
-----
-argocd.argoproj.io/openshift-gitops patched
-----
-
-this command patches the ArgoCD Controller in the following ways:
-
-- Ignores .spec.host field in routes
-- Uses SSL edge termination
-
-Wait for the rollout of a new controller:
-
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-oc rollout status deploy openshift-gitops-server -n openshift-gitops
 ----
 
 Give the serviceAccount for ArgoCD the ability to manage the cluster:
