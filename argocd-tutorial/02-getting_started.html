@@ -297,7 +297,7 @@ echo $argoURL</code></pre>
 </div>
 <div class="tab-pane" aria-labelledby="tabset2_openshift">
 <div class="paragraph">
-<p>From Web Console, navigate to top-right Applications pad and click to ArgoCD icon:</p>
+<p>From <strong>Web Console</strong>, navigate to top-right Applications pad and click to <strong>ArgoCD</strong> icon:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -732,6 +732,17 @@ deployment.apps/bgd   1/1     1            1           10m</code></pre>
 </div>
 </div>
 <div class="tab-pane" aria-labelledby="tabset5_openshift">
+<div class="paragraph">
+<p>From <strong>Web Console</strong>, select <strong>bgd</strong> project from drop-down menu, then click to the application&#8217;s Route to access it.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bgdapp.png" alt="BGD App">
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, get app Route from CLI:</p>
+</div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get route bgd -n bgd -o jsonpath='{.spec.host}{"\n"}'</code></pre>
