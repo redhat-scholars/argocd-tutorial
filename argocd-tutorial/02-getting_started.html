@@ -297,11 +297,20 @@ echo $argoURL</code></pre>
 </div>
 <div class="tab-pane" aria-labelledby="tabset2_openshift">
 <div class="paragraph">
-<p>Access to the Route of ArgoCD:</p>
+<p>From Web Console, navigate to top-right Applications pad and click to ArgoCD icon:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argopad.png" alt="ArgoCD">
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, get ArgoCD Route from CLI:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo $argoRoute</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">argoURL=$(oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}{"\n"}')
+echo $argoURL</code></pre>
 </div>
 </div>
 </div>
