@@ -3,7 +3,7 @@ runtime:
 
 site:
   title: ArgoCD Tutorial
-  url: https://redhat-scholars.github.io/course-template
+  url: https://redhat-scholars.github.io/argocd-tutorial
   start_page: argocd-tutorial::index.adoc
 
 content:
