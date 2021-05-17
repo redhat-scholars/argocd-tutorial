@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Setup :: ArgoCD Tutorial</title>
-    <link rel="canonical" href="https://redhat-scholars.github.io/course-template/argocd-tutorial/01-setup.html">
+    <link rel="canonical" href="https://redhat-scholars.github.io/argocd-tutorial/argocd-tutorial/01-setup.html">
     <link rel="prev" href="index.html">
     <link rel="next" href="02-getting_started.html">
     <meta name="generator" content="Antora 2.3.4">
@@ -15,7 +15,7 @@
   <nav class="navbar">
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" style="font-size: 24px; color: white" href="https://redhat-scholars.github.io/course-template">ArgoCD Tutorial</a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://redhat-scholars.github.io/argocd-tutorial">ArgoCD Tutorial</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
@@ -322,11 +322,19 @@ Although they are used in the tutorial, you could use others without any problem
 <p>Having <code>minikube</code> installed and in your <code>PATH</code>, then run:</p>
 </div>
 <div class="paragraph">
-<p><strong>MacOS / Linux:</strong></p>
+<p><strong>MacOS</strong></p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube start --memory=8192 --cpus=3 --kubernetes-version=v1.20.2 --vm-driver=virtualbox -p gitops</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Linux</strong></p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">minikube start --memory=8192 --cpus=3 --kubernetes-version=v1.20.2 --vm-driver=kvm2 -p gitops</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -342,13 +350,13 @@ Although they are used in the tutorial, you could use others without any problem
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">❌  profile "gitops" not found
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">😄  [gitops] minikube v1.20.0 on Darwin 11.3
 ✅  Created a new profile : gitops
 ✅  minikube profile was successfully set to gitops
-😄  [default] minikube v1.20.0 on Darwin 10.15.2
+😄  [default] minikube v1.20.0 on Darwin 11.3
 ✨  Selecting 'virtualbox' driver from user configuration (alternates: [hyperkit])
 🔥  Creating virtualbox VM (CPUs=2, Memory=8192MB, Disk=50000MB) ...
-🐳  Preparing Kubernetes v1.20.2 on Docker '19.03.5' ...
+🐳  Preparing Kubernetes v1.20.2 on Docker '20.10.6' ...
     ▪ apiserver.enable-admission-plugins=LimitRanger,NamespaceExists,NamespaceLifecycle,ResourceQuota,ServiceAccount,DefaultStorageClass,MutatingAdmissionWebhook
 🚜  Pulling images ...
 🚀  Launching Kubernetes ...
@@ -384,11 +392,11 @@ Once you have your cluster, you can download the latest OpenShift client(oc) fro
 </div>
 </div>
 <div class="paragraph">
-<p>The output should show oc version &gt;=4.2:</p>
+<p>The output should show oc version &gt;=4.7:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Client Version: openshift-clients-4.3.0-201910250623-88-g6a937dfe
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Client Version: 4.7.0-202102130115.p0-c66c03f
 Kubernetes Version: v1.20.2</code></pre>
 </div>
 </div>
