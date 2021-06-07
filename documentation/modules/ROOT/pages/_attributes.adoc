@@ -5,4 +5,5 @@
 :profile: gitops
 :minikube-version: v1.20.0
 :kubernetes-version: v1.20.2
+:argocd-version: v2.0.0
 :kustomize-version: v4.1.2

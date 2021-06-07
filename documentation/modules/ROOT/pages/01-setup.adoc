@@ -36,6 +36,11 @@ Please have them installed and configured before you get started with any of the
 | https://storage.googleapis.com/kubernetes-release/release/{kubernetes-version}/bin/linux/amd64/kubectl[Download]
 | https://storage.googleapis.com/kubernetes-release/release/{kubernetes-version}/bin/windows/amd64/kubectl.exe[Download]
 
+| `argocd {argocd-version}`
+| https://github.com/argoproj/argo-cd/releases/download/{argocd-version}/argocd-darwin-amd64[Download]
+| https://github.com/argoproj/argo-cd/releases/download/{argocd-version}/argocd-linux-amd64[Download]
+| https://github.com/argoproj/argo-cd/releases/download/{argocd-version}/argocd-windows-amd64.exe[Download]
+
 | `kustomize {kustomize-version}`
 | https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.1.2/kustomize_{kustomize-version}_darwin_amd64.tar.gz[Download]
 | https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.1.2/kustomize_{kustomize-version}_linux_amd64.tar.gz[Download]

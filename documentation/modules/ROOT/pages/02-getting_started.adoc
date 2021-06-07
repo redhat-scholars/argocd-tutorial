@@ -14,16 +14,8 @@ ArgoCD by default generates a `admin` user, and a random password that generates
 
 === Connecting with the CLI
 
-Install the argocd CLI tool.
 
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-wget -q -O /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.0.0/argocd-linux-amd64
-chmod +x /usr/local/bin/argocd
-----
-
-Login in the ArgoCD instance with ArgoCD cli:
+Login in the ArgoCD instance with the `argocd` CLI:
 
 [tabs, subs="attributes+,+macros"]
 ====
@@ -112,12 +104,11 @@ From *Web Console*, navigate to top-right Applications pad and click to *ArgoCD*
 
 image::argopad.png[ArgoCD]
 
-Alternatively, get ArgoCD Route from CLI:
+Alternatively, get ArgoCD Route from CLI as previously done:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-argoURL=$(oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}{"\n"}')
-echo $argoURL
+oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}{"\n"}'
 ----
 --
 ====
@@ -291,11 +282,11 @@ kubectl apply -f documentation/modules/ROOT/examples/bgd-app/bgd-app.yaml
 
 This should create the `bgd-app` in the ArgoCD UI.
 
-image::argocd-app1.png[SampleApp, 300]
+image::argocd-app1.png[SampleApp]
 
 Clicking on this "card" takes you to the overview page. You may see it as still progressing or full synced.
 
-image::argocd-app2.png[SampleApp, 600]
+image::argocd-app2.png[SampleApp]
 
 NOTE: You may have to click on `show hidden resources` on this page to see it all
 
@@ -368,7 +359,7 @@ oc get route bgd -n bgd -o jsonpath='{.spec.host}{"\n"}'
 
 Your application should look like this.
 
-image::argocd-app3.png[SampleApp, 600]
+image::bgd.png[SampleApp]
 
 
 Let's introduce a change! Patch the live manifest to change the color
