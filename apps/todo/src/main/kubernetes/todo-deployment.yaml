@@ -6,23 +6,9 @@ metadata:
     app.kubernetes.io/name: "todo-gitops"
     app.kubernetes.io/version: "1.0.0"
   name: "todo-gitops"
----
-apiVersion: "v1"
-kind: "Service"
-metadata:
-  labels:
-    app.kubernetes.io/name: "todo-gitops"
-    app.kubernetes.io/version: "1.0.0"
-  name: "todo-gitops"
-spec:
-  ports:
-  - name: "http"
-    port: 8080
-    targetPort: 8080
-  selector:
-    app.kubernetes.io/name: "todo-gitops"
-    app.kubernetes.io/version: "1.0.0"
-  type: "ClusterIP"
+  namespace: todo
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 ---
 apiVersion: "apps/v1"
 kind: "Deployment"
@@ -31,6 +17,9 @@ metadata:
     app.kubernetes.io/name: "todo-gitops"
     app.kubernetes.io/version: "1.0.0"
   name: "todo-gitops"
+  namespace: todo
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   replicas: 1
   selector:

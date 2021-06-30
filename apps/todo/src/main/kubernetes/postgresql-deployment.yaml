@@ -1,20 +1,11 @@
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: postgres
-spec:
-  selector:
-    app: postgresql
-  ports:
-    - name: pgsql
-      port: 5432
-      targetPort: 5432
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgresql
+  namespace: todo
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   selector:
     matchLabels:
