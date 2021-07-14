@@ -13,6 +13,10 @@ This example will take you through the following steps:
 * Exploring Resource Hooks
 * Using Syncwaves and Hooks together
 
+The sample application that we will deploy is a TODO application with a database and apart from deployment files, syncwaves and resource hooks are used:
+
+image::todo-app.png[]
+
 [#using_syncwaves]
 == Using Sync Waves
 
@@ -52,132 +56,134 @@ Read more about syncwaves on the https://argoproj.github.io/argo-cd/user-guide/s
 
 The sample application that we will deploy has the following manifests:
 
-The *Namespace* with syncwave as *0*:
+The *Namespace* with syncwave as *-1*:
 
-.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/overlays/syncwaves/welcome-php-ns.yaml[welcome-php-ns.yaml,window='_blank']
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/todo/todo-namespace.yaml[todo-namespace.yaml,window='_blank']
 [source,yaml,subs="+macros,attributes+"]
 ----
-include::ROOT:example$welcome-php-yaml/welcome-php-ns.yaml[]
+include::ROOT:example$todo-yaml/todo-namespace.yaml[]
 ----
 
-The *Deployment* with syncwave as *1*:
-
-.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-deployment.yaml[welcome-php-deployment.yaml,window='_blank']
-[source,yaml,subs="+macros,attributes+"]
-----
-include::ROOT:example$welcome-php-yaml/welcome-php-deployment.yaml[]
-----
+The *PostgreSQL* with syncwave as *0*:
 
 [tabs, subs="attributes+,+macros"]
 ====
 Minikube::
 +
 --
-The *Service* with syncwave as *2*:
+The *PostgreSQL deployment* with syncwave as *0*:
 
-.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/welcome-php/base/welcome-php-svc.yaml[welcome-php-svc.yaml,window='_blank']
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/todo/postgresql-deployment.yaml[postgresql-deployment.yaml,window='_blank']
 [source,yaml,subs="+macros,attributes+"]
 ----
-include::ROOT:example$minikube/welcome-php-yaml/welcome-php-svc.yaml[]
+include::ROOT:example$minikube/todo-yaml/postgresql-deployment.yaml[]
 ----
 
-The *Ingress* with syncwave as *3*:
+The *PostgreSQL Service* with syncwave as *0*:
 
-.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/welcome-php/base/welcome-php-ingress.yaml[welcome-php-ingress.yaml,window='_blank']
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/todo/postgresql-service.yaml[postgresql-service.yaml,window='_blank']
 [source,yaml,subs="+macros,attributes+"]
 ----
-include::ROOT:example$minikube/welcome-php-yaml/welcome-php-ingress.yaml[]
-----
-
-Add Minikube IP (`minikube ip`) and the Ingress hostname `welcome-php.devnation` to your Host file, like `/etc/hosts`.
-
-Example:
-[source,bash,subs="attributes+,+macros"]
-----
-192.168.39.242 bgd.devnation bgdx.devnation welcome-php.devnation
+include::ROOT:example$minikube/todo-yaml/postgresql-service.yaml[]
 ----
 
 --
 OpenShift::
 +
 --
-The *Service* with syncwave as *2*:
+The *PostgreSQL deployment* with syncwave as *0*:
 
-.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-svc.yaml[welcome-php-svc.yaml,window='_blank']
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/todo/postgres-deployment.yaml[postgres-deployment.yaml,window='_blank']
 [source,yaml,subs="+macros,attributes+"]
 ----
-include::ROOT:example$welcome-php-yaml/welcome-php-svc.yaml[]
+include::ROOT:example$todo-yaml/postgres-deployment.yaml[]
 ----
 
-The *Route* with syncwave as *3*:
+The *PostgreSQL Service* with syncwave as *0*:
 
-.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/welcome-php/base/welcome-php-route.yaml[welcome-php-route.yaml,window='_blank']
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/todo/postgres-service.yaml[postgres-service.yaml,window='_blank']
 [source,yaml,subs="+macros,attributes+"]
 ----
-include::ROOT:example$welcome-php-yaml/welcome-php-route.yaml[]
+include::ROOT:example$todo-yaml/postgres-service.yaml[]
 ----
 
+--
+====
+
+The *Database table creation* with syncwave as *1*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/todo/postgres-create-table.yaml[postgres-create-table.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$todo-yaml/postgres-create-table.yaml[]
+----
+
+The *TODO application deployment* with syncwave as *2*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/todo/todo-deployment.yaml[todo-deployment.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$todo-yaml/todo-deployment.yaml[]
+----
+
+The *TODO network*: 
+
+[tabs, subs="attributes+,+macros"]
+====
+Minikube::
++
+--
+The *TODO Service* with syncwave as *2*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/todo/todo-service.yaml[todo-service.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$minikube/todo-yaml/todo-service.yaml[]
+----
+
+The *TODO Ingress* configuration with syncwave as *3*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/minikube/apps/todo/todo-ingress.yaml[todo-ingress.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$minikube/todo-yaml/todo-ingress.yaml[]
+----
+
+Add Minikube IP (`minikube ip`) and the Ingress hostname `todo.devnation` to your Host file, like `/etc/hosts`.
+
+Example:
+[source,bash,subs="attributes+,+macros"]
+----
+192.168.39.242 bgd.devnation bgdx.devnation todo.devnation
+----
+
+--
+OpenShift::
++
+--
+The *TODO Service* with syncwave as *2*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/todo/todo-service.yaml[todo-service.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$todo-yaml/todo-service.yaml[]
+----
+
+The *TODO Route* configuration with syncwave as *3*:
+
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/todo/todo-route.yaml[todo-route.yaml,window='_blank']
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$todo-yaml/todo-route.yaml[]
+----
 --
 ====
 
 Argo CD will apply the Namespace first (since it's the lowest value), and make sure it returns a "healthy" status before moving on.
 
-Next, the Deployment will be applied. After that reports healthy, Argo CD will apply the Service then the Ingress or Route.
+Next, the PostgreSQL Deployment will be applied. After that reports healthy will continue with the rest of resources.
 
 NOTE: Argo CD won't apply the next manifest until the previous reports "healthy".
-
-[#deploying_the_application]
-=== Deploying the Application
-
-Before we deploy this application, make sure you've opened the Argo CD Web Console.
-
-Access to the Arg2oCD console with the user admin and the password extracted in the previous steps:
-
-image::argocd-login.png[ArgoCDLogin, 600]
-
-Apply the Argo CD `Application` manifest to get this application deployed.
-
-[tabs, subs="attributes+,+macros"]
-====
-Minikube::
-+
---
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-kubectl apply -f documentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-syncwaves.yaml
-----
---
-OpenShift::
-+
---
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-kubectl apply -f documentation/modules/ROOT/examples/syncwaves-hooks/welcome-syncwaves.yaml
-----
---
-====
-
-[.console-output]
-[source,bash,subs="attributes+,+macros"]
-----
-application.argoproj.io/welcome-syncwaves created
-----
-
-
-This should create the `welcome-syncwaves` in the ArgoCD UI.
-
-image::welcome-syncwaves.png[Syncwaves1, 400]
-
-Clicking on this "card" will take you to the application overview page. Clicking on "show hidden resources" should expand the "tree" view.
-
-image::welcome-syncwaves-tree.png[Syncwaves2, 400]
-
-If you follow along, you'll note that these manifests get applied in order of their annotated syncwave!
-
-Keep the Argo CD WebUI tab open for the next exercise.
-
 
 [#exploring_resource_hooks]
 == Exploring Resource Hooks
@@ -224,7 +230,7 @@ metadata:
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
 ----
 
-> **NOTE** Since a sync can fail in any phase, you can come to a situation where the application never reports healthy!
+IMPORTANT: Since a sync can fail in any phase, you can come to a situation where the application never reports healthy!
 
 Although hooks can be any resource, they are usually Pods and/or Jobs.
 
@@ -233,61 +239,40 @@ To read more about resource hooks, consult the https://argoproj.github.io/argo-c
 [#exploring_the_manifests_hooks]
 === Exploring Manifests
 
-Take a look at this `PreSync` manifest:
+Take a look at this `PostSync` manifest which sends an HTTP request to insert a new TODO item:
 
-.link:https://github.com/redhat-scholars/argocd-tutorial/blob/master/documentation/modules/ROOT/examples/syncwaves-hooks/hooks/welcome-php-presync-job.yaml[welcome-php-presync-job.yaml,window='_blank']
+.link:https://github.com/redhat-developer-demos/openshift-gitops-examples/blob/main/apps/todo/todo-insert-data.yaml[todo-insert-data.yaml,window='_blank']
 [source,yaml,subs="+macros,attributes+"]
 ----
-apiVersion: batch/v1
-kind: Job
-metadata:
-  creationTimestamp: null
-  name: welcome-presyncjob
-  annotations:
-    argocd.argoproj.io/hook: PreSync <1>
-spec:
-  template:
-    metadata:
-      creationTimestamp: null
-    spec:
-      containers:
-      - command:
-        - /bin/bash
-        - -c
-        - |
-          sleep 15
-        image: registry.access.redhat.com/ubi8/ubi:latest
-        imagePullPolicy: IfNotPresent
-        name: welcome-sleep-job
-      restartPolicy: Never
+include::ROOT:example$todo-yaml/todo-insert-data.yaml[]
 ----
+<1> This means that this Job will run in the `PostSync` phase, after the application of the manifests in the `Sync` phase.
 
-<1> This means that this Job will run in the `PreSync` phase, before
-the application of the manifests in the `Sync` phase.
+IMPORTANT: Since I don't have a deletion policy, this job will "stick around" after completion.
 
-> **NOTE** Since I don't have a deletion policy, this job will "stick around" after completion.
+The execution order can be seen in the following diagram:
+
+image::presyncpost.png[]
 
 [#deploying_the_application_hooks]
 === Deploying The Application
 
-This sample will be using `kustomize` to create a new application based
-on the one we previously deployed; while adding the `Job`
-with the resource hook. You can see this by https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/welcome-php/overlays/hooks[visiting the repo,window='_blank'].
+You can see all deployment files by https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/todo[visiting the repo,window='_blank'].
 
-Taking a look at this manifest file: `welcome-hooks.yaml`:
+Taking a look at this manifest file: `todo-application.yaml`:
 
 [tabs, subs="attributes+,+macros"]
 ====
 Minikube::
 +
 --
-.link:https://github.com/redhat-scholars/argocd-tutorial/blob/master/documentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-hooks.yaml[welcome-hooks.yaml,window='_blank']
+.link:https://github.com/redhat-scholars/argocd-tutorial/blob/master/documentation/modules/ROOT/examples/minikube/todo-yaml/todo-application.yaml[todo-application.yaml,window='_blank']
 [source,yaml,subs="+macros,attributes+"]
 ----
-include::ROOT:example$minikube/syncwaves-hooks/welcome-hooks.yaml[]
+include::ROOT:example$minikube/todo-yaml/todo-application.yaml[]
 ----
 
-It will show that this will deploy the application in the `welcome-hooks`
+It will show that this will deploy the application in the `todo`
 namespace.
 
 Create this application:
@@ -295,28 +280,20 @@ Create this application:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-kubectl apply -f documentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-hooks.yaml 
-----
-
-Add Minikube IP (`minikube ip`) and the Ingress hostname `welcome-php-hooks.devnation` to your Host file, like `/etc/hosts`.
-
-Example:
-[source,bash,subs="attributes+,+macros"]
-----
-192.168.39.242 bgd.devnation bgdx.devnation welcome-php.devnation welcome-php-hooks.devantion
+kubectl apply -f documentation/modules/ROOT/examples/minikube/todo-yaml/todo-application.yaml 
 ----
 
 --
 OpenShift::
 +
 --
-.link:https://github.com/redhat-scholars/argocd-tutorial/blob/master/documentation/modules/ROOT/examples/syncwaves-hooks/welcome-hooks.yaml[welcome-hooks.yaml,window='_blank']
+.link:https://github.com/redhat-scholars/argocd-tutorial/blob/master/documentation/modules/ROOT/examples/todo-yaml/todo-application.yaml[todo-application.yaml,window='_blank']
 [source,yaml,subs="+macros,attributes+"]
 ----
-include::ROOT:example$syncwaves-hooks/welcome-hooks.yaml[]
+include::ROOT:example$todo-yaml/todo-application.yaml[]
 ----
 
-It will show that this will deploy the application in the `welcome-hooks`
+It will show that this will deploy the application in the `todo`
 namespace.
 
 Create this application:
@@ -324,8 +301,7 @@ Create this application:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-kubectl apply -f documentation/modules/ROOT/examples/syncwaves-hooks/welcome-hooks.yaml 
-
+kubectl apply -f documentation/modules/ROOT/examples/todo-yaml/todo-application.yaml 
 ----
 --
 ====
@@ -333,20 +309,18 @@ kubectl apply -f documentation/modules/ROOT/examples/syncwaves-hooks/welcome-hoo
 [.console-output]
 [source,bash,subs="attributes+,+macros"]
 ----
-application.argoproj.io/welcome-hooks created
+application.argoproj.io/todo-app created
 ----
 
 On the Argo CD WebUI, you should see another application appear.
 
-image::hooks-card.png[Hooks Card]
+image::todo-card.png[TODO Card]
 
 Clicking on this "card" should take you over to the tree view.
 
-image::hooks-tree.png[Hooks Tree]
+image::todo-argocd.png[TODO Tree]
 
-Observe the sync process. You will see that the `PreSync` manifest has
-an anchor icon ⚓ . You will also notice that the other manifests don't
-start applying until the `PreSync` Job is done.
+Observe the sync process. You will see the order that the resource has been applied, first the namespace creation and last the creation of Route to access the application.
 
 Once the application is fully synced. Take a look at the pods and jobs in
 the namespace:
@@ -354,7 +328,7 @@ the namespace:
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
-kubectl get pods,jobs -n welcome-hooks
+kubectl get pods -n todo
 ----
 
 You should see that the Job is finished, but still there.
@@ -362,176 +336,19 @@ You should see that the Job is finished, but still there.
 [.console-output]
 [source,bash,subs="attributes+,+macros"]
 ----
-NAME                               READY   STATUS      RESTARTS   AGE
-pod/welcome-php-6986bd99c4-7w7qk   1/1     Running     0          2m43s
-pod/welcome-presyncjob-l9h8n       0/1     Completed   0          3m14s
-
-NAME                           COMPLETIONS   DURATION   AGE
-job.batch/welcome-presyncjob   1/1           30s        3m14s
+NAME                           READY   STATUS      RESTARTS   AGE
+postgresql-599467fd86-cgj9v    1/1     Running     0          32s
+todo-gitops-679d88f6f4-v4djp   1/1     Running     0          19s
+todo-table-xhddk               0/1     Completed   0          27s
 ----
 
-Keep this tab open, in the next exercise. We will see how to use Syncwaves
-and Hooks in tandem!
+Your application should look like this.
 
-[#using_syncwaves_and_hooks]
-== Using Sync Waves and Hooks
+image::todo-app-screenshot.png[TODO]
 
-Now that you got your hands on syncwaves and resource hooks, you will
-now use them together to see how you can control how your deployment
-rolls out.
+The `todo-insert` Job is not shown as it was configured to be deleted if succeeded:
 
-In the previous sections you learned how to order the application
-of manifests using syncwaves. You also went over how you phase your
-deployments with resource hooks.
-
-
-In this section we will use syncwaves within each phase to show how you
-can further refine the deployment process.
-
-Take a look at the following diagram.
-
-image::resource-hooks.png[Resource waves hooks]
-
-The workflow can be summarized like this:
-
-* The `PreSync` phase will run and manifests will be applied in their syncwave order.
-* Once the `PreSync` phase is successful, the `Sync` phase begins.
-* The `Sync` phase will apply the manifests in the their syncwave order
-* Finally, after the `Sync` phase is done, the `PostSync` phase applies the manifests in the syncwave order.
-
-[#exploring_manifests_resources]
-=== Exploring Manifests
-
-Here we are adding 3 addition manifests.
-
-A *PreSync* Job with a syncwave of *0*:
-
-.link:[welcome-php-presync-job.yaml,window='_blank']
-[source,yaml,subs="+macros,attributes+"]
+[source, yaml]
 ----
-include::ROOT:example$syncwaves-hooks/syncwaves-and-hooks/welcome-php-presync-job.yaml[]
-----
-
-A *PreSync* Job with a syncwave of *1* and a hook deletion policy:
-
-.link:[welcome-php-presync-pod.yaml,window='_blank']
-[source,yaml,subs="+macros,attributes+"]
-----
-include::ROOT:example$syncwaves-hooks/syncwaves-and-hooks/welcome-php-presync-pod.yaml[]
-----
-
-A *PostSync* Pod with a hook deletion policy:
-
-.link:[welcome-php-postsync-pod.yaml,window='_blank']
-[source,yaml,subs="+macros,attributes+"]
-----
-include::ROOT:example$syncwaves-hooks/syncwaves-and-hooks/welcome-php-postsync-pod.yaml[]
-----
-
-The manifest will apply in the following order.
-
-* `PreSync` - The Job will start and finish. The the Pod will start and finish. Once these are both done successfully the `PreSync` phase is considered "done".
-* `Sync` - All the manifests will apply in their respective syncwave order. Once this is done successfully, the `Sync` phase is considered done.
-* `PostSync` - The Pod will start and finish. Once it's successfully finished, the resource is deleted.
-
-[#deploying_the_application_resources]
-=== Deploying the Application
-
-Take a look at the manifest file:
-
-[tabs, subs="attributes+,+macros"]
-====
-Minikube::
-+
---
-.link:[welcome-syncwaves-and-hooks.yaml,window='_blank']
-[source,yaml,subs="+macros,attributes+"]
-----
-include::ROOT:example$minikube/syncwaves-hooks/welcome-syncwaves-and-hooks.yaml[]
-----
-
-As before, we are using Kustomize to deploy the same application,
-but in a different namespace and we are loading in the 3 additional
-manifests. You can see the specific implementation in the https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/minikube/apps/welcome-php/overlays/syncwaves-and-hooks[git repo,window='_blank']
-
-Create this application:
-
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-kubectl apply -f documentation/modules/ROOT/examples/minikube/syncwaves-hooks/welcome-syncwaves-and-hooks.yaml
-----
-
-Add Minikube IP (`minikube ip`) and the Ingress hostname `welcome-php-waves-hooks.devnation` to your Host file, like `/etc/hosts`.
-
-Example:
-[source,bash,subs="attributes+,+macros"]
-----
-192.168.39.242 bgd.devnation bgdk.devnation welcome-php.devnation welcome-php-hooks.devantion welcome-php-waves-hooks.devantion
-----
-
---
-OpenShift::
-+
---
-.link:[welcome-syncwaves-and-hooks.yaml,window='_blank']
-[source,yaml,subs="+macros,attributes+"]
-----
-include::ROOT:example$syncwaves-hooks/welcome-syncwaves-and-hooks.yaml[]
-----
-
-As before, we are using Kustomize to deploy the same application,
-but in a different namespace and we are loading in the 3 additional
-manifests. You can see the specific implementation in the https://github.com/redhat-developer-demos/openshift-gitops-examples/tree/main/apps/welcome-php/overlays/syncwaves-and-hooks[git repo,window='_blank']
-
-Create this application:
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-kubectl apply -f  documentation/modules/ROOT/examples/syncwaves-hooks/welcome-syncwaves-and-hooks.yaml
-
-----
---
-====
-
-[.console-output]
-[source,bash,subs="attributes+,+macros"]
-----
-application.argoproj.io/welcome-hooks created
-----
-
-
-
-This should create the 3rd application on Argo CD.
-
-image::waves-and-hooks-card.png[Waves and Hooks card] 
-
-Clicking on this card should take you to the tree view.
-
-image::waves-and-hooks-tree.png[Waves and Hooks Tree]
-
-Here you can observe the sync process happening in the order
-specified. You will also note that the `PreSync` Pod and the `PostSync`
-pod were deleted after the sync process because of the deletion policy
-annotation.
-
-Take a look to verify:
-
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-kubectl get pods,jobs -n welcome-waves-and-hooks
-----
-
-You should see the following output.
-
-[.console-output]
-[source,bash,subs="attributes+,+macros"]
-----
-NAME                               READY   STATUS      RESTARTS   AGE
-pod/welcome-php-6986bd99c4-vv499   1/1     Running     0          4m52s
-pod/welcome-presyncjob-8jtqj       0/1     Completed   0          5m24s
-
-NAME                           COMPLETIONS   DURATION   AGE
-job.batch/welcome-presyncjob   1/1           18s        5m24s
+argocd.argoproj.io/hook-delete-policy: HookSucceeded
 ----
