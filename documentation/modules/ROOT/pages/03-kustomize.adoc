@@ -39,7 +39,7 @@ This should display the version, it should look something like this.
 
 Kustomize, at it's core, is meant to build native Kubernetes manifests
 based on YAML, while leaving the original YAML in tact. It achives this
-in a "templte-less" templating format. This is done by providing a `kustomization.yaml` file.
+in a "template-less" templating format. This is done by providing a `kustomization.yaml` file.
 
 We will be focusing on two sub-commands the `build` command and the
 `edit` command.
