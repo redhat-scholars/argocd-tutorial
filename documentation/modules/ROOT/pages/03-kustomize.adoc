@@ -77,7 +77,7 @@ example are the `resources` and the `patchesJson6902` sections.
 
 `resources` is an array of individual files, directories, and/or URLs where other manifests are stored. In this example we are just loading in one file. The (https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patchesjson6902/[`patchesJson6902` is a patching RFC] that `kustomize` supports. As you can see, in the `patchesJson6902` file, I am adding a label to this manifest.
 
-> **NOTE** You can read about what options are availble for patching in the https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/[official documentaion site]
+> **NOTE** You can read about what options are available for patching in the https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/[official documentaion site]
 
 Build this manifets by running:
 
