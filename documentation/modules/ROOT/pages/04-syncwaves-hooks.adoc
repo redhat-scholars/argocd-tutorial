@@ -200,7 +200,7 @@ operation. These hooks are:
 * **PostSync** - Runs after `Sync` has ran successfully. This can be something like a Slack message or an email notification.
 * **SyncFail** - Runs if the `Sync` operation as failed. This is also used to send notifications or do other evasive actions.
 
-To enable a sync, annotate the specific object manfiest with
+To enable a sync, annotate the specific object manifest with
 `argocd.argoproj.io/hook` with the type of sync you want to use for that
 resource. For example, if I wanted to use the `PreSync` hook:
 

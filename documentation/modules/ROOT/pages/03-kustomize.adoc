@@ -79,7 +79,7 @@ example are the `resources` and the `patchesJson6902` sections.
 
 > **NOTE** You can read about what options are available for patching in the https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/[official documentation site]
 
-Build this manifets by running:
+Build this manifest by running:
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
