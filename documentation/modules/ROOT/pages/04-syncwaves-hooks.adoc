@@ -196,7 +196,7 @@ hooks. These hooks can run before, during, and after a sync
 operation. These hooks are:
 
 * **PreSync** - Runs before the sync operation. This can be something like a database backup before a schema change
-* **Sync** - Runs after `PreSync` has successfully ran. This will run alongside your normal manifesets.
+* **Sync** - Runs after `PreSync` has successfully ran. This will run alongside your normal manifests.
 * **PostSync** - Runs after `Sync` has ran successfully. This can be something like a Slack message or an email notification.
 * **SyncFail** - Runs if the `Sync` operation as failed. This is also used to send notifications or do other evasive actions.
 
