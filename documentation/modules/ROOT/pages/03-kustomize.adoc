@@ -183,7 +183,7 @@ kustomize build . | kubectl apply -f -
 [#exploring_kustomize_with_kubectl]
 === Exploring Kustomize with Kubectl
 
-Since Kubernetes 1.14, The `kubectl` command (and by extention the
+Since Kubernetes 1.14, The `kubectl` command (and by extension the
 `oc` cli) has support for Kustomize built in.
 
 You can see this by running:
