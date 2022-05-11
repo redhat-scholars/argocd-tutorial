@@ -38,7 +38,7 @@ This should display the version, it should look something like this.
 
 
 Kustomize, at it's core, is meant to build native Kubernetes manifests
-based on YAML, while leaving the original YAML in tact. It achives this
+based on YAML, while leaving the original YAML in tact. It achieves this
 in a "template-less" templating format. This is done by providing a `kustomization.yaml` file.
 
 We will be focusing on two sub-commands the `build` command and the
@@ -77,9 +77,9 @@ example are the `resources` and the `patchesJson6902` sections.
 
 `resources` is an array of individual files, directories, and/or URLs where other manifests are stored. In this example we are just loading in one file. The (https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patchesjson6902/[`patchesJson6902` is a patching RFC] that `kustomize` supports. As you can see, in the `patchesJson6902` file, I am adding a label to this manifest.
 
-> **NOTE** You can read about what options are availble for patching in the https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/[official documentaion site]
+> **NOTE** You can read about what options are available for patching in the https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/[official documentation site]
 
-Build this manifets by running:
+Build this manifest by running:
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
@@ -183,7 +183,7 @@ kustomize build . | kubectl apply -f -
 [#exploring_kustomize_with_kubectl]
 === Exploring Kustomize with Kubectl
 
-Since Kubernetes 1.14, The `kubectl` command (and by extention the
+Since Kubernetes 1.14, The `kubectl` command (and by extension the
 `oc` cli) has support for Kustomize built in.
 
 You can see this by running:
@@ -388,7 +388,7 @@ oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
 
 Argo CD has native support for Kustomize. You can use this to avoid
 duplicating YAML for each deployment. This is especially good to
-use if you have different environements or clusters you're deploying
+use if you have different environments or clusters you're deploying
 to.
 
 Take a look at the `Application` definition:
