@@ -191,7 +191,7 @@ NOTE: Argo CD won't apply the next manifest until the previous reports "healthy"
 Now that you're familiar with syncwaves, we can begin exploring applying
 manifests in phases using `resource hooks`.
 
-Controlling your sync operation can be futher redefined by using
+Controlling your sync operation can be further redefined by using
 hooks. These hooks can run before, during, and after a sync
 operation. These hooks are:
 
