@@ -7,7 +7,7 @@
     <link rel="canonical" href="https://redhat-scholars.github.io/argocd-tutorial/argocd-tutorial/03-kustomize.html">
     <link rel="prev" href="02-getting_started.html">
     <link rel="next" href="04-syncwaves-hooks.html">
-    <meta name="generator" content="Antora 2.3.4">
+    <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
   <body class="article">
@@ -220,7 +220,7 @@ setup. Verify that it has been installed.</p>
 </div>
 <div class="paragraph">
 <p>Kustomize, at it&#8217;s core, is meant to build native Kubernetes manifests
-based on YAML, while leaving the original YAML in tact. It achives this
+based on YAML, while leaving the original YAML in tact. It achieves this
 in a "template-less" templating format. This is done by providing a <code>kustomization.yaml</code> file.</p>
 </div>
 <div class="paragraph">
@@ -306,12 +306,12 @@ example are the <code>resources</code> and the <code>patchesJson6902</code> sect
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
-<p><strong>NOTE</strong> You can read about what options are availble for patching in the <a href="https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/">official documentaion site</a></p>
+<p><strong>NOTE</strong> You can read about what options are available for patching in the <a href="https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/">official documentation site</a></p>
 </div>
 </blockquote>
 </div>
 <div class="paragraph">
-<p>Build this manifets by running:</p>
+<p>Build this manifest by running:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -422,7 +422,7 @@ the <code>kubectl</code> (or <code>oc</code>) command. Example:</p>
 <div class="sect2">
 <h3 id="exploring_kustomize_with_kubectl"><a class="anchor" href="#exploring_kustomize_with_kubectl"></a>Exploring Kustomize with Kubectl</h3>
 <div class="paragraph">
-<p>Since Kubernetes 1.14, The <code>kubectl</code> command (and by extention the
+<p>Since Kubernetes 1.14, The <code>kubectl</code> command (and by extension the
 <code>oc</code> cli) has support for Kustomize built in.</p>
 </div>
 <div class="paragraph">
@@ -660,7 +660,7 @@ presented with the Argo CD login screen.</p>
 <div class="paragraph">
 <p>Argo CD has native support for Kustomize. You can use this to avoid
 duplicating YAML for each deployment. This is especially good to
-use if you have different environements or clusters you&#8217;re deploying
+use if you have different environments or clusters you&#8217;re deploying
 to.</p>
 </div>
 <div class="paragraph">

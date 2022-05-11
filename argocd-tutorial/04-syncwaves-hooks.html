@@ -6,7 +6,7 @@
     <title>SyncWaves and Hooks :: ArgoCD Tutorial</title>
     <link rel="canonical" href="https://redhat-scholars.github.io/argocd-tutorial/argocd-tutorial/04-syncwaves-hooks.html">
     <link rel="prev" href="03-kustomize.html">
-    <meta name="generator" content="Antora 2.3.4">
+    <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
   <body class="article">
@@ -235,7 +235,7 @@
 <p>The wave the resource is annotated in (starting from the lowest value to the highest)</p>
 </li>
 <li>
-<p>By kind (Namspaces first, then services, then deployments, etc &#8230;&#8203;)</p>
+<p>By kind (Namespaces first, then services, then deployments, etc &#8230;&#8203;)</p>
 </li>
 <li>
 <p>By name (ascending order)</p>
@@ -671,7 +671,7 @@ Argo CD won&#8217;t apply the next manifest until the previous reports "healthy"
 manifests in phases using <code>resource hooks</code>.</p>
 </div>
 <div class="paragraph">
-<p>Controlling your sync operation can be futher redefined by using
+<p>Controlling your sync operation can be further redefined by using
 hooks. These hooks can run before, during, and after a sync
 operation. These hooks are:</p>
 </div>
@@ -681,7 +681,7 @@ operation. These hooks are:</p>
 <p><strong>PreSync</strong> - Runs before the sync operation. This can be something like a database backup before a schema change</p>
 </li>
 <li>
-<p><strong>Sync</strong> - Runs after <code>PreSync</code> has successfully ran. This will run alongside your normal manifesets.</p>
+<p><strong>Sync</strong> - Runs after <code>PreSync</code> has successfully ran. This will run alongside your normal manifests.</p>
 </li>
 <li>
 <p><strong>PostSync</strong> - Runs after <code>Sync</code> has ran successfully. This can be something like a Slack message or an email notification.</p>
@@ -692,7 +692,7 @@ operation. These hooks are:</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>To enable a sync, annotate the specific object manfiest with
+<p>To enable a sync, annotate the specific object manifest with
 <code>argocd.argoproj.io/hook</code> with the type of sync you want to use for that
 resource. For example, if I wanted to use the <code>PreSync</code> hook:</p>
 </div>
@@ -709,7 +709,7 @@ resource. For example, if I wanted to use the <code>PreSync</code> hook:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>HookSucceeded</strong> - The resouce will be deleted after it has succeeded.</p>
+<p><strong>HookSucceeded</strong> - The resource will be deleted after it has succeeded.</p>
 </li>
 <li>
 <p><strong>HookFailed</strong> - The resource will be deleted if it has failed.</p>
