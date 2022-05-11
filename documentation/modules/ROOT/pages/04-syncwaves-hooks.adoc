@@ -214,7 +214,7 @@ metadata:
 
 You can also have the hooks be deleted after a successful/unsuccessful run.
 
-* **HookSucceeded** - The resouce will be deleted after it has succeeded.
+* **HookSucceeded** - The resource will be deleted after it has succeeded.
 * **HookFailed** - The resource will be deleted if it has failed.
 * **BeforeHookCreation** - The resource will be deleted before a new one is created (when a new sync is triggered).
 
