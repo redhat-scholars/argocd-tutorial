@@ -74,7 +74,7 @@
     <a class="nav-link" href="#connect_argocd">Connecting to ArgoCD</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#deploy_sample_application">Deploying Sample Application</a>
+    <a class="nav-link" href="#deploy_sample_application">Deploy a Sample Application</a>
   </li>
 </ul>
   </li>
@@ -164,23 +164,23 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Once you&#8217;ve verified that Argo CD is up and running, let&#8217;s explore how to access and manage Argo CD.</p>
+<p>Now that you&#8217;ve verified that Argo CD is up and running, let&#8217;s explore how to access and manage Argo CD.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="connect_argocd"><a class="anchor" href="#connect_argocd"></a>Connecting to ArgoCD</h2>
+<h2 id="connect_argocd"><a class="anchor" href="#connect_argocd"></a>Connecting to Argo CD</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can connect to ArgoCD with the CLI or Web console.</p>
+<p>Argo CD generates a default <code>admin</code> user, and a random password when first deployed.</p>
 </div>
 <div class="paragraph">
-<p>ArgoCD by default generates a <code>admin</code> user, and a random password that generates when the ArgoCD is deployed.</p>
+<p>You can connect to Argo CD using this user account via the CLI or web console.</p>
 </div>
 <div class="sect2">
 <h3 id="_connecting_with_the_cli"><a class="anchor" href="#_connecting_with_the_cli"></a>Connecting with the CLI</h3>
 <div class="paragraph">
-<p>Login in the ArgoCD instance with the <code>argocd</code> CLI:</p>
+<p>To login using the CLI you&#8217;ll need to obtain the admin password and URL for the Argo CD instance:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -196,7 +196,7 @@
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset1_minikube">
 <div class="paragraph">
-<p>To get the ArgoCD password execute:</p>
+<p>To get the Argo CD password execute:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -225,7 +225,7 @@ echo $argoPass</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Get the Route for the ArgoCD/OpenShift GitOps server:</p>
+<p>Get the Route for the Argo CD/OpenShift GitOps server:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -237,12 +237,15 @@ echo $argoURL</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Login to the ArgoCD with the ArgoCD cli:</p>
+<p>Login to Argo CD with the <code>argocd</code> CLI using the URL and password:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">argocd login --insecure --grpc-web $argoURL  --username admin --password $argoPass</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The following message will be printed upon successful login:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -276,7 +279,7 @@ echo $argoURL</code></pre>
 </div>
 <div class="tab-pane" aria-labelledby="tabset2_openshift">
 <div class="paragraph">
-<p>From <strong>Web Console</strong>, navigate to top-right Applications pad and click to <strong>ArgoCD</strong> icon:</p>
+<p>In the OpenShift Web Console, expand the <strong>Application Launcher</strong> in the  top-right and click the <strong>ArgoCD</strong> icon:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -284,7 +287,7 @@ echo $argoURL</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Alternatively, get ArgoCD Route from CLI as previously done:</p>
+<p>Alternatively, get Argo CD Route using the <code>oc</code> CLI as previously done:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -295,7 +298,7 @@ echo $argoURL</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Access to the ArgoCD console with the user <code>admin</code> and the password extracted in the previous step:</p>
+<p>Access the Argo CD console by logging in with the username <code>admin</code> and the password extracted in the previous step:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -303,27 +306,40 @@ echo $argoURL</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Once you&#8217;ve logged in, you should see the following page.</p>
+<p>Once you&#8217;ve logged in, you should see the following page. This is the Argo CD Web UI.</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/argocd-login2.png" alt="ArgoCDLogin2" width="600">
 </div>
 </div>
-<div class="paragraph">
-<p>This is the Argo CD Web UI.</p>
-</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="deploy_sample_application"><a class="anchor" href="#deploy_sample_application"></a>Deploying Sample Application</h2>
+<h2 id="deploy_sample_application"><a class="anchor" href="#deploy_sample_application"></a>Deploy a Sample Application</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>For this tutorial, we will use our <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples" target="_blank" rel="noopener">GitOps repo</a>. We&#8217;ll be using this repo to deploy our first application and contain the manifests to deploy our example app.</p>
+<p>We&#8217;ll be using the <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples" target="_blank" rel="noopener">redhat-developer-demos/openshift-gitops-examples</a> Git repository to deploy our first application. It contains the manifests that define the application state.</p>
 </div>
+<div class="sect2">
+<h3 id="_review_the_application_manifests"><a class="anchor" href="#_review_the_application_manifests"></a>Review the Application Manifests</h3>
 <div class="paragraph">
-<p>These manifests include:</p>
+<p>The application manifests include a Namespace, Deployment, and networking manifests for Minikube/OpenShift. Deploying these manifests to a cluster will result in an application that supports ingress.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Review, but do not apply these manifests to your cluster. We will do that shortly using Argo CD.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>A <strong>Namespace</strong>:</p>
@@ -488,11 +504,14 @@ spec:
 </div>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_deploy_the_application"><a class="anchor" href="#_deploy_the_application"></a>Deploy the Application</h3>
 <div class="paragraph">
-<p>Collectively, this is known as an <code>Application</code> within ArgoCD. Therefore, you must define it as such in order to apply these manifest in your cluster.</p>
+<p>A managed collection of manifests is known as an <code>Application</code> within Argo CD. Therefore, you must define it as such using an <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/#applications" target="_blank" rel="noopener">Application CR (CustomResource)</a> in order to have Argo CD apply these manifests in your cluster.</p>
 </div>
 <div class="paragraph">
-<p>For this you can define and apply an <code>Application</code> manifest in ArgoCD. Let&#8217;s check the <a href="https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml">ArgoCD Application manifest</a> used for deploy our application and break this down a bit:</p>
+<p>Let&#8217;s review the <a href="https://github.com/redhat-scholars/argocd-tutorial/blob/master/assets/bgd-app/bgd-app.yaml">Argo CD Application manifest</a> used to deploy this application and break this down a bit:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -536,24 +555,24 @@ spec:
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The destination server is the server we installed ArgoCD on.</td>
+<td>The destination server is the same server we installed Argo CD on.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Here you&#8217;re installing the application in ArgoCD&#8217;s <code>default</code> project (<code>.spec.project</code>).</td>
+<td>Here you&#8217;re installing the application in Argo CD&#8217;s <code>default</code> project (<code>.spec.project</code>).</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>The manifest repo where the YAML resides and the path to look for.</td>
+<td>The manifest repo, and th path within it where the YAML resides.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The <code>syncPolicy</code> is set to <code>false</code>. Note that you can have Argo CD automatically sync the repo.</td>
+<td>The <code>syncPolicy</code> is set to <code>automated</code>. It will automatically prune resources resources that have been removed from the Git repo, but will not automatically correct resources that deviate from the definition stored in the repo, i.e manual changes use <code>kubectl</code> will not be "healed".</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>The Application CR (CustomResource) can be applied by running the following:</p>
+<p>Apply the Application CR by running the following command:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -591,24 +610,36 @@ spec:
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The destination server is the server we installed ArgoCD on. ArgoCD&#8217;s concept of a <code>Project</code> is different than OpenShift&#8217;s. Here you&#8217;re installing the application in ArgoCD&#8217;s <code>default</code> project (<code>.spec.project</code>). <strong>NOT</strong> OpenShift&#8217;s default project.</td>
+<td>The destination server is the same server we installed Argo CD on.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Here you&#8217;re installing the application in ArgoCD&#8217;s <code>default</code> project (<code>.spec.project</code>).</td>
+<td>Here you&#8217;re installing the application in Argo CD&#8217;s <code>default</code> project (<code>.spec.project</code>).
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Argo CD&#8217;s concept of a <code>Project</code> is different than OpenShift&#8217;s. Here you&#8217;re installing the application in Argo CD&#8217;s <code>default</code> project (<code>.spec.project</code>). <strong>NOT</strong> OpenShift&#8217;s default project.
+</td>
+</tr>
+</table>
+</div></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>The manifest repo where the YAML resides and the path to look for.</td>
+<td>The manifest repo, and th path within it where the YAML resides.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The <code>syncPolicy</code> is set to <code>false</code>. Note that you can have Argo CD automatically sync the repo.</td>
+<td>The <code>syncPolicy</code> is set to <code>automated</code>. It will automatically prune resources resources that have been removed from the Git repo, but will not automatically correct resources that deviate from the definition stored in the repo, i.e manual changes made using <code>kubectl</code> will not be "healed".</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>The Application CR (CustomResource) can be applied by running the following:</p>
+<p>Apply the Application CR by running the following command:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -619,7 +650,7 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>This should create the <code>bgd-app</code> in the ArgoCD UI.</p>
+<p>The newly created Application appears as a tile with the title <code>bgd-app</code> in the Argo CD UI.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -627,7 +658,7 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>Clicking on this "card" takes you to the overview page. You may see it as still progressing or full synced.</p>
+<p>Clicking on this tile takes you to the application details page. You may see it as still progressing or fully synced.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -641,16 +672,13 @@ spec:
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-You may have to click on <code>show hidden resources</code> on this page to see it all
+You may have to click on <code>show hidden resources</code> on this page to see all of the resources.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>At this point the application should be up and running.</p>
-</div>
-<div class="paragraph">
-<p>You can see all the resources created with:</p>
+<p>At this point the application should be up and running. Verify that the resources were created:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -658,7 +686,7 @@ You may have to click on <code>show hidden resources</code> on this page to see 
 </div>
 </div>
 <div class="paragraph">
-<p>The output should look like this:</p>
+<p>The output should list a Service, Deployment, and Pod:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -673,7 +701,7 @@ deployment.apps/bgd   1/1     1            1           10m</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>First wait for the rollout to complete:</p>
+<p>Verify the the rollout is complete:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -681,7 +709,7 @@ deployment.apps/bgd   1/1     1            1           10m</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Then visit your application:</p>
+<p>Obtain the URL, and visit your application in a web browser:</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -736,9 +764,12 @@ deployment.apps/bgd   1/1     1            1           10m</code></pre>
 <img src="_images/bgd.png" alt="SampleApp">
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_addressing_configuration_drift"><a class="anchor" href="#_addressing_configuration_drift"></a>Addressing Configuration Drift</h3>
 <div class="paragraph">
-<p>Let&#8217;s introduce a change! Patch the live manifest to change the color
-of the box from blue to green:</p>
+<p>Let&#8217;s introduce a change in the application environment! Patch the live Deployment manifest to change the color
+of the bubbles in the application from blue to green:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -754,7 +785,7 @@ of the box from blue to green:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>If you refresh your tab where your application is running you should see a green square now.</p>
+<p>Refresh the tab where your application is running. You should see green bubbles.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -784,7 +815,7 @@ application as "Out of Sync".</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>Conversely, you can run:</p>
+<p>Alternatively, you can run the following command:</p>
 </div>
 <div class="listingblock console-input">
 <div class="content">
@@ -800,8 +831,7 @@ application as "Out of Sync".</p>
 </div>
 </div>
 <div class="paragraph">
-<p>If you reload the page on the tab where the application is running. It
-should have returned to a blue square.</p>
+<p>Reload the page on the tab where the application is running. The bubbles should have returned to their original blue color.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -847,6 +877,7 @@ should have returned to a blue square.</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl patch application/bgd-app -n openshift-gitops --type=merge -p='{"spec":{"syncPolicy":{"automated":{"prune":true,"selfHeal":true}}}}'</code></pre>
+</div>
 </div>
 </div>
 </div>

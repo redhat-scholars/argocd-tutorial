@@ -74,7 +74,7 @@
     <a class="nav-link" href="02-getting_started.html#connect_argocd">Connecting to ArgoCD</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-getting_started.html#deploy_sample_application">Deploying Sample Application</a>
+    <a class="nav-link" href="02-getting_started.html#deploy_sample_application">Deploy a Sample Application</a>
   </li>
 </ul>
   </li>
@@ -162,7 +162,7 @@
 <article class="doc">
 <h1 class="page">Setup</h1>
 <div class="sect1">
-<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>Prerequisite CLI tools</h2>
+<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>Prerequisite CLI Tools</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The following CLI tools are required for running the exercises in this tutorial.
@@ -180,7 +180,7 @@ Please have them installed and configured before you get started with any of the
 <th class="tableblock halign-center valign-top"><strong>Tool</strong></th>
 <th class="tableblock halign-center valign-top"><strong>macOS</strong></th>
 <th class="tableblock halign-center valign-top"><strong>Fedora</strong></th>
-<th class="tableblock halign-center valign-top"><strong>windows</strong></th>
+<th class="tableblock halign-center valign-top"><strong>Windows</strong></th>
 </tr>
 </thead>
 <tbody>
@@ -244,7 +244,7 @@ Although they are used in the tutorial, you could use others without any problem
 <th class="tableblock halign-center valign-top"><strong>Tool</strong></th>
 <th class="tableblock halign-center valign-top"><strong>macOS</strong></th>
 <th class="tableblock halign-center valign-top"><strong>Fedora</strong></th>
-<th class="tableblock halign-center valign-top"><strong>windows</strong></th>
+<th class="tableblock halign-center valign-top"><strong>Windows</strong></th>
 </tr>
 </thead>
 <tbody>
@@ -271,7 +271,7 @@ Although they are used in the tutorial, you could use others without any problem
 </div>
 </div>
 <div class="sect1">
-<h2 id="downloadtutorial"><a class="anchor" href="#downloadtutorial"></a>Get tutorial sources</h2>
+<h2 id="downloadtutorial"><a class="anchor" href="#downloadtutorial"></a>Download Tutorial Source Files</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Before we start setting up the environment, let’s clone the tutorial sources and set the <code>TUTORIAL_HOME</code> environment variable to point to the root directory of the tutorial:</p>
@@ -401,15 +401,15 @@ Kubernetes Version: v1.20.2</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>And then you are ready for installing ArgoCD on Kubernetes.</p>
+<p>Now you&#8217;re ready to install Argo CD on Kubernetes.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="install_argocd"><a class="anchor" href="#install_argocd"></a>ArgoCD Installation</h2>
+<h2 id="install_argocd"><a class="anchor" href="#install_argocd"></a>Argo CD Installation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In this section we will be exploring how to install ArgoCD on Minikube and how to install it on OpenShift with the OpenShift GitOps Operator.</p>
+<p>In this section we will be exploring how to install Argo CD on Minikube, and how to install it on OpenShift with the OpenShift GitOps Operator.</p>
 </div>
 <div class="tabset is-loading">
 <div class="ulist tabs">
@@ -425,7 +425,7 @@ Kubernetes Version: v1.20.2</code></pre>
 <div class="content">
 <div class="tab-pane" aria-labelledby="tabset2_minikube">
 <div class="paragraph">
-<p>In the minikube guide, an ArgoCD upstream deployment will be installed and used.</p>
+<p>In the minikube guide, an Argo CD upstream deployment will be installed and used.</p>
 </div>
 <div class="paragraph">
 <p>Enable the Ingress Addon for Minikube:</p>
@@ -509,47 +509,82 @@ argocd-server-859b4b5578-cv2qx        1/1     Running   0          2m18s</code><
 <p>ArgoCD is supported in OpenShift 4.7 by <strong>Red Hat OpenShift GitOps</strong> operator.</p>
 </div>
 <div class="paragraph">
-<p>To install it, you need to follow the instructions from <a href="https://docs.openshift.com/container-platform/4.7/cicd/gitops/installing-openshift-gitops.html" target="_blank" rel="noopener">OpenShift GitOps installation documentation</a>.</p>
+<p>To install it, you need to follow the instructions from <a href="https://docs.openshift.com/container-platform/4.10/cicd/gitops/installing-openshift-gitops.html#installing-gitops-operator-in-web-console_installing-openshift-gitops" target="_blank" rel="noopener">OpenShift GitOps installation documentation</a>. A summary of the documentation is provided below:</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>Open the <strong>Administrator perspective</strong> of the web console and navigate to <strong>Operators</strong> &#8594; <strong>OperatorHub</strong> in the menu on the left.</p>
+<p>The ability to install Operators is limited to users with the <code>cluster-admin</code> role assigned to them. Make sure to login as a user with the necessary privileges to install the Operator.</p>
 </div>
-<div class="paragraph">
-<p>Search for OpenShift GitOps, click the <strong>Red Hat OpenShift GitOps</strong> tile and then click the <strong>Install</strong> button</p>
+</td>
+</tr>
+</table>
 </div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Switch to the <strong>Administrator perspective</strong> in the OpenShift web console.</p>
+</li>
+<li>
+<p>Navigate to <strong>Operators</strong> &#8594; <strong>OperatorHub</strong> using the menu on the left.</p>
+</li>
+<li>
+<p>Search for OpenShift GitOps in OperatorHub.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/ocp-install1.png" alt="OperatorHub">
 </div>
 </div>
+</li>
+<li>
+<p>Click the <strong>Red Hat OpenShift GitOps</strong> tile.</p>
+</li>
+<li>
+<p>Select the <strong>Stable</strong> channel.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/ocp-install2.png" alt="Install GitOps Operator">
 </div>
 </div>
+</li>
+<li>
+<p>Click the <strong>Install</strong> button.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/ocp-install3.png" alt="Install version">
 </div>
 </div>
-<div class="paragraph">
-<p>The OpenShift GitOps Operator is installed via the Operator Hub.</p>
-</div>
+</li>
+<li>
+<p>Wait for the installation process to complete.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/ocp-install4.png" alt="OpenShift GitOps Installed">
 </div>
 </div>
-<div class="paragraph">
-<p>It is important that after you finish with the installation, all the required pods are deployed in <code>openshift-gitops</code> namespace.</p>
+</li>
+<li>
+<p>Login to the cluster using the <code>oc</code> client. You can copy a login command from the OpenShift web console:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ocp-install5.png" alt="OpenShift Login Command">
 </div>
-<div class="paragraph">
-<p>Another way to view what was installed is to run the following:</p>
 </div>
+</li>
+<li>
+<p>Verify that all the required Pods have been deployed in <code>openshift-gitops</code> namespace using the following command:</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods -n openshift-gitops</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The output should show a list of Pods similar to this:</p>
 </div>
 <div class="listingblock console-output">
 <div class="content">
@@ -562,6 +597,9 @@ cluster-86f8d97979-lfdhv                                1/1     Running   0     
 kam-7ff6f58c-2jxkm                                      1/1     Running   0          55s</code></pre>
 </div>
 </div>
+</li>
+<li>
+<p>Verify that the Operator is listed when you issue the following command:</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get operators</code></pre>
@@ -577,13 +615,19 @@ openshift-gitops-operator.openshift-operators         25m
 openshift-pipelines-operator-rh.openshift-operators   25m</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Give the serviceAccount for ArgoCD the ability to manage the cluster:</p>
-</div>
+</li>
+<li>
+<p>Give the ServiceAccount for ArgoCD the ability to manage the cluster:</p>
 <div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc adm policy add-cluster-role-to-user cluster-admin -z openshift-gitops-argocd-application-controller -n openshift-gitops</code></pre>
 </div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>That&#8217;s it! You learned how to install an Operator on OpenShift using OperatorHub, and how to use administrative commands via <code>oc adm</code> to apply cluster roles to users.</p>
 </div>
 </div>
 </div>
