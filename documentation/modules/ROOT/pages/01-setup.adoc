@@ -2,14 +2,14 @@
 include::_attributes.adoc[]
 
 [#prerequisite]
-== Prerequisite CLI tools
+== Prerequisite CLI Tools
 
 The following CLI tools are required for running the exercises in this tutorial. 
 Please have them installed and configured before you get started with any of the tutorial chapters.
 
 [cols="4*^,4*.",options="header,+attributes"]
 |===
-|**Tool**|**macOS**|**Fedora**|**windows**
+|**Tool**|**macOS**|**Fedora**|**Windows**
 
 | `Git`
 | https://git-scm.com/download/mac[Download]
@@ -53,7 +53,7 @@ Although they are used in the tutorial, you could use others without any problem
 
 [cols="4*^,4*.",options="header,+attributes"]
 |===
-|**Tool**|**macOS**|**Fedora**|**windows**
+|**Tool**|**macOS**|**Fedora**|**Windows**
 
 | https://github.com/mikefarah/yq[yq v2.4.1]
 | https://github.com/mikefarah/yq/releases/download/2.4.1/yq_darwin_amd64[Download]
@@ -74,7 +74,7 @@ Although they are used in the tutorial, you could use others without any problem
 
 
 [#downloadtutorial]
-== Get tutorial sources
+== Download Tutorial Source Files
 
 :tutorial-url: https://github.com/redhat-scholars/argocd-tutorial.git
 :folder: gitops
@@ -88,19 +88,19 @@ include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-c
 
 include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-common/master/kubernetes-setup.adoc[]
 
-And then you are ready for installing ArgoCD on Kubernetes.
+Now you're ready to install Argo CD on Kubernetes.
 
 [#install_argocd]
-== ArgoCD Installation
+== Argo CD Installation
 
-In this section we will be exploring how to install ArgoCD on Minikube and how to install it on OpenShift with the OpenShift GitOps Operator.
+In this section we will be exploring how to install Argo CD on Minikube, and how to install it on OpenShift with the OpenShift GitOps Operator.
 
 [tabs, subs="attributes+,+macros"]
 ====
 Minikube::
 +
 --
-In the minikube guide, an ArgoCD upstream deployment will be installed and used.
+In the minikube guide, an Argo CD upstream deployment will be installed and used.
 
 Enable the Ingress Addon for Minikube:
 
@@ -175,32 +175,40 @@ OpenShift::
 --
 ArgoCD is supported in OpenShift 4.7 by **Red Hat OpenShift GitOps** operator.
 
-To install it, you need to follow the instructions from link:https://docs.openshift.com/container-platform/4.7/cicd/gitops/installing-openshift-gitops.html[OpenShift GitOps installation documentation,window='_blank'].
+To install it, you need to follow the instructions from link:https://docs.openshift.com/container-platform/4.10/cicd/gitops/installing-openshift-gitops.html#installing-gitops-operator-in-web-console_installing-openshift-gitops[OpenShift GitOps installation documentation,window='_blank']. A summary of the documentation is provided below:
 
-Open the *Administrator perspective* of the web console and navigate to *Operators* -> *OperatorHub* in the menu on the left.
+[NOTE]
+======
+The ability to install Operators is limited to users with the `cluster-admin` role assigned to them. Make sure to login as a user with the necessary privileges to install the Operator.
+======
 
-Search for OpenShift GitOps, click the *Red Hat OpenShift GitOps* tile and then click the *Install* button
-
+. Switch to the *Administrator perspective* in the OpenShift web console.
+. Navigate to *Operators* -> *OperatorHub* using the menu on the left.
+. Search for OpenShift GitOps in OperatorHub.
++
 image::ocp-install1.png[OperatorHub]
-
+. Click the *Red Hat OpenShift GitOps* tile.
+. Select the *Stable* channel.
++
 image::ocp-install2.png[Install GitOps Operator]
-
+. Click the *Install* button.
++
 image::ocp-install3.png[Install version]
-
-The OpenShift GitOps Operator is installed via the Operator Hub.
-
+. Wait for the installation process to complete.
++
 image::ocp-install4.png[OpenShift GitOps Installed]
-
-It is important that after you finish with the installation, all the required pods are deployed in `openshift-gitops` namespace.
-
-Another way to view what was installed is to run the following:
-
+. Login to the cluster using the `oc` client. You can copy a login command from the OpenShift web console:
++
+image::ocp-install5.png[OpenShift Login Command]
+. Verify that all the required Pods have been deployed in `openshift-gitops` namespace using the following command:
++
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
 oc get pods -n openshift-gitops
 ----
-
+The output should show a list of Pods similar to this:
++
 [.console-output]
 [source,bash,subs="attributes+,+macros"]
 ----
@@ -212,16 +220,16 @@ argocd-cluster-server-78467b647-8lcv9                   1/1     Running   0     
 cluster-86f8d97979-lfdhv                                1/1     Running   0          56s
 kam-7ff6f58c-2jxkm                                      1/1     Running   0          55s
 ----
-
-
++
+. Verify that the Operator is listed when you issue the following command: 
++
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
 oc get operators
 ----
-
 This should have the following output.
-
++
 [.console-output]
 [source,bash,subs="attributes+,+macros"]
 ----
@@ -229,13 +237,12 @@ NAME                                                  AGE
 openshift-gitops-operator.openshift-operators         25m
 openshift-pipelines-operator-rh.openshift-operators   25m
 ----
-
-Give the serviceAccount for ArgoCD the ability to manage the cluster:
+. Give the ServiceAccount for ArgoCD the ability to manage the cluster:
++
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
 oc adm policy add-cluster-role-to-user cluster-admin -z openshift-gitops-argocd-application-controller -n openshift-gitops
 ----
 
---
-====
+That's it! You learned how to install an Operator on OpenShift using OperatorHub, and how to use administrative commands via `oc adm` to apply cluster roles to users.

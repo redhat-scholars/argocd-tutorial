@@ -5,7 +5,7 @@
 
 * xref:02-getting_started.adoc[Getting Started]
 ** xref:02-getting_started.adoc#connect_argocd[Connecting to ArgoCD]
-** xref:02-getting_started.adoc#deploy_sample_application[Deploying Sample Application]
+** xref:02-getting_started.adoc#deploy_sample_application[Deploy a Sample Application]
 
 * xref:03-kustomize.adoc[Work with Kustomize]
 ** xref:03-kustomize.adoc#exploring_kustomize[Exploring the Kustomize]
