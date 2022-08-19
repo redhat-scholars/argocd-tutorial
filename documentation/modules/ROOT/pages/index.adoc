@@ -1,17 +1,17 @@
-= Welcome to the ArgoCD Tutorial
+= Welcome to the Argo CD Tutorial
 :page-layout: home
 :!sectids:
 
 [.text-center.strong]
-== ArgoCD
+== Argo CD
 
 https://argoproj.github.io/argo-cd/[Argo CD,window='_blank'] is a declarative, GitOps continuous delivery tool for Kubernetes.
 
 It follows the **GitOps** pattern of using Git repositories as the source of truth for defining the desired application state.
 
-It automates the deployment of the desired application states in the specified target environments. Application deployments can track updates to branches, tags, or pinned to a specific version of manifests at a Git commit.
+It automates the deployment of the desired application states in the specified target environments. Application deployments can track updates to branches, tags, or be pinned to a specific version of manifests at a Git commit.
 
-image::argocd-logo.png[ArgoCD Logo, 400]
+image::argocd-sync-flow.png[Argo CD Sync Flow, 700]
 
 
 == GitOps
