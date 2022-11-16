@@ -8,7 +8,7 @@ The principals of `kustomize` are:
 * Purely declarative approach to configuration customization 
 * Manage an arbitrary number of distinctly customized Kubernetes configurations 
 * Every artifact that kustomize uses is plain YAML and can be validated and processed as such 
-* As a "templateless" templating system; it encourages using YAML without forking the repo it.
+* As a "templateless" templating system; it encourages using YAML without forking the repo.
 
 image::kustomize_logo.png[Kustomize Logo]
 
