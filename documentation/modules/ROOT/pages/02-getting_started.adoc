@@ -232,7 +232,7 @@ spec:
 ----
 <1> The destination server is the same server we installed Argo CD on.
 <2> Here you're installing the application in Argo CD's `default` project (`.spec.project`).
-<3> The manifest repo, and th path within it where the YAML resides.
+<3> The manifest repo, and the path within it where the YAML resides.
 <4> The `syncPolicy` is set to `automated`. It will automatically prune resources resources that have been removed from the Git repo, but will not automatically correct resources that deviate from the definition stored in the repo, i.e manual changes use `kubectl` will not be "healed".
 
 
